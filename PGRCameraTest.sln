@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PGRCameraTest", "PGRCameraTest\PGRCameraTest.vcxproj", "{34D5F70E-6928-4622-8DC8-8B814409A01C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PNGReader", "PNGReader\PNGReader.vcxproj", "{23BC8141-D0E2-4211-8472-2BDF94ACDE44}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ResponseAnalysis", "PythonApplication1\ResponseAnalysis.pyproj", "{BA33A422-D9AC-4500-AAC3-1C1CF5A3B18D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Debug|Win32.Build.0 = Debug|Win32
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Debug|x64.ActiveCfg = Debug|x64
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Debug|x64.Build.0 = Debug|x64
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Debug|x64.Deploy.0 = Debug|x64
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Release|Any CPU.ActiveCfg = Release|Win32
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Release|Win32.ActiveCfg = Release|Win32
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Release|Win32.Build.0 = Release|Win32
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Release|x64.ActiveCfg = Release|x64
+		{34D5F70E-6928-4622-8DC8-8B814409A01C}.Release|x64.Build.0 = Release|x64
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Debug|Win32.ActiveCfg = Debug|Win32
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Debug|Win32.Build.0 = Debug|Win32
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Debug|x64.ActiveCfg = Debug|x64
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Debug|x64.Build.0 = Debug|x64
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Release|Any CPU.ActiveCfg = Release|Win32
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Release|Win32.ActiveCfg = Release|Win32
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Release|Win32.Build.0 = Release|Win32
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Release|x64.ActiveCfg = Release|x64
+		{23BC8141-D0E2-4211-8472-2BDF94ACDE44}.Release|x64.Build.0 = Release|x64
+		{BA33A422-D9AC-4500-AAC3-1C1CF5A3B18D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA33A422-D9AC-4500-AAC3-1C1CF5A3B18D}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{BA33A422-D9AC-4500-AAC3-1C1CF5A3B18D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BA33A422-D9AC-4500-AAC3-1C1CF5A3B18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA33A422-D9AC-4500-AAC3-1C1CF5A3B18D}.Release|Win32.ActiveCfg = Release|Any CPU
+		{BA33A422-D9AC-4500-AAC3-1C1CF5A3B18D}.Release|x64.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

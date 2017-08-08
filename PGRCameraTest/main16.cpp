@@ -745,9 +745,11 @@ int main(int argc, char** argv){
 	}
 	LightStage stage;
 	int temp;
+	stage[3][4]->set_rgb2(turn_on);
+	stage[3][5]->set_rgb2(turn_on);
+	stage.go(6);
+	stage.go(7);
 
-	stage.adjustAll(1, 1, 1, 255, 255, 255);
-	stage.adjustAll(2, 2, 2, 0, 0, 0);
 	while (true){
 		cin >> temp;
 		stage.adjustAll(temp, temp, temp, 255, 255, 255);

@@ -52,7 +52,7 @@ void LightStage::go(int i)
 		colour[i / 2]->go();
 	}
 	else {
-		colour[(i - 1) / 2 + 1]->go();
+		white[(i - 1) / 2 + 1]->go();
 	}
 }
 

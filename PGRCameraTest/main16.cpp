@@ -752,7 +752,8 @@ int main(int argc, char** argv){
 
 	while (true){
 		cin >> temp;
-		stage.adjustAll(temp, temp, temp, 255, 255, 255);
+		stage.adjustAll(0, 0, 0, 128, 128, 128);
+		stage.adjustAll(0, 0, 0, 255, 255, 255);
 	}
 
 

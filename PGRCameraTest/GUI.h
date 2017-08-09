@@ -1,10 +1,13 @@
 #pragma once
 #include <Windows.h>
-#include "GL\freeglut.h"
+#include <gl\GL.h>
+#include <gl\GLU.h>
+#include <gl\glut.h>
+
 class GUI
 {
 public:
-	GUI();
+	GUI(int argc, char** argv);
 	~GUI();
 };
 

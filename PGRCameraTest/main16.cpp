@@ -11,6 +11,7 @@
 #include "light_stage.h"
 #include "FlyCapture2.h"
 #include <opencv2\opencv.hpp>
+#include "GUI.h"
 
 #define turn_on 255,255,255,0,0,0
 #define turn_half_lit 128,128,128,0,0,0
@@ -665,8 +666,18 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	LightStage stage;
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);	//GLUT_DEPTH initialises depth mode
+	glutInitWindowSize(500, 500);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("sphere");
+	//glutReshapeFunc(reshape);
+	glutMainLoop();
 	int temp, temp2;
-
+	while (true) {
+		cin >> temp;
+		stage.adjustAll(temp, temp, temp, temp, temp, temp);
+	}
 	while (true){
 		cin >> temp >> temp2;
 		stage(temp, temp2)->set_rgb2(turn_on);
@@ -675,8 +686,7 @@ int main(int argc, char** argv){
 		stage(temp, temp2)->set_rgb2(turn_off);
 		stage.go();
 	}
-
-
+	
 	/*
 	PrintBuildInfo16();
 

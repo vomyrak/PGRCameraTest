@@ -72,3 +72,20 @@ void LightStage::adjustAll(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t 
 	}
 	go();
 }
+
+FixtureRGB16 * LightStage::operator()(int arc, int index)
+{
+	if ((arc < 0) || (arc > 23)) {
+		std::cout << "Arc out of range" << std::endl;
+		return nullptr;
+	}
+	if ((index < 0) || (index > 13)) {
+		std::cout << "Index out of range" << std::endl;
+		return nullptr;
+	}
+	if (arc % 2 == 1) {
+		index += 14;
+	}
+	arc = arc / 2;
+	return lamp[arc][index];
+}

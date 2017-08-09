@@ -339,86 +339,7 @@ int InterfaceTest(PGRGuid guid) {
 		return 1;
 	}
 	// initialize lights
-	PowerSupply *arc_0_w = new PowerSupply("10.37.211.1");
-	PowerSupply *arc_0_c = new PowerSupply("10.37.211.2");
-	PowerSupply *arc_1_w = new PowerSupply("10.37.211.3");
-	PowerSupply *arc_1_c = new PowerSupply("10.37.211.4");
-	PowerSupply *arc_2_w = new PowerSupply("10.37.211.5");
-	PowerSupply *arc_2_c = new PowerSupply("10.37.211.6");
-	PowerSupply *arc_3_w = new PowerSupply("10.37.211.7");
-	PowerSupply *arc_3_c = new PowerSupply("10.37.211.8");
-	PowerSupply *arc_4_w = new PowerSupply("10.37.211.9");
-	PowerSupply *arc_4_c = new PowerSupply("10.37.211.10");
-	PowerSupply *arc_5_w = new PowerSupply("10.37.211.11");
-	PowerSupply *arc_5_c = new PowerSupply("10.37.211.12");
-	PowerSupply *arc_6_w = new PowerSupply("10.37.211.13");
-	PowerSupply *arc_6_c = new PowerSupply("10.37.211.14");
-	PowerSupply *arc_7_w = new PowerSupply("10.37.211.15");
-	PowerSupply *arc_7_c = new PowerSupply("10.37.211.16");
-	PowerSupply *arc_8_w = new PowerSupply("10.37.211.17");
-	PowerSupply *arc_8_c = new PowerSupply("10.37.211.18");
-	PowerSupply *arc_9_w = new PowerSupply("10.37.211.19");
-	PowerSupply *arc_9_c = new PowerSupply("10.37.211.20");
-	PowerSupply *arc_10_w = new PowerSupply("10.37.211.21");
-	PowerSupply *arc_10_c = new PowerSupply("10.37.211.22");
-	PowerSupply *arc_11_w = new PowerSupply("10.37.211.23");
-	PowerSupply *arc_11_c = new PowerSupply("10.37.211.24");
-
-	FixtureRGB16 *fix_0_0_w = new FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_0_c = new FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_1_w = new FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_1_c = new FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_2_w = new FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_2_c = new FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_3_w = new FixtureRGB16(18, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_3_c = new FixtureRGB16(18, 0, 0, 0, 0, 0, 0);	
-	FixtureRGB16 *fix_0_4_w = new FixtureRGB16(24, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_4_c = new FixtureRGB16(24, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_5_w = new FixtureRGB16(30, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_5_c = new FixtureRGB16(30, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_6_w = new FixtureRGB16(36, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_6_c = new FixtureRGB16(36, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_7_w = new FixtureRGB16(42, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_7_c = new FixtureRGB16(42, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_8_w = new FixtureRGB16(48, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_8_c = new FixtureRGB16(48, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_9_w = new FixtureRGB16(54, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_9_c = new FixtureRGB16(54, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_10_w = new FixtureRGB16(60, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_10_c = new FixtureRGB16(60, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_11_w = new FixtureRGB16(66, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_11_c = new FixtureRGB16(66, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_12_w = new FixtureRGB16(72, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_12_c = new FixtureRGB16(72, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_13_w = new FixtureRGB16(78, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_0_13_c = new FixtureRGB16(78, 0, 0, 0, 0, 0, 0);
-
-
-
-	FixtureRGB16 *fixture[8];
-	fixture[0] = fix_w_1;
-	fixture[1] = fix_rgb_1;
-	fixture[2] = fix_w_2;
-	fixture[3] = fix_rgb_2;
-	fixture[4] = fix_w_3;
-	fixture[5] = fix_rgb_3;
-	fixture[6] = fix_w_4;
-	fixture[7] = fix_rgb_4;
-
-	arc_0_c->addFixture(fix_0_0_c);
-	arc_0_c->addFixture(fix_0_1_c);
-	arc_0_c->addFixture(fix_0_2_c);
-	arc_0_c->addFixture(fix_0_3_c);
-	arc_0_c->addFixture(fix_0_4_c);
-	arc_0_c->addFixture(fix_0_5_c);
-	arc_0_c->addFixture(fix_0_6_c);
-	arc_0_c->addFixture(fix_0_7_c);
-	arc_0_c->addFixture(fix_0_8_c);
-	arc_0_c->addFixture(fix_0_9_c);
-	arc_0_c->addFixture(fix_0_10_c);
-	arc_0_c->addFixture(fix_0_11_c);
-	arc_0_c->addFixture(fix_0_12_c);
-	arc_0_c->addFixture(fix_0_13_c);
+	
 
 	arc_0_c->go();
 
@@ -744,16 +665,15 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	LightStage stage;
-	int temp;
-	stage[3][4]->set_rgb2(turn_on);
-	stage[3][5]->set_rgb2(turn_on);
-	stage.go(6);
-	stage.go(7);
+	int temp, temp2;
 
 	while (true){
-		cin >> temp;
-		stage.adjustAll(0, 0, 0, 128, 128, 128);
-		stage.adjustAll(0, 0, 0, 255, 255, 255);
+		cin >> temp >> temp2;
+		stage(temp, temp2)->set_rgb2(turn_on);
+		stage.go();
+		Sleep(2000);
+		stage(temp, temp2)->set_rgb2(turn_off);
+		stage.go();
 	}
 
 

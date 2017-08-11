@@ -104,8 +104,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files\Point Grey Research\FlyCapture2\lib64;C:\dev\zlib-1.2.11\libs\static_x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FlyCapture2d_v110.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\dev\zlib-1.2.11\libs\static_x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FlyCapture2d_v140.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -146,7 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GUI.cpp" />
     <ClCompile Include="kinet.cpp" />
     <ClCompile Include="kinet16.cpp" />
     <ClCompile Include="LightStageCamera.cpp" />
@@ -157,7 +156,6 @@
     <ClCompile Include="test_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GUI.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="kinet.h" />
     <ClInclude Include="kinet16.h" />

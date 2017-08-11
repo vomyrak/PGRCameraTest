@@ -20,7 +20,15 @@ public:
 	uint8_t get_red2() const;
 	uint8_t get_green2() const;
 	uint8_t get_blue2() const;
-
+	
+	uint8_t get_red() const;
+	uint8_t get_green() const;
+	uint8_t get_blue() const;
+	
+	uint8_t * get_config();
+	void get_config(uint8_t(&table)[6]);
+	void FixtureRGB16::set_config(uint8_t *config,  uint8_t *matrix[336]);
+	void FixtureRGB16::set_config(uint8_t config[6]);
 	void set_red(uint8_t r);
 	void set_green(uint8_t g);
 	void set_blue(uint8_t b);

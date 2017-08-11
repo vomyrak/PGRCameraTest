@@ -10,11 +10,9 @@
 //#include "test_interface.h"
 #include "light_stage.h"
 #include "FlyCapture2.h"
-#include <opencv2\opencv.hpp>
-#include "GUI.h"
 
-#define turn_on 255,255,255,0,0,0
-#define turn_half_lit 128,128,128,0,0,0
+#define turn_on 255,255,255,255,255,255
+#define turn_half_lit 128,128,128,128,128,128
 #define turn_off 0,0,0,0,0,0
 
 #define ROI 900, 720, 250, 180
@@ -416,246 +414,6 @@ int InterfaceTest(PGRGuid guid) {
 	return 0;
 }
 */
-
-int CameraTest(PGRGuid guid)
-{
-	
-	// LIGHTS
-	WSADATA wsaData;
-	// Initialize Winsock
-	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (iResult != 0) {
-		printf("WSAStartup failed with error: %d\n", iResult);
-		return 1;
-	}
-	// initialize lights
-	PowerSupply *arc_0_c = new PowerSupply("10.33.157.55");
-	PowerSupply *arc_0_w = new PowerSupply("10.33.157.51");
-
-	FixtureRGB16 *fix_w_1 = new FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_1 = new FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_w_2 = new FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_2 = new FixtureRGB16(18, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_w_3 = new FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_3 = new FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_w_4 = new FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_4 = new FixtureRGB16(18, 0, 0, 0, 0, 0, 0);
-
-	FixtureRGB16 *fixture[8];
-	fixture[0] = fix_w_1;
-	fixture[1] = fix_w_2;
-	fixture[2] = fix_w_3;
-	fixture[3] = fix_w_4;
-	fixture[4] = fix_rgb_1;
-	fixture[5] = fix_rgb_2;
-	fixture[6] = fix_rgb_3;
-	fixture[7] = fix_rgb_4;
-
-	arc_0_c->addFixture(fix_w_1);
-	arc_0_c->addFixture(fix_rgb_1);
-	arc_0_c->addFixture(fix_w_2);
-	arc_0_c->addFixture(fix_rgb_2);
-
-	arc_0_w->addFixture(fix_w_3);
-	arc_0_w->addFixture(fix_rgb_3);
-	arc_0_w->addFixture(fix_w_4);
-	arc_0_w->addFixture(fix_rgb_4);
-
-	arc_0_c->go();
-	arc_0_w->go();
-
-	// CAMERA
-	const int k_numImages = 32;
-
-	Error error;
-	Camera cam;
-
-	// Connect to a camera
-	error = cam.Connect(&guid);
-	if (error != PGRERROR_OK)
-	{
-		PrintError16(error);
-		return -1;
-	}
-
-	// Get the camera information
-	CameraInfo camInfo;
-	error = cam.GetCameraInfo(&camInfo);
-	if (error != PGRERROR_OK)
-	{
-		PrintError16(error);
-		return -1;
-	}
-	PrintCameraInfo16(&camInfo);
-
-
-	// Initialise the camera control
-	Property prop[10];
-	init_control(prop, cam, error);
-
-	// Start capturing images
-	error = cam.StartCapture();
-	if (error != PGRERROR_OK)
-	{
-		PrintError16(error);
-		return -1;
-	}
-
-	Image rawImage;
-	std::vector<Image> vecImages;
-	vecImages.resize(k_numImages + 1);
-	string lighting_param;
-	int counter = 0;
-
-	fix_w_1->set_rgb2(128, 128, 128, 0, 0, 0);
-	fix_w_2->set_rgb2(128, 128, 128, 0, 0, 0);
-	fix_w_3->set_rgb2(128, 128, 128, 0, 0, 0);
-	fix_w_4->set_rgb2(128, 128, 128, 0, 0, 0);
-	fix_rgb_1->set_rgb2(turn_off);
-	fix_rgb_2->set_rgb2(turn_off);
-	fix_rgb_3->set_rgb2(turn_off);
-	fix_rgb_4->set_rgb2(turn_off);
-	arc_0_c->go();
-	arc_0_w->go();
-	prop[shutter].absValue = 0.0;
-	error = cam.SetProperty(prop + shutter);
-	if (error != PGRERROR_OK)
-	{
-		PrintError16(error);
-		return -1;
-	}
-		Sleep(100); // wait for the lights to turn on
-
-		//for testing fine control
-
-		int get[k_numImages];
-		for (int i = 0; i < k_numImages;)
-		{
-
-			get[i] = 191 + i * 2;
-			error = cam.RetrieveBuffer(&rawImage);
-			if (error != PGRERROR_OK)
-			{
-				PrintError16(error);
-				error = cam.Disconnect();
-			}
-			printf("Grabbed %dth image\n", i + 1);
-			vecImages[i].DeepCopy(&rawImage);
-			Sleep(200);
-			prop[shutter].absValue = 0.3 * (i + 1);
-			error = cam.SetProperty(prop + shutter);
-			if (error != PGRERROR_OK)
-			{
-				PrintError16(error);
-				return -1;
-				//fix_w_1->set_rgb2(193 + i * 2, 193 + i * 2, 193 + i * 2, 0, 0, 0);
-				//fix_w_2->set_rgb2(193 + i * 2, 193 + i * 2, 193 + i * 2, 0, 0, 0);
-				//fix_w_3->set_rgb2(193 + i * 2, 193 + i * 2, 193 + i * 2, 0, 0, 0);
-				//fix_w_4->set_rgb2(193 + i * 2, 193 + i * 2, 193 + i * 2, 0, 0, 0);
-				//arc_0_c->go();
-				//arc_0_w->go();
-				Sleep(200);
-				i += 1;
-			}
-			//fix_w_1->set_rgb2(255, 255, 255, 0, 0, 0);
-			//fix_w_2->set_rgb2(255, 255, 255, 0, 0, 0);
-			//fix_w_3->set_rgb2(255, 255, 255, 0, 0, 0);
-			//fix_w_4->set_rgb2(255, 255, 255, 0, 0, 0);
-			//arc_0_c->go();
-			//arc_0_w->go();
-			prop[shutter].absValue = 9.9;
-			error = cam.SetProperty(prop + shutter);
-			if (error != PGRERROR_OK)
-			{
-				PrintError16(error);
-				return -1;
-			}
-			Sleep(200);
-			error = cam.RetrieveBuffer(&rawImage);
-			if (error != PGRERROR_OK)
-			{
-				PrintError16(error);
-				error = cam.Disconnect();
-			}
-			printf("Grabbed 33rd image\n");
-			vecImages[32].DeepCopy(&rawImage);
-			get[32] = 255;
-			Sleep(200);
-
-			/*
-			for (int i = 0; i < k_numImages;) {
-				Sleep(200);
-				get[i] = i * 100;
-				lighting_param = fix_w_1->get_str();
-				if (error != PGRERROR_OK)
-				{
-					PrintError16(error);
-					error = cam.Disconnect();
-				}
-				error = cam.RetrieveBuffer(&rawImage);
-				printf("Grabbed %dth image\n", i + 1);
-				vecImages[i].DeepCopy(&rawImage);
-				Sleep(200);
-				i++;
-			}
-			*/
-			// turn off all lights
-			fix_w_1->set_rgb2(turn_off);
-			fix_w_2->set_rgb2(turn_off);
-			fix_w_3->set_rgb2(turn_off);
-			fix_w_4->set_rgb2(turn_off);
-			fix_rgb_1->set_rgb2(turn_off);
-			fix_rgb_2->set_rgb2(turn_off);
-			fix_rgb_3->set_rgb2(turn_off);
-			fix_rgb_4->set_rgb2(turn_off);
-			arc_0_c->go();
-			arc_0_w->go();
-
-
-			// Stop capturing images
-			error = cam.StopCapture();
-			if (error != PGRERROR_OK)
-			{
-				PrintError16(error);
-				return -1;
-			}
-
-			// Disconnect the camera
-			error = cam.Disconnect();
-			if (error != PGRERROR_OK)
-			{
-				PrintError16(error);
-				return -1;
-			}
-			// Save images to disk
-			for (int imageCnt = 0; imageCnt < k_numImages; imageCnt++)
-			{
-				// Create a converted image
-				Image convertedImage;
-				// Convert the raw image
-				error = vecImages[imageCnt].Convert(PIXEL_FORMAT_RGB, &convertedImage);
-				if (error != PGRERROR_OK)
-				{
-					PrintError16(error);
-					return -1;
-				}
-				// Create a unique filename
-				ostringstream filename;
-				filename << "C:\\Users\\VomyraK\\Documents\\Visual Studio 2015\\Projects\\PGRCameraTest\\PGRCameraTest\\channel_1_" << get[imageCnt] << ".png";
-				// Save the image. If a file format is not passed in, then the file
-				// extension is parsed to attempt to determine the file format.
-				error = convertedImage.Save(filename.str().c_str());
-				if (error != PGRERROR_OK)
-				{
-					PrintError16(error);
-					return -1;
-				}
-			}
-
-			return 0;
-		}
-}
-
 int main(int argc, char** argv){
 	// LIGHTS
 	WSADATA wsaData;
@@ -666,18 +424,22 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	LightStage stage;
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);	//GLUT_DEPTH initialises depth mode
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(0, 0);
-	glutCreateWindow("sphere");
-	//glutReshapeFunc(reshape);
-	glutMainLoop();
-	int temp, temp2;
+	uint8_t config[6];
+	config[0] = 20;
+	config[1] = 10;
+	config[2] = 10;
+	config[3] = 10;
+	config[4] = 10;
+	config[5] = 10;
+	stage[11][0]->set_config(config);
+	stage[11][1]->set_config(config);
+	stage.go();
 	while (true) {
-		cin >> temp;
-		stage.adjustAll(temp, temp, temp, temp, temp, temp);
+		stage.rotation(1);
+		Sleep(30);
 	}
+	
+	/*
 	while (true){
 		cin >> temp >> temp2;
 		stage(temp, temp2)->set_rgb2(turn_on);
@@ -686,7 +448,7 @@ int main(int argc, char** argv){
 		stage(temp, temp2)->set_rgb2(turn_off);
 		stage.go();
 	}
-	
+	*/
 	/*
 	PrintBuildInfo16();
 

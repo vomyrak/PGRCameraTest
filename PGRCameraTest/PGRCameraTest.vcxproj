@@ -98,14 +98,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\dev\zlib-1.2.11;C:\dev\lpng1629;C:\Program Files\Point Grey Research\FlyCapture2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\glui-2.36\src\include;C:\dev\freeglut\include;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include;C:\dev\zlib-1.2.11;C:\dev\lpng1629;C:\Program Files\Point Grey Research\FlyCapture2\include</AdditionalIncludeDirectories>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\dev\zlib-1.2.11\libs\static_x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FlyCapture2d_v140.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dev\glui-2.36\src\lib;C:\dev\freeglut\lib\x64;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\dev\zlib-1.2.11\libs\static_x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glui32d.lib;freeglut.lib;OpenGL32.Lib;FlyCapture2d_v140.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GUI.cpp" />
     <ClCompile Include="kinet.cpp" />
     <ClCompile Include="kinet16.cpp" />
     <ClCompile Include="LightStageCamera.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="test_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GUI.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="kinet.h" />
     <ClInclude Include="kinet16.h" />

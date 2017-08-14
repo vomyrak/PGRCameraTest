@@ -40,6 +40,8 @@ LightStage::~LightStage()
 	delete[] colour;
 	delete[] white;
 	delete[] lamp;
+	delete[] matrix;
+
 }
 
 FixtureRGB16 ** LightStage::operator[](int i)

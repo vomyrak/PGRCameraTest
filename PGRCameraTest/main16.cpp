@@ -10,6 +10,7 @@
 //#include "test_interface.h"
 #include "light_stage.h"
 #include "FlyCapture2.h"
+#include "GUI.h"
 
 #define turn_on 255,255,255,255,255,255
 #define turn_half_lit 128,128,128,128,128,128
@@ -416,6 +417,7 @@ int InterfaceTest(PGRGuid guid) {
 */
 int main(int argc, char** argv){
 	// LIGHTS
+	//GUI gui(argc, argv);
 	WSADATA wsaData;
 	// Initialize Winsock
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -424,28 +426,32 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	LightStage stage;
+	int temp, temp2;
 	uint8_t config[6];
-	config[0] = 20;
-	config[1] = 10;
-	config[2] = 10;
-	config[3] = 10;
-	config[4] = 10;
-	config[5] = 10;
-	stage[11][0]->set_config(config);
-	stage[11][1]->set_config(config);
+	config[0] = 40;
+	config[1] = 5;
+	config[2] = 5;
+	config[3] = 5;
+	config[4] = 5;
+	config[5] = 5;
+
 	stage.go();
+	
 	while (true) {
 		stage.rotation(1);
-		Sleep(30);
+		Sleep(500);
 	}
 	
+	/*
+	for (int i = 0; i < 256; i++) {
+		//stage.adjustAll(0, 0, 0, i, 0, 0);
+		//stage.adjustAll(i, 0, 0, 0, 0, 0);
+	}
+	*/
 	/*
 	while (true){
 		cin >> temp >> temp2;
 		stage(temp, temp2)->set_rgb2(turn_on);
-		stage.go();
-		Sleep(2000);
-		stage(temp, temp2)->set_rgb2(turn_off);
 		stage.go();
 	}
 	*/

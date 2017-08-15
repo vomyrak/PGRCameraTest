@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Fixture.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="kinet.cpp" />
     <ClCompile Include="kinet16.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="test_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Fixture.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="kinet.h" />

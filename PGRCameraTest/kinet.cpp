@@ -32,7 +32,7 @@ const unsigned char oldHeaderBytes[] = {
     0xff, 0xff, 0xff, 0xff, 0x00
 };
 
-const KinetProtocol oldProtocol(21, 512, 1, oldHeaderBytes);
+const Old_KinetProtocol oldProtocol(21, 512, 1, oldHeaderBytes);
 
 const unsigned char newHeaderBytes[] = {
     0x04, 0x01, 0xdc, 0x4a, 0x01, 0x00, 0x08, 0x01,
@@ -40,10 +40,10 @@ const unsigned char newHeaderBytes[] = {
     0x01, 0x00, 0x00, 0x01, 0xFF, 0x00, 0xFF, 0x0F
 };
 
-const KinetProtocol newProtocol(24, 512, 16, newHeaderBytes);
+const Old_KinetProtocol newProtocol(24, 512, 16, newHeaderBytes);
 
 
-void dump_buffer(unsigned n, const uint8_t* buf)
+void Old_dump_buffer(unsigned n, const uint8_t* buf)
 {
     unsigned c = 1;
     while (c < n)
@@ -57,7 +57,7 @@ void dump_buffer(unsigned n, const uint8_t* buf)
         fprintf(stderr, "\n");
 }
 
-PowerSupply::PowerSupply()
+Old_PowerSupply::Old_PowerSupply()
 {
     _connected = false;
     _frame = NULL;
@@ -65,7 +65,7 @@ PowerSupply::PowerSupply()
     initializeBuffer();
 }
 
-PowerSupply::PowerSupply(const string strHost, const string strPort)
+Old_PowerSupply::Old_PowerSupply(const string strHost, const string strPort)
 {    
     _connected = false;
     _frame = NULL;
@@ -74,7 +74,7 @@ PowerSupply::PowerSupply(const string strHost, const string strPort)
     connect(strHost, strPort);
 }
 
-void PowerSupply::switchToNewProtocol()
+void Old_PowerSupply::switchToNewProtocol()
 {
     if (_proto != &newProtocol)
     {
@@ -83,7 +83,7 @@ void PowerSupply::switchToNewProtocol()
     }
 }
 
-void PowerSupply::initializeBuffer()
+void Old_PowerSupply::initializeBuffer()
 {
     if (_frame)
         free(_frame);
@@ -98,7 +98,7 @@ void PowerSupply::initializeBuffer()
     }
 }
 
-bool PowerSupply::connect(const string strHost, const string strPort)
+bool Old_PowerSupply::connect(const string strHost, const string strPort)
 {
     struct addrinfo hints;
     struct addrinfo *pResult, *pr;
@@ -159,32 +159,32 @@ bool PowerSupply::connect(const string strHost, const string strPort)
     return true;
 }
 
-PowerSupply::~PowerSupply()
+Old_PowerSupply::~Old_PowerSupply()
 {
     free(_frame);
 }
 
-string PowerSupply::getHost()
+string Old_PowerSupply::getHost()
 {
     return _host;
 }
 
-int PowerSupply::getPort()
+int Old_PowerSupply::getPort()
 {
     return _port;
 }
 
-void PowerSupply::addFixture(Fixture* pFix)
+void Old_PowerSupply::addOld_Fixture(Old_Fixture* pFix)
 {
-    _fixtures.push_back(pFix);
+    _Old_Fixtures.push_back(pFix);
 }
 
-void PowerSupply::clearFixtures()
+void Old_PowerSupply::clearOld_Fixtures()
 {
-    _fixtures.clear();
+    _Old_Fixtures.clear();
 }
 
-void PowerSupply::go()
+void Old_PowerSupply::go()
 {
     if (!_connected)
     {
@@ -192,7 +192,7 @@ void PowerSupply::go()
         return;
     }
     
-    for (auto fix = _fixtures.begin(); fix != _fixtures.end(); fix++)
+    for (auto fix = _Old_Fixtures.begin(); fix != _Old_Fixtures.end(); fix++)
     {
         (*fix)->updateFrame(_frame);
     }
@@ -203,13 +203,13 @@ void PowerSupply::go()
         
 #if ENABLE_LOGGING
         std::cout << "Channel " << channel+1 << "\n";
-        dump_buffer(_proto->getHeaderSize() + 3, _frame + _proto->getPacketSize() * channel);
+        Old_dump_buffer(_proto->getHeaderSize() + 3, _frame + _proto->getPacketSize() * channel);
 #endif
     }
 }
 
-FixtureRGB::FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b)
-: Fixture()
+Old_FixtureRGB::Old_FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b)
+: Old_Fixture()
 , _address(address)
 {
     _values[0] = r;
@@ -218,50 +218,50 @@ FixtureRGB::FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b)
 	inter = &oldProtocol;
 }
 
-void FixtureRGB::updateFrame(uint8_t* packets) const
+void Old_FixtureRGB::updateFrame(uint8_t* packets) const
 {
     memcpy(packets + oldProtocol.getHeaderSize() + _address, _values, 3);
 }
 
 
-std::string FixtureRGB::getName() const
+std::string Old_FixtureRGB::getName() const
 {
     std::ostringstream out;
     out << getAddress();
     return out.str();
 }
 
-uint8_t FixtureRGB::get_red() const
+uint8_t Old_FixtureRGB::get_red() const
 {
     return _values[0];
 }
 
-uint8_t FixtureRGB::get_green() const
+uint8_t Old_FixtureRGB::get_green() const
 {
     return _values[1];
 }
 
-uint8_t FixtureRGB::get_blue() const
+uint8_t Old_FixtureRGB::get_blue() const
 {
     return _values[2];
 }
 
-void FixtureRGB::set_red(uint8_t r)
+void Old_FixtureRGB::set_red(uint8_t r)
 {
     _values[0] = r;
 }
 
-void FixtureRGB::set_green(uint8_t g)
+void Old_FixtureRGB::set_green(uint8_t g)
 {
     _values[1] = g;
 }
 
-void FixtureRGB::set_blue(uint8_t b)
+void Old_FixtureRGB::set_blue(uint8_t b)
 {
     _values[2] = b;
 }
 
-void FixtureRGB::set_rgb(uint8_t r, uint8_t g, uint8_t b)
+void Old_FixtureRGB::set_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
     set_red(r);
     set_green(g);
@@ -269,15 +269,15 @@ void FixtureRGB::set_rgb(uint8_t r, uint8_t g, uint8_t b)
 }
 
 //newly implemented
-const KinetProtocol * FixtureRGB::get_protocol() const
+const Old_KinetProtocol * Old_FixtureRGB::get_protocol() const
 {
 	return inter;
 }
 
-FixtureTile::FixtureTile(int startChannel, int width, int height)
+Old_FixtureTile::Old_FixtureTile(int startChannel, int width, int height)
 : _startChannel(startChannel)
-, _fixtureWidth(width)
-, _fixtureHeight(height)
+, _Old_FixtureWidth(width)
+, _Old_FixtureHeight(height)
 , _videoX(0)
 , _videoY(0)
 , _videoW(width)
@@ -287,7 +287,7 @@ FixtureTile::FixtureTile(int startChannel, int width, int height)
 {
 }
 
-void FixtureTile::setVideoRect(int x, int y, int w, int h)
+void Old_FixtureTile::setVideoRect(int x, int y, int w, int h)
 {
     _videoX = x;
     _videoY = y;
@@ -295,7 +295,7 @@ void FixtureTile::setVideoRect(int x, int y, int w, int h)
     _videoH = h;
 }
 
-void FixtureTile::setSourceData(const uint8_t* sourceData, int sourceWidth, int sourceHeight, int sourceChannels)
+void Old_FixtureTile::setSourceData(const uint8_t* sourceData, int sourceWidth, int sourceHeight, int sourceChannels)
 {
     _sourceData = sourceData;
     _sourceWidth = sourceWidth;
@@ -303,7 +303,7 @@ void FixtureTile::setSourceData(const uint8_t* sourceData, int sourceWidth, int 
     _sourceChannels = sourceChannels;
 }
 
-void FixtureTile::updateFrame(uint8_t* packets) const
+void Old_FixtureTile::updateFrame(uint8_t* packets) const
 {
     if (_sourceData == NULL)
         return;
@@ -311,14 +311,14 @@ void FixtureTile::updateFrame(uint8_t* packets) const
     int tileX, tileY;
     uint8_t* pIndex;
     
-    tileX = _fixtureWidth-1;
-    tileY = _fixtureHeight/2-1;
+    tileX = _Old_FixtureWidth-1;
+    tileY = _Old_FixtureHeight/2-1;
     pIndex = packets + newProtocol.getPacketSize() * (_startChannel-1) + newProtocol.getHeaderSize();
     
-    int xscale = (int)floor(_videoW/(_fixtureWidth*1.0));
-    int yscale = (int)floor(_videoH/(_fixtureHeight*1.0));
+    int xscale = (int)floor(_videoW/(_Old_FixtureWidth*1.0));
+    int yscale = (int)floor(_videoH/(_Old_FixtureHeight*1.0));
 
-    while (tileY < _fixtureHeight)
+    while (tileY < _Old_FixtureHeight)
     {
 #if ENABLE_LOGGING
         std::cout << "Writing x: " << tileX << " y: " << tileY << " to address " << (void*)pIndex << "\n";
@@ -339,11 +339,11 @@ void FixtureTile::updateFrame(uint8_t* packets) const
 
         if (tileX < 0)
         {
-            tileX =  _fixtureWidth-1;
+            tileX =  _Old_FixtureWidth-1;
             if (tileY == 0) {
-                tileY = _fixtureHeight/2;
+                tileY = _Old_FixtureHeight/2;
                 pIndex = packets + newProtocol.getPacketSize() * (_startChannel) + newProtocol.getHeaderSize();
-            } else if (tileY < _fixtureHeight/2) {
+            } else if (tileY < _Old_FixtureHeight/2) {
                 tileY--;
             } else {
                 tileY++;
@@ -352,12 +352,12 @@ void FixtureTile::updateFrame(uint8_t* packets) const
     }
 }
 
-FixtureTile6::FixtureTile6(int startChannel, int width, int height)
-: FixtureTile(startChannel, width, height)
+Old_FixtureTile6::Old_FixtureTile6(int startChannel, int width, int height)
+: Old_FixtureTile(startChannel, width, height)
 {
 }
 
-void FixtureTile6::updateFrame(uint8_t* packets) const
+void Old_FixtureTile6::updateFrame(uint8_t* packets) const
 {
     if (_sourceData == NULL)
         return;
@@ -366,13 +366,13 @@ void FixtureTile6::updateFrame(uint8_t* packets) const
     uint8_t* pIndex;
     
     startx = 0;
-    endx = _fixtureWidth/2-1;
+    endx = _Old_FixtureWidth/2-1;
     tileX = startx;
-    tileY = _fixtureHeight-1;
+    tileY = _Old_FixtureHeight-1;
     pIndex = packets + newProtocol.getPacketSize() * (_startChannel-1) + newProtocol.getHeaderSize();
     
-    int xscale = (int)floor(_videoW/(_fixtureWidth*1.0));
-    int yscale = (int)floor(_videoH/(_fixtureHeight*1.0));
+    int xscale = (int)floor(_videoW/(_Old_FixtureWidth*1.0));
+    int yscale = (int)floor(_videoH/(_Old_FixtureHeight*1.0));
     
     while(1)
     {
@@ -396,11 +396,11 @@ void FixtureTile6::updateFrame(uint8_t* packets) const
         {
             tileY--;
             if (tileY < 0) {
-                if (endx == _fixtureWidth - 1)
+                if (endx == _Old_FixtureWidth - 1)
                     break;
                 startx = endx + 1;
-                endx = _fixtureWidth - 1;
-                tileY = _fixtureHeight - 1;
+                endx = _Old_FixtureWidth - 1;
+                tileY = _Old_FixtureHeight - 1;
                 pIndex = packets + newProtocol.getPacketSize() * (_startChannel) + newProtocol.getHeaderSize();
             }
             tileX = startx;
@@ -409,12 +409,12 @@ void FixtureTile6::updateFrame(uint8_t* packets) const
     
 }
 
-FixtureTileDC::FixtureTileDC(int startChannel, int width, int height)
-: FixtureTile(startChannel, width, height)
+Old_FixtureTileDC::Old_FixtureTileDC(int startChannel, int width, int height)
+: Old_FixtureTile(startChannel, width, height)
 {
 }
 
-void FixtureTileDC::updateFrame(uint8_t* packets) const
+void Old_FixtureTileDC::updateFrame(uint8_t* packets) const
 {
     if (_sourceData == NULL)
         return;
@@ -424,14 +424,14 @@ void FixtureTileDC::updateFrame(uint8_t* packets) const
 
     int quadrant = 0;
 
-    tileX = _fixtureWidth/2-1;
+    tileX = _Old_FixtureWidth/2-1;
     tileY = 0;
     pIndex = packets + oldProtocol.getPacketSize() * (_startChannel-1) + oldProtocol.getHeaderSize();
 
-    int xscale = (int)floor(_videoW/(_fixtureWidth*1.0));
-    int yscale = (int)floor(_videoH/(_fixtureHeight*1.0));
+    int xscale = (int)floor(_videoW/(_Old_FixtureWidth*1.0));
+    int yscale = (int)floor(_videoH/(_Old_FixtureHeight*1.0));
 
-    int tileYtop = _fixtureHeight/2;
+    int tileYtop = _Old_FixtureHeight/2;
     int tileXright = -1;
 
     while (true)
@@ -448,16 +448,16 @@ void FixtureTileDC::updateFrame(uint8_t* packets) const
 
         if (rotation == 0) {
             xx = _videoX + tileX * xscale;
-            yy = _videoY + (_fixtureHeight - tileY - 1) * yscale;
+            yy = _videoY + (_Old_FixtureHeight - tileY - 1) * yscale;
         } else if (rotation == 90) {
-            xx = _videoX + (_fixtureHeight - tileY - 1) * yscale;
+            xx = _videoX + (_Old_FixtureHeight - tileY - 1) * yscale;
             yy = _videoY + tileX * xscale;
         } else if (rotation == 180) {
-            xx = _videoX + (_fixtureWidth - tileX - 1) * xscale;
+            xx = _videoX + (_Old_FixtureWidth - tileX - 1) * xscale;
             yy = _videoY + tileY * yscale;
         } else if (rotation == 270) {
             xx = _videoX + tileY * yscale;
-            yy = _videoY + (_fixtureWidth - tileX - 1) * xscale;
+            yy = _videoY + (_Old_FixtureWidth - tileX - 1) * xscale;
         }
 
         if (xx >= 0 && xx < _sourceWidth && yy >= 0 && yy < _sourceHeight) {
@@ -472,23 +472,23 @@ void FixtureTileDC::updateFrame(uint8_t* packets) const
         if (tileY >= tileYtop)
         {
             tileX--;
-            tileY = tileYtop - _fixtureHeight/2;
+            tileY = tileYtop - _Old_FixtureHeight/2;
             if (tileX <= tileXright) {
                 if (quadrant == 0) {
                     quadrant = 1;
-                    tileX = _fixtureWidth/2 - 1;
-                    tileY = _fixtureHeight/2;
-                    tileYtop = _fixtureHeight;
+                    tileX = _Old_FixtureWidth/2 - 1;
+                    tileY = _Old_FixtureHeight/2;
+                    tileYtop = _Old_FixtureHeight;
                 } else if (quadrant == 1) {
                     quadrant = 2;
-                    tileX = _fixtureWidth - 1;
-                    tileY = _fixtureHeight/2;
-                    tileXright = _fixtureWidth/2 - 1;
+                    tileX = _Old_FixtureWidth - 1;
+                    tileY = _Old_FixtureHeight/2;
+                    tileXright = _Old_FixtureWidth/2 - 1;
                 } else if (quadrant == 2) {
                     quadrant = 3;
-                    tileX = _fixtureWidth - 1;
+                    tileX = _Old_FixtureWidth - 1;
                     tileY = 0;
-                    tileYtop = _fixtureHeight/2;
+                    tileYtop = _Old_FixtureHeight/2;
                 } else if (quadrant == 3) {
                     break;
                 }
@@ -499,7 +499,7 @@ void FixtureTileDC::updateFrame(uint8_t* packets) const
 
 
 
-std::string FixtureTile::getName() const
+std::string Old_FixtureTile::getName() const
 {
     std::ostringstream out;
     out << "C" << _startChannel << "/" << (_startChannel + 1);

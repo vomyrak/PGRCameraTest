@@ -23,10 +23,10 @@ using std::string;
 
 
 // Just a data container for now. Todo: move all protocol logic into this class
-class KinetProtocol
+class Old_KinetProtocol
 {
 public:
-    KinetProtocol(size_t headerSize, size_t dataSize, size_t numChannels, const unsigned char* headerBytes)
+    Old_KinetProtocol(size_t headerSize, size_t dataSize, size_t numChannels, const unsigned char* headerBytes)
     : _headerSize(headerSize), _dataSize(dataSize), _numChannels(numChannels), _headerBytes(headerBytes)
     {
     }
@@ -45,17 +45,17 @@ protected:
     const unsigned char* _headerBytes;
 };
 
-class Fixture
+class Old_Fixture
 {
 public:
     virtual void updateFrame(uint8_t* packets) const = 0;
     virtual std::string getName() const = 0;
 };
 
-class FixtureRGB : public Fixture
+class Old_FixtureRGB : public Old_Fixture
 {
 public:
-    FixtureRGB(int address, uint8_t r=0, uint8_t g=0, uint8_t b=0);
+    Old_FixtureRGB(int address, uint8_t r=0, uint8_t g=0, uint8_t b=0);
     int getAddress() const { return _address; }
     void setAddress(int address) { _address = address; }
    
@@ -74,18 +74,18 @@ public:
     void set_rgb(uint8_t r, uint8_t g, uint8_t b);
 
 	//newly implemented
-	const KinetProtocol * get_protocol() const;
+	const Old_KinetProtocol * get_protocol() const;
 
 protected:
     int _address;
     unsigned char _values[3];
-	const KinetProtocol *inter;
+	const Old_KinetProtocol *inter;
 };
 
-class FixtureTile : public Fixture
+class Old_FixtureTile : public Old_Fixture
 {
 public:
-    FixtureTile(int startChannel, int width = 12, int height = 12);
+    Old_FixtureTile(int startChannel, int width = 12, int height = 12);
     int getChannel() const { return _startChannel; }
     void setChannel(int channel) { _startChannel = channel; }
     void setVideoRect(int x, int y, int w, int h);
@@ -98,8 +98,8 @@ public:
 
 protected:
     int _startChannel;
-    int _fixtureWidth;
-    int _fixtureHeight;
+    int _Old_FixtureWidth;
+    int _Old_FixtureHeight;
     int _videoX;
     int _videoY;
     int _videoW;
@@ -111,35 +111,35 @@ protected:
     int _rotation;
 };
 
-class FixtureTile6 : public FixtureTile
+class Old_FixtureTile6 : public Old_FixtureTile
 {
 public:
-    FixtureTile6(int startChannel, int width = 12, int height = 12);
+    Old_FixtureTile6(int startChannel, int width = 12, int height = 12);
     virtual void updateFrame(uint8_t* packets) const;
 };
 
-class FixtureTileDC : public FixtureTile
+class Old_FixtureTileDC : public Old_FixtureTile
 {
 public:
-    FixtureTileDC(int startChannel, int width = 12, int height = 12);
+    Old_FixtureTileDC(int startChannel, int width = 12, int height = 12);
     virtual void updateFrame(uint8_t* packets) const;
 };
 
-class PowerSupply
+class Old_PowerSupply
 {
 public:
-    PowerSupply();
-    PowerSupply(const string strHost, const string strPort = "6038");
-    ~PowerSupply();
+    Old_PowerSupply();
+    Old_PowerSupply(const string strHost, const string strPort = "6038");
+    ~Old_PowerSupply();
     
     bool connect(const string strHost, const string strPort = "6038");
     
     string getHost();
     int getPort();
     
-    void addFixture(Fixture* pFix);
-    void clearFixtures();
-    int getFixtureCount() const { return _fixtures.size(); }
+    void addOld_Fixture(Old_Fixture* pFix);
+    void clearOld_Fixtures();
+    int getOld_FixtureCount() const { return _Old_Fixtures.size(); }
     
     void go();
     
@@ -150,11 +150,11 @@ protected:
     
     bool _connected;
     int _socket;
-    list<Fixture*> _fixtures;
+    list<Old_Fixture*> _Old_Fixtures;
     uint8_t* _frame;
     string _host;
     int _port;
-    const KinetProtocol* _proto;		//added for 16-bit control
+    const Old_KinetProtocol* _proto;		//added for 16-bit control
 };
 
 #endif

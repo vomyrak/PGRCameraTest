@@ -9,7 +9,7 @@ test_interface::test_interface(Camera &cam, LightStage &ls, Property (&propty)[1
 	light_value[3] = ls[0][0]->get_red2();
 	light_value[4] = ls[0][0]->get_green2();
 	light_value[5] = ls[0][0]->get_blue2();
-	active_fixture = 0b11111111;
+	active_Old_Fixture = 0b11111111;
 	active_channel = 0b00000111;
 	active_param = 0b1111111111;	
 	camera = &cam;
@@ -35,10 +35,10 @@ void test_interface::set_file_name() {
 	file_name << "LT_";
 	file_name << (*stage)[0][0]->get_str();
 
-	if (active_fixture != 0) {
+	if (active_Old_Fixture != 0) {
 		file_name << "_";
 		for (int i = 0; i < 8; i++) {
-			if ((active_fixture & (1 << i)) == 1) {
+			if ((active_Old_Fixture & (1 << i)) == 1) {
 				file_name << 1;
 			}
 			else {
@@ -97,12 +97,12 @@ string test_interface::get_file_name() {
 	return file_name.str();
 }
 
-void test_interface::set_active_fixture(int control) {
-	active_fixture &= (control & 0xFF);
+void test_interface::set_active_Old_Fixture(int control) {
+	active_Old_Fixture &= (control & 0xFF);
 }
 
-uint8_t test_interface::get_active_fixture() {
-	return active_fixture;
+uint8_t test_interface::get_active_Old_Fixture() {
+	return active_Old_Fixture;
 }
 
 void test_interface::set_active_param(int control) {
@@ -125,10 +125,10 @@ test_interface::~test_interface()
 {
 }
 /*/
-void test_interface::apply_active_fixture() {
+void test_interface::apply_active_Old_Fixture() {
 	for (auto i = 0; i < 8; i++) {
-		if ((active_fixture & (1 << (7 - i))) == 0) {
-			fixture[i]->set_rgb2(0, 0, 0, 0, 0, 0);
+		if ((active_Old_Fixture & (1 << (7 - i))) == 0) {
+			Old_Fixture[i]->set_rgb2(0, 0, 0, 0, 0, 0);
 		}
 	}
 }
@@ -137,16 +137,16 @@ void test_interface::apply_active_fixture() {
 void test_interface::apply_active_channel() {
 	for (auto i = 0; i < 8; i++) {
 		if ((active_channel & 0b1) == 0) {
-			fixture[i]->set_blue(0);
-			fixture[i]->set_blue2(0);
+			Old_Fixture[i]->set_blue(0);
+			Old_Fixture[i]->set_blue2(0);
 		}
 		if ((active_channel & 0b10) == 0) {
-			fixture[i]->set_green(0);
-			fixture[i]->set_green2(0);
+			Old_Fixture[i]->set_green(0);
+			Old_Fixture[i]->set_green2(0);
 		}
 		if ((active_channel & 0b100) == 0) {
-			fixture[i]->set_red(0);
-			fixture[i]->set_red2(0);
+			Old_Fixture[i]->set_red(0);
+			Old_Fixture[i]->set_red2(0);
 		}
 	}
 }
@@ -189,8 +189,8 @@ void test_interface::set_light_value(int r, int g, int b, int r2, int g2, int b2
 	light_value[4] = b;
 	light_value[5] = b2;
 	for (auto i = 0; i < 8; i++) {
-		if ((active_fixture & (1 << (7 - i))) != 0) {
-			//fixture[i]->set_rgb2(r, g, b, r2, g2, b2);
+		if ((active_Old_Fixture & (1 << (7 - i))) != 0) {
+			//Old_Fixture[i]->set_rgb2(r, g, b, r2, g2, b2);
 		}
 	}
 }

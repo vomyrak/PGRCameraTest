@@ -126,27 +126,27 @@ int RunSingleCamera16(PGRGuid guid)
 		return 1;
 	}
 	// initialize lights
-	PowerSupply *arc_0_c = new PowerSupply("10.33.157.55");
-	PowerSupply *arc_0_w = new PowerSupply("10.33.157.51");
+	Old_PowerSupply *arc_0_c = new Old_PowerSupply("10.33.157.55");
+	Old_PowerSupply *arc_0_w = new Old_PowerSupply("10.33.157.51");
 
-	FixtureRGB16 *fix_w_1 = new FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_1 = new FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_w_2 = new FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_2 = new FixtureRGB16(18, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_w_3 = new FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_3 = new FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_w_4 = new FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
-	FixtureRGB16 *fix_rgb_4 = new FixtureRGB16(18, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_w_1 = new Old_FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_rgb_1 = new Old_FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_w_2 = new Old_FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_rgb_2 = new Old_FixtureRGB16(18, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_w_3 = new Old_FixtureRGB16(0, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_rgb_3 = new Old_FixtureRGB16(6, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_w_4 = new Old_FixtureRGB16(12, 0, 0, 0, 0, 0, 0);
+	Old_FixtureRGB16 *fix_rgb_4 = new Old_FixtureRGB16(18, 0, 0, 0, 0, 0, 0);
 
-	arc_0_c->addFixture(fix_w_1);
-	arc_0_c->addFixture(fix_rgb_1);
-	arc_0_c->addFixture(fix_w_2);
-	arc_0_c->addFixture(fix_rgb_2);
+	arc_0_c->addOld_Fixture(fix_w_1);
+	arc_0_c->addOld_Fixture(fix_rgb_1);
+	arc_0_c->addOld_Fixture(fix_w_2);
+	arc_0_c->addOld_Fixture(fix_rgb_2);
 
-	arc_0_w->addFixture(fix_w_3);
-	arc_0_w->addFixture(fix_rgb_3);
-	arc_0_w->addFixture(fix_w_4);
-	arc_0_w->addFixture(fix_rgb_4);
+	arc_0_w->addOld_Fixture(fix_w_3);
+	arc_0_w->addOld_Fixture(fix_rgb_3);
+	arc_0_w->addOld_Fixture(fix_w_4);
+	arc_0_w->addOld_Fixture(fix_rgb_4);
 
 	arc_0_c->go();
 	arc_0_w->go();
@@ -372,7 +372,7 @@ int InterfaceTest(PGRGuid guid) {
 	Property prop[10];
 	init_control(prop, cam, error);
 
-	test_interface test(cam, fixture, prop);
+	test_interface test(cam, Old_Fixture, prop);
 	test.set_light_value(turn_half_lit);
 	arc_0_c->go();
 	arc_0_w->go();
@@ -437,10 +437,10 @@ int main(int argc, char** argv){
 	//stage(2, 5)->set_config(config);
 	//stage(5, 2)->set_config(config);
 	//stage(7, 3)->set_config(config);
-
+	stage.adjustAll(stage.getDeault());
 	int a = 1;
 	while (true) {
-		stage.adjustAll(stage.getDeault());
+		stage.loadMap("123.txt");
 		stage.go();
 		Sleep(20);		
 		stage.loadMap("1234.txt");
@@ -448,12 +448,17 @@ int main(int argc, char** argv){
 		Sleep(20);
 	}
 	
+	//fine step increase
 	/*
 	for (int i = 0; i < 256; i++) {
-		//stage.adjustAll(0, 0, 0, i, 0, 0);
-		//stage.adjustAll(i, 0, 0, 0, 0, 0);
+		for (int j = 0; j < 256; j++) {
+			//stage.adjustAll(0, 0, 0, j, 0, 0);
+			//stage.adjustAll(i, 0, 0, 0, 0, 0);
+		}
 	}
 	*/
+
+	//control one light
 	/*
 	while (true){
 		cin >> temp >> temp2;

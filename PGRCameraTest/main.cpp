@@ -65,27 +65,27 @@ int RunSingleCamera(PGRGuid guid)
 		return 1;
 	}
 	// initialize lights
-	PowerSupply *arc_0_c = new PowerSupply("10.33.157.55");
-	PowerSupply *arc_0_w = new PowerSupply("10.33.157.51");
+	Old_PowerSupply *arc_0_c = new Old_PowerSupply("10.33.157.55");
+	Old_PowerSupply *arc_0_w = new Old_PowerSupply("10.33.157.51");
 
-	FixtureRGB *fix_w_1 = new FixtureRGB(0, 0, 0, 0);
-	FixtureRGB *fix_rgb_1 = new FixtureRGB(6, 0, 0, 0);
-	FixtureRGB *fix_w_2 = new FixtureRGB(12, 0, 0, 0);
-	FixtureRGB *fix_rgb_2 = new FixtureRGB(18, 0, 0, 0);
-	FixtureRGB *fix_w_3 = new FixtureRGB(0, 0, 0, 0);
-	FixtureRGB *fix_rgb_3 = new FixtureRGB(6, 0, 0, 0);
-	FixtureRGB *fix_w_4 = new FixtureRGB(12, 0, 0, 0);
-	FixtureRGB *fix_rgb_4 = new FixtureRGB(18, 0, 0, 0);
+	Old_FixtureRGB *fix_w_1 = new Old_FixtureRGB(0, 0, 0, 0);
+	Old_FixtureRGB *fix_rgb_1 = new Old_FixtureRGB(6, 0, 0, 0);
+	Old_FixtureRGB *fix_w_2 = new Old_FixtureRGB(12, 0, 0, 0);
+	Old_FixtureRGB *fix_rgb_2 = new Old_FixtureRGB(18, 0, 0, 0);
+	Old_FixtureRGB *fix_w_3 = new Old_FixtureRGB(0, 0, 0, 0);
+	Old_FixtureRGB *fix_rgb_3 = new Old_FixtureRGB(6, 0, 0, 0);
+	Old_FixtureRGB *fix_w_4 = new Old_FixtureRGB(12, 0, 0, 0);
+	Old_FixtureRGB *fix_rgb_4 = new Old_FixtureRGB(18, 0, 0, 0);
 
-	arc_0_c->addFixture(fix_w_1);
-	arc_0_c->addFixture(fix_rgb_1);
-	arc_0_c->addFixture(fix_w_2);
-	arc_0_c->addFixture(fix_rgb_2);
+	arc_0_c->addOld_Fixture(fix_w_1);
+	arc_0_c->addOld_Fixture(fix_rgb_1);
+	arc_0_c->addOld_Fixture(fix_w_2);
+	arc_0_c->addOld_Fixture(fix_rgb_2);
 
-	arc_0_w->addFixture(fix_w_3);
-	arc_0_w->addFixture(fix_rgb_3);
-	arc_0_w->addFixture(fix_w_4);
-	arc_0_w->addFixture(fix_rgb_4);
+	arc_0_w->addOld_Fixture(fix_w_3);
+	arc_0_w->addOld_Fixture(fix_rgb_3);
+	arc_0_w->addOld_Fixture(fix_w_4);
+	arc_0_w->addOld_Fixture(fix_rgb_4);
 
 	arc_0_c->go();
 	arc_0_w->go();

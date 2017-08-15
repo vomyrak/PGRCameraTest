@@ -28,9 +28,10 @@ GUI::GUI(int argc, char** argv)
 		->set_int_limits(3, 60);
 
 	glui->set_main_gfx_window(window);
+	glui->set_current_draw_buffer();
+	glui->set_viewport();
 
 	glutMainLoop();
-	decltype(window) glub;
 }
 
 

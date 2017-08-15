@@ -16,6 +16,10 @@ public:
 	void go();
 	/*apply the same 6-channel setting to all lights*/
 	void adjustAll(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
+	void adjustAll(uint8_t config[6]);
+	void adjustAll(const uint8_t config[6]);
+	void adjustRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
+	void adjustWhite(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
 	/*access lamp via virtual arc coordinates*/
 	FixtureRGB16 * operator()(int arc, int index);
 	void rotation(int i);
@@ -27,6 +31,7 @@ public:
 	void setVirtualBuffer(uint8_t * source[12][28]);
 	void saveMap(string filename);
 	void loadMap(string filename);
+	const uint8_t * getDeault();
 private:
 	PowerSupply ** colour;
 	PowerSupply ** white;
@@ -37,4 +42,5 @@ private:
 	uint8_t virtualOffset;
 	uint8_t virtualBuffer[12][28][6];
 	string ip;
+	const uint8_t defaultConfig[6] = {4, 4, 3, 0, 128, 0};
 };

@@ -79,6 +79,44 @@ void LightStage::adjustAll(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t 
 	go();
 }
 
+void LightStage::adjustAll(uint8_t config[6])
+{
+	for (auto i = 0; i < 12; i++) {
+		for (auto j = 0; j < 28; j++) {
+			lamp[i][j]->set_config(config);
+		}
+	}
+}
+
+void LightStage::adjustAll(const uint8_t config[6])
+{
+	for (auto i = 0; i < 12; i++) {
+		for (auto j = 0; j < 28; j++) {
+			lamp[i][j]->set_rgb2(*config, *(config + 1), *(config + 2), *(config + 3), *(config + 4), *(config + 5));
+		}
+	}
+}
+
+void LightStage::adjustRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+{
+	for (auto i = 0; i < 12; i++) {
+		for (auto j = 0; j < 14; j++) {
+			lamp[i][2 * j]->set_rgb2(r, g, b, r2, g2, b2);
+		}
+		colour[i]->go();
+	}
+}
+
+void LightStage::adjustWhite(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+{
+	for (auto i = 0; i < 12; i++) {
+		for (auto j = 0; j < 14; j++) {
+			lamp[i][2 * j + 1]->set_rgb2(r, g, b, r2, g2, b2);
+		}
+		white[i]->go();
+	}
+}
+
 FixtureRGB16 * LightStage::operator()(int arc, int index)
 {
 	if ((arc < 0) || (arc > 23)) {
@@ -215,4 +253,9 @@ void LightStage::loadMap(string filename)
 		}
 	}
 	infile.close();
+}
+
+const uint8_t * LightStage::getDeault()
+{
+	return defaultConfig;
 }

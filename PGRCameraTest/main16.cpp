@@ -428,18 +428,24 @@ int main(int argc, char** argv){
 	LightStage stage;
 	int temp, temp2;
 	uint8_t config[6];
-	config[0] = 40;
-	config[1] = 5;
-	config[2] = 5;
-	config[3] = 5;
-	config[4] = 5;
-	config[5] = 5;
+	config[0] = 4;
+	config[1] = 4;
+	config[2] = 3;
+	config[3] = 0;
+	config[4] = 128;
+	config[5] = 0;
+	//stage(2, 5)->set_config(config);
+	//stage(5, 2)->set_config(config);
+	//stage(7, 3)->set_config(config);
 
-	stage.go();
-	
+	int a = 1;
 	while (true) {
-		stage.rotation(1);
-		Sleep(500);
+		stage.adjustAll(stage.getDeault());
+		stage.go();
+		Sleep(20);		
+		stage.loadMap("1234.txt");
+		stage.go();
+		Sleep(20);
 	}
 	
 	/*

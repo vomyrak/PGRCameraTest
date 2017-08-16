@@ -35,12 +35,9 @@ public:
 
 
 	void rotation(int i);
-	void readRealBuffer();
-	void readVirtualBuffer();
-	void setRealBuffer();
-	void setVirtualBuffer();
-	void setRealBuffer(uint8_t * source[12][28]);
-	void setVirtualBuffer(uint8_t * source[12][28]);
+	void readBuffer();
+	void setBuffer();
+	void setBuffer(uint8_t * source[12][28]);
 
 	void saveMap(string filename);
 	void loadMap(string filename);
@@ -53,10 +50,8 @@ private:
 	uint8_t Matrix[12][28][6];
 	uint8_t MatrixOffsetH;
 	uint8_t MatrixOffsetV;
-	uint8_t realBuffer[12][28][6];
-	uint8_t realOffset;
-	uint8_t virtualOffset;
-	uint8_t virtualBuffer[12][28][6];
+	uint8_t Buffer[12][28][6];
+	uint8_t bufferOffset;
 	string ip;
 	uint8_t defaultConfig[6] = {4, 4, 3, 0, 128, 0};
 };

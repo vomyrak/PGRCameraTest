@@ -119,6 +119,7 @@ void LightStageCamera::setNumImages(int num)
 void LightStageCamera::StartCapture()
 {
 	status = camera.StartCapture();
+	StatusQuery();
 }
 
 Camera * LightStageCamera::getCamera()
@@ -126,29 +127,33 @@ Camera * LightStageCamera::getCamera()
 	return &camera;
 }
 
-void LightStageCamera::setStatus(Error & error)
+void LightStageCamera::updateStatus(Error & error)
 {
 	status = error;
+	StatusQuery();
 }
 
 void LightStageCamera::RetrieveBuffer(Image * rawImage)
 {
 	status = camera.RetrieveBuffer(rawImage);
+	StatusQuery();
 }
 
 void LightStageCamera::StopCapture()
 {
 	status = camera.StopCapture();
+	StatusQuery();
 }
 
 void LightStageCamera::Disconnect()
 {
 	status = camera.Disconnect();
+	StatusQuery();
 }
 
 int LightStageCamera::getNumCamera()
 {
-	return numCamera;
+	return numCameras;
 }
 
 PGRGuid * LightStageCamera::getGuid()

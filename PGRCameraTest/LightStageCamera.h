@@ -6,20 +6,22 @@
 using namespace FlyCapture2;
 using namespace std;
 
+enum {
+	brightness,
+	auto_exposure,
+	sharpness,
+	hue,
+	saturation,
+	gamma,
+	shutter,
+	gain,
+	frame_rate,
+	white_balance
+};
+
 class LightStageCamera
 {
-	enum {
-		brightness,
-		auto_exposure,
-		sharpness,
-		hue,
-		saturation,
-		gamma,
-		shutter,
-		gain,
-		frame_rate,
-		white_balance
-	};
+	
 public:
 	LightStageCamera();
 	~LightStageCamera();
@@ -34,14 +36,14 @@ public:
 	void setNumImages(int num);
 	void StartCapture();
 	Camera * getCamera();
-	void setStatus(Error &error);
+	void updateStatus(Error &error);
 	void RetrieveBuffer(Image * rawImage);
 	void StopCapture();
 	void Disconnect();
 	int getNumCamera();
 	PGRGuid * getGuid();
 	BusManager * getBusManager();
-	Property* prop = new Property[10];
+	
 
 private:
 	Error status;
@@ -52,6 +54,6 @@ private:
 	Camera camera;
 	CameraInfo camInfo;
 	int numImages;
-	int numCamera;
+	Property* prop = new Property[10];
 };
 

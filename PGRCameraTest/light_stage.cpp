@@ -27,9 +27,9 @@ LightStage::LightStage()
 	}
 	MatrixOffsetH = 0;
 	MatrixOffsetV = 0;
-	//setRealBuffer();
+	//setBuffer();
 	//setVirtualBuffer();
-	//realOffset = 0;
+	//bufferOffset = 0;
 	//virtualOffset = 0;
 }
 
@@ -223,7 +223,7 @@ FixtureRGB * LightStage::operator()(int arc, int index)
 
 void LightStage::rotation(int dir)
 {
-	setRealBuffer();
+	setBuffer();
 	
 	if (dir == 0) {
 		if (MatrixOffsetH == 0) {
@@ -250,71 +250,42 @@ void LightStage::rotation(int dir)
 	go();
 }
 
-void LightStage::readRealBuffer()
+void LightStage::readBuffer()
 {
 	for (int i = 0; i < 12; i++) {
 		for (int j = 0; j < 28; j++) {
-			Lamp[i][j]->setValuePtr(realBuffer[i][j]);
+			Lamp[i][j]->setValuePtr(Buffer[i][j]);
 		}
 	}
 }
 
-void LightStage::readVirtualBuffer()
-{
-	for (int i = 0; i < 12; i++) {
-		for (int j = 0; j < 28; j++) {
-			Lamp[i][j]->setValuePtr(virtualBuffer[i][j]);
-		}
-	}
-}
 
-void LightStage::setRealBuffer()
+
+void LightStage::setBuffer()
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
 			for (auto k = 0; k < 6; k++) {
-				if (Matrix[i][j][k] != realBuffer[i][j][k]) {
-					realBuffer[i][j][k] = Matrix[i][j][k];
+				if (Matrix[i][j][k] != Buffer[i][j][k]) {
+					Buffer[i][j][k] = Matrix[i][j][k];
 				}
 			}
 		}
 	}
 }
 
-void LightStage::setVirtualBuffer()
+void LightStage::setBuffer(uint8_t * source[12][28])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
 			for (auto k = 0; k < 6; k++) {
-				if (Matrix[i][j][k] != virtualBuffer[i][j][k]) {
-					virtualBuffer[i][j][k] = Matrix[i][j][k];
-				}
+				Buffer[i][j][k] = source[i][j][k];
 			}
 		}
 	}
 }
 
-void LightStage::setRealBuffer(uint8_t * source[12][28])
-{
-	for (auto i = 0; i < 12; i++) {
-		for (auto j = 0; j < 28; j++) {
-			for (auto k = 0; k < 6; k++) {
-				realBuffer[i][j][k] = source[i][j][k];
-			}
-		}
-	}
-}
 
-void LightStage::setVirtualBuffer(uint8_t * source[12][28])
-{
-	for (auto i = 0; i < 12; i++) {
-		for (auto j = 0; j < 28; j++) {
-			for (auto k = 0; k < 6; k++) {
-				virtualBuffer[i][j][k] = source[i][j][k];
-			}
-		}
-	}
-}
 
 void LightStage::saveMap(string filename)
 {

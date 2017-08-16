@@ -11,24 +11,13 @@
 #include "light_stage.h"
 #include "LightStageCamera.h"
 #include "FlyCapture2.h"
-#include "GUI.h"
+//#include "GUI.h"
 
 #define turn_on 255,255,255,255,255,255
 #define turn_half_lit 128,128,128,128,128,128
 #define turn_off 0,0,0,0,0,0
 
 #define ROI 900, 720, 250, 180
-
-#define brightness 0
-#define auto_exposure 1
-#define sharpness 2
-#define hue 3
-#define saturation 4
-#define gamma 5
-#define shutter 6
-#define gain 7
-#define frame_rate 8
-#define white_balance 9
 
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -52,7 +41,7 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 	cam.PrintCameraInfo16();
 
 	// Set the camera control
-
+	
 
 
 	// Start capturing images
@@ -102,7 +91,6 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 		*/
 		Sleep(150);
 		cam.RetrieveBuffer(&rawImage);
-		cam.StatusQuery();
 		printf("Grabbed %dth image\n", i + 1);
 		vecImages[i].DeepCopy(&rawImage);
 		Sleep(200);
@@ -115,11 +103,9 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 
 	// Stop capturing images
 	cam.StopCapture();
-	cam.StatusQuery();
 
 	// Disconnect the camera
 	cam.Disconnect();
-	cam.StatusQuery();
 
 	// Save images to disk
 	for (int imageCnt = 0; imageCnt < cam.getNumImages(); imageCnt++)
@@ -128,16 +114,16 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 		Image convertedImage;
 		// Convert the raw image
 		ImageMetadata data = vecImages[imageCnt].GetMetadata();
-		cam.setStatus(vecImages[imageCnt].Convert(PIXEL_FORMAT_RGB, &convertedImage));
+		cam.updateStatus(vecImages[imageCnt].Convert(PIXEL_FORMAT_RGB, &convertedImage));
 		cam.StatusQuery();
 		ImageStatistics stats;
 		stats.EnableAll();
 		convertedImage.CalculateStatistics(&stats);
 		stats.EnableAll();
 		float mean[3];
-		cam.setStatus(stats.GetMean(stats.RED, mean));
-		cam.setStatus(stats.GetMean(stats.RED, mean+1));
-		cam.setStatus(stats.GetMean(stats.RED, mean+2));
+		cam.updateStatus(stats.GetMean(stats.RED, mean));
+		cam.updateStatus(stats.GetMean(stats.RED, mean+1));
+		cam.updateStatus(stats.GetMean(stats.RED, mean+2));
 		printf("%dth picture: \n", imageCnt + 1);
 		cout << "Exposure " << data.embeddedExposure << endl;
 		cout << "Brightness " << data.embeddedBrightness << endl;
@@ -145,12 +131,11 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 		cout << "Mean " << mean << endl;
 		// Create a unique filename
 		ostringstream filename;
-		filename << "image_" << imageCnt + 1 << "_first_light" << ".png";
+		filename << "..\\image_folder\\image_" << imageCnt + 1 << "_first_light" << ".png";
 
 		// Save the image. If a file format is not passed in, then the file
 		// extension is parsed to attempt to determine the file format.
-		cam.setStatus(convertedImage.Save(filename.str().c_str()));
-		cam.StatusQuery();
+		cam.updateStatus(convertedImage.Save(filename.str().c_str()));
 	}
 
 	return 0;
@@ -268,11 +253,11 @@ int main(int argc, char** argv){
 	stage.go();
 	int a = 1;
 	LightStageCamera cam;
-	for (unsigned int i = 0; i < cam.getNumCamera; i++) {
-		cam.setStatus(cam.getBusManager->GetCameraFromIndex(i, cam.getGuid));
-		cam.StatusQuery();
+	for (unsigned int i = 0; i < cam.getNumCamera(); i++) {
+		cam.updateStatus(cam.getBusManager()->GetCameraFromIndex(i, cam.getGuid()));
 
 		RunSingleCamera16(cam, stage);
+		
 	}
 	while (true) {
 		stage.rotation(1);

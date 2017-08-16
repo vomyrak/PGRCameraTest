@@ -27,7 +27,7 @@ void LightStageCamera::PrintBuildInfo16()
 	cout << timeStamp.str() << endl << endl;
 }
 
-Error LightStageCamera::init_control(Property(&prop)[10], Camera & cam, Error & error)
+Error LightStageCamera::init_control()
 {
 	prop[0].type = BRIGHTNESS;
 	prop[1].type = AUTO_EXPOSURE;
@@ -61,13 +61,9 @@ Error LightStageCamera::init_control(Property(&prop)[10], Camera & cam, Error & 
 	prop[white_balance].valueA = 482;
 	prop[white_balance].valueB = 762;
 	for (size_t i = 0; i < 10; i++) {
-		error = cam.SetProperty(prop + i);
-		if (error != PGRERROR_OK) {
-			PrintError16(error);
-			cout << "Failure at property" << i << endl;
-		}
+		status = camera.SetProperty(prop + i);
+		StatusQuery();
 	}
-	return error;
 }
 
 void LightStageCamera::connect()
@@ -127,7 +123,7 @@ Camera * LightStageCamera::getCamera()
 	return &camera;
 }
 
-void LightStageCamera::updateStatus(Error & error)
+void LightStageCamera::performFunc(Error & error)
 {
 	status = error;
 	StatusQuery();

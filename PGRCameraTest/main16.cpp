@@ -28,6 +28,7 @@ using namespace std;
 
 int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 {
+	cam.init_control();
 	// CAMERA
 	cam.setNumImages(32);
 
@@ -55,40 +56,9 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 	stage.adjustAll(turn_off);
 	Sleep(100); // wait for the lights to turn on
 
-	//for testing fine control
-	/*
-	for (int i = 0; counter < k_numImages;)
-	{
-		error = cam.RetrieveBuffer(&rawImage);
-		if (error != PGRERROR_OK)
-		{
-			PrintError16(error);
-			error = cam.Disconnect();
-		}
-		printf("Grabbed %dth image\n", counter+1);
-		vecImages[counter].DeepCopy(&rawImage);
-		Sleep(200);
-
-		fix_w_1->set_rgb2(128, 128, 128, i, i, i);
-		fix_w_2->set_rgb2(128, 128, 128, i, i, i);
-		fix_w_3->set_rgb2(128, 128, 128, i, i, i);
-		fix_w_4->set_rgb2(128, 128, 128, i, i, i);
-		arc_0_c->go();
-		arc_0_w->go();
-		Sleep(200);
-		i += 255 / k_numImages;
-		counter += 1;
-	}
-	*/
 	for (int i = 0; i < cam.getNumImages();) {
 		
 		stage.adjustAll(i, 0, 0, 0, 0, 0);
-		/*
-		fix_rgb_1->set_rgb2(i, 0, 0, 0, 0, 0);
-		fix_rgb_2->set_rgb2(i, 0, 0, 0, 0, 0);
-		fix_rgb_3->set_rgb2(i, 0, 0, 0, 0, 0);
-		fix_rgb_4->set_rgb2(i, 0, 0, 0, 0, 0);
-		*/
 		Sleep(150);
 		cam.RetrieveBuffer(&rawImage);
 		printf("Grabbed %dth image\n", i + 1);
@@ -114,16 +84,16 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 		Image convertedImage;
 		// Convert the raw image
 		ImageMetadata data = vecImages[imageCnt].GetMetadata();
-		cam.updateStatus(vecImages[imageCnt].Convert(PIXEL_FORMAT_RGB, &convertedImage));
+		cam.performFunc(vecImages[imageCnt].Convert(PIXEL_FORMAT_RGB, &convertedImage));
 		cam.StatusQuery();
 		ImageStatistics stats;
 		stats.EnableAll();
 		convertedImage.CalculateStatistics(&stats);
 		stats.EnableAll();
 		float mean[3];
-		cam.updateStatus(stats.GetMean(stats.RED, mean));
-		cam.updateStatus(stats.GetMean(stats.RED, mean+1));
-		cam.updateStatus(stats.GetMean(stats.RED, mean+2));
+		cam.performFunc(stats.GetMean(stats.RED, mean));
+		cam.performFunc(stats.GetMean(stats.RED, mean+1));
+		cam.performFunc(stats.GetMean(stats.RED, mean+2));
 		printf("%dth picture: \n", imageCnt + 1);
 		cout << "Exposure " << data.embeddedExposure << endl;
 		cout << "Brightness " << data.embeddedBrightness << endl;
@@ -135,7 +105,7 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 
 		// Save the image. If a file format is not passed in, then the file
 		// extension is parsed to attempt to determine the file format.
-		cam.updateStatus(convertedImage.Save(filename.str().c_str()));
+		cam.performFunc(convertedImage.Save(filename.str().c_str()));
 	}
 
 	return 0;
@@ -240,13 +210,7 @@ int main(int argc, char** argv){
 	}
 	LightStage stage;
 	int temp, temp2;
-	uint8_t config[6];
-	config[0] = 50;
-	config[1] = 50;
-	config[2] = 50;
-	config[3] = 0;
-	config[4] = 128;
-	config[5] = 0;
+	uint8_t config[6] = { 50, 50, 50, 0, 128, 0 };
 	stage(2, 5)->set_config(config);
 	stage(5, 2)->set_config(config);
 	stage(7, 3)->set_config(config);
@@ -254,7 +218,7 @@ int main(int argc, char** argv){
 	int a = 1;
 	LightStageCamera cam;
 	for (unsigned int i = 0; i < cam.getNumCamera(); i++) {
-		cam.updateStatus(cam.getBusManager()->GetCameraFromIndex(i, cam.getGuid()));
+		cam.performFunc(cam.getBusManager()->GetCameraFromIndex(i, cam.getGuid()));
 
 		RunSingleCamera16(cam, stage);
 		

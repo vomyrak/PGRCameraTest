@@ -26,7 +26,7 @@ public:
 	LightStageCamera();
 	~LightStageCamera();
 	void PrintBuildInfo16();
-	Error init_control(Property(&prop)[10], Camera &cam, Error &error);
+	Error init_control();
 	void connect();
 	void getCameraInfo();
 	void PrintCameraInfo16();
@@ -36,7 +36,7 @@ public:
 	void setNumImages(int num);
 	void StartCapture();
 	Camera * getCamera();
-	void updateStatus(Error &error);
+	void performFunc(Error &error);
 	void RetrieveBuffer(Image * rawImage);
 	void StopCapture();
 	void Disconnect();

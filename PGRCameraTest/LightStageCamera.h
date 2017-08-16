@@ -25,17 +25,33 @@ public:
 	~LightStageCamera();
 	void PrintBuildInfo16();
 	Error init_control(Property(&prop)[10], Camera &cam, Error &error);
-	void PrintCameraInfo16(CameraInfo* pCamInfo);
+	void connect();
+	void getCameraInfo();
+	void PrintCameraInfo16();
 	void PrintError16(Error error);
+	void StatusQuery();
+	int getNumImages();
+	void setNumImages(int num);
+	void StartCapture();
+	Camera * getCamera();
+	void setStatus(Error &error);
+	void RetrieveBuffer(Image * rawImage);
+	void StopCapture();
+	void Disconnect();
+	int getNumCamera();
+	PGRGuid * getGuid();
+	BusManager * getBusManager();
+	Property* prop = new Property[10];
 
 private:
-	FC2Version fc2Version;
-	Error error;
+	Error status;
 	BusManager busMgr;
+	FC2Version fc2Version;
 	unsigned int numCameras;
 	PGRGuid guid;
-	Camera cam;
+	Camera camera;
 	CameraInfo camInfo;
-	Property* prop = new Property[10];
+	int numImages;
+	int numCamera;
 };
 

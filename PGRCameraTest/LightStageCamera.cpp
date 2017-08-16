@@ -5,10 +5,8 @@ using namespace std;
 LightStageCamera::LightStageCamera()
 {
 	PrintBuildInfo16();
-	error = busMgr.GetNumOfCameras(&numCameras);
-	if (error != PGRERROR_OK) {
-		PrintError16(error);
-	}
+	status = busMgr.GetNumOfCameras(&numCameras);
+	StatusQuery();
 	cout << "Number of cameras detected: " << numCameras << endl;
 }
 
@@ -72,20 +70,93 @@ Error LightStageCamera::init_control(Property(&prop)[10], Camera & cam, Error & 
 	return error;
 }
 
-void LightStageCamera::PrintCameraInfo16(CameraInfo * pCamInfo)
+void LightStageCamera::connect()
 {
+	status = camera.Connect(&guid);
+}
+
+void LightStageCamera::getCameraInfo()
+{
+	status = camera.GetCameraInfo(&camInfo);
+}
+
+void LightStageCamera::PrintCameraInfo16()
+{
+
 	cout << endl;
 	cout << "*** CAMERA INFORMATION ***" << endl;
-	cout << "Serial number -" << pCamInfo->serialNumber << endl;
-	cout << "Camera model - " << pCamInfo->modelName << endl;
-	cout << "Camera vendor - " << pCamInfo->vendorName << endl;
-	cout << "Sensor - " << pCamInfo->sensorInfo << endl;
-	cout << "Resolution - " << pCamInfo->sensorResolution << endl;
-	cout << "Firmware version - " << pCamInfo->firmwareVersion << endl;
-	cout << "Firmware build time - " << pCamInfo->firmwareBuildTime << endl << endl;
+	cout << "Serial number -" << camInfo.serialNumber << endl;
+	cout << "Camera model - " << camInfo.modelName << endl;
+	cout << "Camera vendor - " << camInfo.vendorName << endl;
+	cout << "Sensor - " << camInfo.sensorInfo << endl;
+	cout << "Resolution - " << camInfo.sensorResolution << endl;
+	cout << "Firmware version - " << camInfo.firmwareVersion << endl;
+	cout << "Firmware build time - " << camInfo.firmwareBuildTime << endl << endl;
 }
 
 void LightStageCamera::PrintError16(Error error)
 {
 	error.PrintErrorTrace();
+}
+
+void LightStageCamera::StatusQuery()
+{
+	if (status != PGRERROR_OK) {
+		PrintError16(status);
+	}
+}
+
+int LightStageCamera::getNumImages()
+{
+	return numImages;
+}
+
+void LightStageCamera::setNumImages(int num)
+{
+	numImages = num;
+}
+
+void LightStageCamera::StartCapture()
+{
+	status = camera.StartCapture();
+}
+
+Camera * LightStageCamera::getCamera()
+{
+	return &camera;
+}
+
+void LightStageCamera::setStatus(Error & error)
+{
+	status = error;
+}
+
+void LightStageCamera::RetrieveBuffer(Image * rawImage)
+{
+	status = camera.RetrieveBuffer(rawImage);
+}
+
+void LightStageCamera::StopCapture()
+{
+	status = camera.StopCapture();
+}
+
+void LightStageCamera::Disconnect()
+{
+	status = camera.Disconnect();
+}
+
+int LightStageCamera::getNumCamera()
+{
+	return numCamera;
+}
+
+PGRGuid * LightStageCamera::getGuid()
+{
+	return &guid;
+}
+
+BusManager * LightStageCamera::getBusManager()
+{
+	return &busMgr;
 }

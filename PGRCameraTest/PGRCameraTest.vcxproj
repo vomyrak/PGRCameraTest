@@ -148,11 +148,8 @@
   <ItemGroup>
     <ClCompile Include="Fixture.cpp" />
     <ClCompile Include="GUI.cpp" />
-    <ClCompile Include="kinet.cpp" />
-    <ClCompile Include="kinet16.cpp" />
     <ClCompile Include="LightStageCamera.cpp" />
     <ClCompile Include="light_stage.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="main16.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="test_interface.cpp" />
@@ -161,8 +158,6 @@
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="interface.h" />
-    <ClInclude Include="kinet.h" />
-    <ClInclude Include="kinet16.h" />
     <ClInclude Include="LightStageCamera.h" />
     <ClInclude Include="light_stage.h" />
     <ClInclude Include="stdafx.h" />

@@ -55,8 +55,8 @@ public:
 class FixtureRGB : public Fixture
 {
 public:
-	FixtureRGB(int address, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0);
-	FixtureRGB(int address, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t r2 = 0, uint8_t g2 = 0, uint8_t b2 = 0);
+	FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b);
+	FixtureRGB(int address, uint8_t * ptr = nullptr, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t r2 = 0, uint8_t g2 = 0, uint8_t b2 = 0);
 	int getAddress() const { return _address; }
 	void setAddress(int address) { _address = address; }
 
@@ -89,6 +89,9 @@ public:
 	void FixtureRGB::set_rgb2(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
 
 	string get_str() const;
+
+	uint8_t * getValuePtr();
+	void setValuePtr(uint8_t * ptr);
 private:
 	int _address;
 	uint8_t * _values;

@@ -223,16 +223,19 @@ FixtureRGB::FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b)
 	channelNumber = 3;
 }
 
-FixtureRGB::FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+FixtureRGB::FixtureRGB(int address, uint8_t * ptr, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
 	: Fixture()
 	, _address(address)
 {
+	if (ptr != nullptr) {
+		_values = ptr;
+	}
 	_values[0] = r;
 	_values[1] = r2;
 	_values[2] = g;
 	_values[3] = g2;
 	_values[4] = b;
-	_values[5] = b2;	
+	_values[5] = b2;
 	channelNumber = 6;
 }
 
@@ -421,6 +424,16 @@ string FixtureRGB::get_str() const
 	}
 	return ss.str();
 }
+uint8_t * FixtureRGB::getValuePtr()
+{
+	return _values;
+}
+
+void FixtureRGB::setValuePtr(uint8_t * ptr)
+{
+	_values = ptr;
+}
+
 //Original codes that are not used in the project
 /*
 FixtureTile::FixtureTile(int startChannel, int width, int height)

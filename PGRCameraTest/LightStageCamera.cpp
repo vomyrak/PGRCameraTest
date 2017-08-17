@@ -27,7 +27,7 @@ void LightStageCamera::PrintBuildInfo16()
 	cout << timeStamp.str() << endl << endl;
 }
 
-Error LightStageCamera::init_control()
+void LightStageCamera::init_control()
 {
 	prop[0].type = BRIGHTNESS;
 	prop[1].type = AUTO_EXPOSURE;
@@ -58,6 +58,7 @@ Error LightStageCamera::init_control()
 	prop[frame_rate].absValue = 55.161;//80;
 									   //white balance must have absControl set to false
 	prop[white_balance].absControl = false;
+	prop[white_balance].onOff = false;
 	prop[white_balance].valueA = 482;
 	prop[white_balance].valueB = 762;
 	for (size_t i = 0; i < 10; i++) {
@@ -129,10 +130,12 @@ void LightStageCamera::performFunc(Error & error)
 	StatusQuery();
 }
 
-void LightStageCamera::RetrieveBuffer(Image * rawImage)
+void LightStageCamera::RetrieveBuffer(std::vector<Image> & vecImages, Image * rawImage, int index)
 {
 	status = camera.RetrieveBuffer(rawImage);
 	StatusQuery();
+	printf("Grabbed %dth image\n", index + 1);
+	vecImages[index].DeepCopy(rawImage);
 }
 
 void LightStageCamera::StopCapture()

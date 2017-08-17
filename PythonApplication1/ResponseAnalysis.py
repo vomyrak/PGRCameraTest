@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+'''
 locale = "C:\\Users\\VomyraK\\Documents\\Visual Studio 2015\\Projects\\PGRCameraTest\\PNGReader\\intensity_curve_absolute.txt"
 
 
@@ -30,5 +31,32 @@ def main():
 	plt.savefig(filename)
 	plt.grid()
 	plt.show()
+if __name__ == "__main__":
+	main()
+
+'''
+
+text = "..\\image_folder\\intensity_curve_gain.txt"
+
+def main():
+	data = []
+	for i in range(9):
+		data.append([])
+		for j in range(24):
+			data[i].append([])
+	file = open(text, 'r')
+	content = file.read().split()
+	temp = 0
+	iter = 0
+	for i in range(len(content)):
+		iter %= 120
+		if (i % 5 == 0):
+			temp = int(content[i] - 1)
+		elif (i % 5 == 1):
+			pass
+		else:
+			data[temp][int(iter / 5)].append(int(content[i]))
+		iter += 1
+
 if __name__ == "__main__":
 	main()

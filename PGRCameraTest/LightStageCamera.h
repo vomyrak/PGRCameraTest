@@ -2,6 +2,7 @@
 #include "FlyCapture2.h"
 #include <sstream>
 #include <iostream>
+#include <vector>
 
 using namespace FlyCapture2;
 using namespace std;
@@ -26,7 +27,7 @@ public:
 	LightStageCamera();
 	~LightStageCamera();
 	void PrintBuildInfo16();
-	Error init_control();
+	void init_control();
 	void connect();
 	void getCameraInfo();
 	void PrintCameraInfo16();
@@ -37,7 +38,7 @@ public:
 	void StartCapture();
 	Camera * getCamera();
 	void performFunc(Error &error);
-	void RetrieveBuffer(Image * rawImage);
+	void LightStageCamera::RetrieveBuffer(std::vector<Image> & vecImages, Image * rawImage, int index);
 	void StopCapture();
 	void Disconnect();
 	int getNumCamera();

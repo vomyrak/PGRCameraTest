@@ -242,3 +242,4 @@ ModelManifest.xml
 .fake/
 /PGRCameraTest/123.txt
 /image_folder
+/intensity_curve_gain.txt

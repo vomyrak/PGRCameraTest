@@ -25,12 +25,61 @@
 using namespace FlyCapture2;
 using namespace std;
 
+LightStage stage;
+LightStageCamera cam;
 
-int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
+bool check_matching() {
+	return true;
+}
+void test_cases(int i) {
+	
+	switch (i) {
+		
+		case 0:
+			stage.adjustRGB(20, 20, 20, 0, 0, 0);
+			//stage.adjustRGB(40, 40, 40, 0, 0, 0);
+			break;
+		case 1:
+			stage.adjustWhite(20, 20, 20, 0, 0, 0);
+			//stage.adjustWhite(40, 40, 40, 0, 0, 0);
+			break;
+		case 2:
+			stage.adjustRGB(10, 10, 10, 0, 0, 0);
+			stage.adjustWhite(10, 10, 10, 0, 0, 0);
+			//stage.adjustRGB(40, 40, 40, 0, 0, 0);
+			break;
+		case 3:
+			stage.adjustRGB(60, 0, 0, 0, 0, 0);
+			break;
+		case 4:
+			stage.adjustRGB(0, 60, 0, 0, 0, 0);
+			break;
+		case 5:
+			stage.adjustRGB(0, 0, 60, 0, 0, 0);
+			break;
+		case 6:
+			stage.adjustWhite(60, 0, 0, 0, 0, 0);
+			break;
+		case 7:
+			stage.adjustWhite(0, 60, 0, 0, 0, 0);
+			break;
+		case 8:
+			stage.adjustWhite(0, 0, 60, 0, 0, 0);
+			break;
+			
+		
+	}
+	/*
+	stage.adjustWhite(20 + i * 2, 0, 60 - i * 2, 0, 0, 0);
+	*/
+
+}
+int RunSingleCamera16(int &count)
 {
+
 	cam.init_control();
 	// CAMERA
-	cam.setNumImages(32);
+	cam.setNumImages(9);
 
 	// Connect to a camera
 	cam.connect();
@@ -56,14 +105,12 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 	stage.adjustAll(turn_off);
 	Sleep(100); // wait for the lights to turn on
 
-	for (int i = 0; i < cam.getNumImages();) {
+	for (int i = 0; i < cam.getNumImages();) {//cam.getNumImages()
 		
-		stage.adjustAll(i, 0, 0, 0, 0, 0);
+		test_cases(i);
 		Sleep(150);
-		cam.RetrieveBuffer(&rawImage);
-		printf("Grabbed %dth image\n", i + 1);
-		vecImages[i].DeepCopy(&rawImage);
-		Sleep(200);
+		cam.RetrieveBuffer(vecImages, &rawImage, i);
+		stage.adjustAll(turn_off);
 		i++;
 	}
 
@@ -83,25 +130,13 @@ int RunSingleCamera16(LightStageCamera &cam, LightStage &stage)
 		// Create a converted image
 		Image convertedImage;
 		// Convert the raw image
-		ImageMetadata data = vecImages[imageCnt].GetMetadata();
 		cam.performFunc(vecImages[imageCnt].Convert(PIXEL_FORMAT_RGB, &convertedImage));
 		cam.StatusQuery();
-		ImageStatistics stats;
-		stats.EnableAll();
-		convertedImage.CalculateStatistics(&stats);
-		stats.EnableAll();
-		float mean[3];
-		cam.performFunc(stats.GetMean(stats.RED, mean));
-		cam.performFunc(stats.GetMean(stats.RED, mean+1));
-		cam.performFunc(stats.GetMean(stats.RED, mean+2));
-		printf("%dth picture: \n", imageCnt + 1);
-		cout << "Exposure " << data.embeddedExposure << endl;
-		cout << "Brightness " << data.embeddedBrightness << endl;
-		cout << "White Balance " << data.embeddedWhiteBalance << endl;
-		cout << "Mean " << mean << endl;
+		printf("%dth picture, take %d\n", imageCnt + 1, count);
+
 		// Create a unique filename
 		ostringstream filename;
-		filename << "..\\image_folder\\image_" << imageCnt + 1 << "_first_light" << ".png";
+		filename << "..\\image_folder\\image_" << imageCnt + 1 << "_iter_" << count << ".png";
 
 		// Save the image. If a file format is not passed in, then the file
 		// extension is parsed to attempt to determine the file format.
@@ -199,35 +234,53 @@ int InterfaceTest(PGRGuid guid) {
 }
 */
 int main(int argc, char** argv){
+
 	// LIGHTS
 	//GUI gui(argc, argv);
 	WSADATA wsaData;
 	// Initialize Winsock
+	
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed with error: %d\n", iResult);
 		return 1;
 	}
-	LightStage stage;
-	int temp, temp2;
-	uint8_t config[6] = { 50, 50, 50, 0, 128, 0 };
-	stage(2, 5)->set_config(config);
-	stage(5, 2)->set_config(config);
-	stage(7, 3)->set_config(config);
-	stage.go();
-	int a = 1;
-	LightStageCamera cam;
-	for (unsigned int i = 0; i < cam.getNumCamera(); i++) {
-		cam.performFunc(cam.getBusManager()->GetCameraFromIndex(i, cam.getGuid()));
 
-		RunSingleCamera16(cam, stage);
-		
+	while (true) {
+		stage(8, 5)->set_rgb2(10, 10, 10, 10, 10, 10);
+		stage.go(7);
+		stage(8, 5)->set_rgb2(turn_off);
+		stage.go(7);
+		Sleep(20);
+		//stage[5][5]->set_rgb2(turn_off);
+		//Sleep(20);
 	}
+	stage.adjustAll(turn_off);
+	cam.performFunc(cam.getBusManager()->GetCameraFromIndex(0, cam.getGuid()));
+	int count = 0;
+	
+	while (true) {
+		RunSingleCamera16(count);
+		ofstream configuration;
+		string name("..\\image_folder\\take_num.config");
+		configuration.open(name.c_str());
+		configuration << count;
+		configuration.close();
+		//system("..\\x64\\Debug\\PNGReader.exe");
+		if (check_matching() == false) {
+			count += 1;
+		}
+		else {
+			break;
+		}
+	}
+	
+	/*
 	while (true) {
 		stage.rotation(1);
 		Sleep(100);
 	}
-	
+	*/
 	//fine step increase
 	/*
 	for (int i = 0; i < 256; i++) {

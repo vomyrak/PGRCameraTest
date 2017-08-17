@@ -36,10 +36,6 @@ LightStage::LightStage()
 
 LightStage::~LightStage()
 {
-	delete[] Colour;
-	delete[] White;
-	delete[] Lamp;
-	delete[] Matrix;
 
 }
 

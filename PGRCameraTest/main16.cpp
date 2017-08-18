@@ -36,34 +36,44 @@ void test_cases(int i) {
 	switch (i) {
 		
 		case 0:
+			stage.adjustAll(turn_off);
 			stage.adjustRGB(20, 20, 20, 0, 0, 0);
 			//stage.adjustRGB(40, 40, 40, 0, 0, 0);
 			break;
 		case 1:
+			stage.adjustAll(turn_off);
+
 			stage.adjustWhite(20, 20, 20, 0, 0, 0);
 			//stage.adjustWhite(40, 40, 40, 0, 0, 0);
 			break;
 		case 2:
+			stage.adjustAll(turn_off);
 			stage.adjustRGB(10, 10, 10, 0, 0, 0);
 			stage.adjustWhite(10, 10, 10, 0, 0, 0);
 			//stage.adjustRGB(40, 40, 40, 0, 0, 0);
 			break;
 		case 3:
+			stage.adjustAll(turn_off);
 			stage.adjustRGB(60, 0, 0, 0, 0, 0);
 			break;
 		case 4:
+			stage.adjustAll(turn_off);
 			stage.adjustRGB(0, 60, 0, 0, 0, 0);
 			break;
 		case 5:
+			stage.adjustAll(turn_off);
 			stage.adjustRGB(0, 0, 60, 0, 0, 0);
 			break;
 		case 6:
+			stage.adjustAll(turn_off);
 			stage.adjustWhite(60, 0, 0, 0, 0, 0);
 			break;
 		case 7:
+			stage.adjustAll(turn_off);
 			stage.adjustWhite(0, 60, 0, 0, 0, 0);
 			break;
 		case 8:
+			stage.adjustAll(turn_off);
 			stage.adjustWhite(0, 0, 60, 0, 0, 0);
 			break;
 			
@@ -76,17 +86,18 @@ void test_cases(int i) {
 }
 int RunSingleCamera16(int &count)
 {
-
+	cam.connect();
+	cam.getCameraInfo();
 	cam.init_control();
 	// CAMERA
-	cam.setNumImages(9);
+	cam.setNumImages(336);
 
 	// Connect to a camera
-	cam.connect();
+	
 	cam.StatusQuery();
 
 	// Get the camera information
-	cam.getCameraInfo();
+
 	cam.StatusQuery();
 	cam.PrintCameraInfo16();
 
@@ -100,17 +111,26 @@ int RunSingleCamera16(int &count)
 	Image rawImage;
 	std::vector<Image> vecImages;
 	vecImages.resize(cam.getNumImages());
-	int counter = 0;
-
+	int k = 0;
 	stage.adjustAll(turn_off);
 	Sleep(100); // wait for the lights to turn on
+	for (int i = 0; i < 1;) {//cam.getNumImages()
+		for (int j = 0; j < 1; j++) {
+			if (j % 2 == 0) {
+				stage(i, j)->set_rgb2(255, 255, 255, 0, 0, 0);
+			}
+			else {
+				stage(i, j)->set_rgb2(255, 255, 255, 0, 0, 0);
+			}
+			stage.go();
+			Sleep(100);
+			cam.RetrieveBuffer(vecImages, &rawImage, k);
+			k++;
+			stage.adjustAll(turn_off);
+		}
+		//test_cases(i);
 
-	for (int i = 0; i < cam.getNumImages();) {//cam.getNumImages()
-		
-		test_cases(i);
-		Sleep(150);
-		cam.RetrieveBuffer(vecImages, &rawImage, i);
-		stage.adjustAll(turn_off);
+		//cam.RetrieveBuffer(vecImages, &rawImage, i);
 		i++;
 	}
 
@@ -239,26 +259,24 @@ int main(int argc, char** argv){
 	//GUI gui(argc, argv);
 	WSADATA wsaData;
 	// Initialize Winsock
-	
+	stage.adjustAll(turn_off);
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed with error: %d\n", iResult);
 		return 1;
 	}
-
-	while (true) {
-		stage(8, 5)->set_rgb2(10, 10, 10, 10, 10, 10);
-		stage.go(7);
-		stage(8, 5)->set_rgb2(turn_off);
-		stage.go(7);
-		Sleep(20);
+	stage(8, 5)->set_rgb2(10, 10, 10, 10, 10, 10);
+	stage.go(7);
+	int count = 0;
+	RunSingleCamera16(count);
 		//stage[5][5]->set_rgb2(turn_off);
 		//Sleep(20);
-	}
+	/*
 	stage.adjustAll(turn_off);
 	cam.performFunc(cam.getBusManager()->GetCameraFromIndex(0, cam.getGuid()));
 	int count = 0;
-	
+	*/
+	/*
 	while (true) {
 		RunSingleCamera16(count);
 		ofstream configuration;
@@ -274,7 +292,7 @@ int main(int argc, char** argv){
 			break;
 		}
 	}
-	
+	*/
 	/*
 	while (true) {
 		stage.rotation(1);

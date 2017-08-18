@@ -8,6 +8,7 @@ LightStageCamera::LightStageCamera()
 	status = busMgr.GetNumOfCameras(&numCameras);
 	StatusQuery();
 	cout << "Number of cameras detected: " << numCameras << endl;
+	getCameraFromIndex();
 }
 
 
@@ -155,6 +156,12 @@ int LightStageCamera::getNumCamera()
 	return numCameras;
 }
 
+void LightStageCamera::getCameraFromIndex()
+{
+	status = busMgr.GetCameraFromIndex(0, &guid);
+	StatusQuery();
+}
+
 PGRGuid * LightStageCamera::getGuid()
 {
 	return &guid;
@@ -163,4 +170,9 @@ PGRGuid * LightStageCamera::getGuid()
 BusManager * LightStageCamera::getBusManager()
 {
 	return &busMgr;
+}
+
+Property * LightStageCamera::getProp()
+{
+	return prop;
 }

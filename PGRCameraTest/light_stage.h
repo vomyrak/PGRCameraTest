@@ -53,5 +53,5 @@ private:
 	uint8_t Buffer[12][28][6];
 	uint8_t bufferOffset;
 	string ip;
-	uint8_t defaultConfig[6] = {4, 4, 3, 0, 128, 0};
+	uint8_t defaultConfig[6];
 };

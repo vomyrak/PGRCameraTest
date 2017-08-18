@@ -42,8 +42,10 @@ public:
 	void StopCapture();
 	void Disconnect();
 	int getNumCamera();
+	void getCameraFromIndex();
 	PGRGuid * getGuid();
 	BusManager * getBusManager();
+	Property * getProp();
 	
 
 private:
@@ -55,6 +57,6 @@ private:
 	Camera camera;
 	CameraInfo camInfo;
 	int numImages;
-	Property* prop = new Property[10];
+	Property prop[10];
 };
 

@@ -27,7 +27,7 @@ public:
 	LightStageCamera();
 	~LightStageCamera();
 	void PrintBuildInfo16();
-	void init_control();
+	void initCurrentCamera();
 	void connect();
 	void getCameraInfo();
 	void PrintCameraInfo16();

@@ -210,7 +210,7 @@ void PowerSupply::go()
 	}
 }
 
-FixtureRGB::FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b)
+FixtureLED::FixtureLED(int address, uint8_t r, uint8_t g, uint8_t b)
 	: Fixture()
 	, _address(address)
 {
@@ -223,7 +223,7 @@ FixtureRGB::FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b)
 	channelNumber = 3;
 }
 
-FixtureRGB::FixtureRGB(int address, uint8_t * ptr, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+FixtureLED::FixtureLED(int address, uint8_t * ptr, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
 	: Fixture()
 	, _address(address)
 {
@@ -239,112 +239,112 @@ FixtureRGB::FixtureRGB(int address, uint8_t * ptr, uint8_t r, uint8_t g, uint8_t
 	channelNumber = 6;
 }
 
-void FixtureRGB::updateFrame(uint8_t* packets) const
+void FixtureLED::updateFrame(uint8_t* packets) const
 {
 	memcpy(packets + oldProtocol.getHeaderSize() + _address, _values, channelNumber);
 }
 
 
-std::string FixtureRGB::getName() const
+std::string FixtureLED::getName() const
 {
 	std::ostringstream out;
 	out << getAddress();
 	return out.str();
 }
 
-uint8_t FixtureRGB::get_red() const
+uint8_t FixtureLED::getRed() const
 {
 	return _values[0];
 }
 
-uint8_t FixtureRGB::get_green() const
+uint8_t FixtureLED::getGreen() const
 {
 	return _values[2];
 }
 
-uint8_t FixtureRGB::get_blue() const
+uint8_t FixtureLED::getBlue() const
 {
 	return _values[4];
 }
 
-uint8_t FixtureRGB::get_red2() const
+uint8_t FixtureLED::getRed2() const
 {
 	return _values[1];
 }
 
-uint8_t FixtureRGB::get_green2() const
+uint8_t FixtureLED::getGreen2() const
 {
 	return _values[3];
 }
 
-uint8_t FixtureRGB::get_blue2() const
+uint8_t FixtureLED::getBlue2() const
 {
 	return _values[5];
 }
 
-void FixtureRGB::set_red(uint8_t r)
+void FixtureLED::setRed(uint8_t r)
 {
 	_values[0] = r;
 }
 
-void FixtureRGB::set_green(uint8_t g)
+void FixtureLED::setGreen(uint8_t g)
 {
 	_values[2] = g;
 }
 
-void FixtureRGB::set_blue(uint8_t b)
+void FixtureLED::setBlue(uint8_t b)
 {
 	_values[4] = b;
 }
 
-void FixtureRGB::set_red2(uint8_t r2)
+void FixtureLED::setRed2(uint8_t r2)
 {
 	_values[1] = r2;
 }
 
-void FixtureRGB::set_green2(uint8_t g2)
+void FixtureLED::setGreen2(uint8_t g2)
 {
 	_values[3] = g2;
 }
 
-void FixtureRGB::set_blue2(uint8_t b2)
+void FixtureLED::setBlue2(uint8_t b2)
 {
 	_values[5] = b2;
 }
 
-void FixtureRGB::set_rgb(uint8_t r, uint8_t g, uint8_t b)
+void FixtureLED::setRGB(uint8_t r, uint8_t g, uint8_t b)
 {
 	if (channelNumber = 3) {
-		set_red(r);
-		set_green(g);
-		set_blue(b);
+		setRed(r);
+		setGreen(g);
+		setBlue(b);
 	}
 	else {
-		std::cout << "Setting failed. Use set_rgb2 for 6-channel lights" << std::endl;
+		std::cout << "Setting failed. Use setValue for 6-channel lights" << std::endl;
 	}
 }
 
-void FixtureRGB::set_rgb2(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+void FixtureLED::setValue(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
 {
 	if (channelNumber = 6) {
-		set_red(r);
-		set_green(g);
-		set_blue(b);
-		set_red2(r2);
-		set_green2(g2);
-		set_blue2(b2);
+		setRed(r);
+		setGreen(g);
+		setBlue(b);
+		setRed2(r2);
+		setGreen2(g2);
+		setBlue2(b2);
 	}
 	else {
-		std::cout << "Setting failed. Use set_rgb for 3-channel lights" << std::endl;
+		std::cout << "Setting failed. Use setRGB for 3-channel lights" << std::endl;
 	}
 }
 
-uint8_t * FixtureRGB::get_config()
+uint8_t * FixtureLED::getConfig()
 {
 	return _values;
 }
 
-void FixtureRGB::get_config(uint8_t(&table)[6])
+void FixtureLED::getConfig(uint8_t(&table)[6])
 {
 	if (channelNumber == 6) {
 		for (auto i = 0; i < 6; i++) {
@@ -356,19 +356,19 @@ void FixtureRGB::get_config(uint8_t(&table)[6])
 	}
 }
 
-void FixtureRGB::get_config(uint8_t(&table)[3])
+void FixtureLED::getConfig(uint8_t(&table)[3])
 {
 	if (channelNumber == 3) {
-		for (auto i = 0; i < 3; i++) {
-			table[i] = _values[i];
-		}
+		table[0] = _values[0];
+		table[1] = _values[2];
+		table[2] = _values[4];
 	}
 	else {
 		std::cout << "Copying failed. Use uint8_t[6] for 6-channel lights" << std::endl;
 	}
 }
 
-void FixtureRGB::set_config(uint8_t * config, uint8_t *matrix[336])
+void FixtureLED::setConfig(uint8_t * config, uint8_t *matrix[336])
 {
 	std::cout << unsigned(*config) << std::endl;
 	_values[0] = *config;
@@ -380,7 +380,7 @@ void FixtureRGB::set_config(uint8_t * config, uint8_t *matrix[336])
 	_values[5] = *(config + 5);
 }
 
-void FixtureRGB::set_config(uint8_t config[6])
+void FixtureLED::setConfig(uint8_t config[6])
 {
 	if (channelNumber == 6) {
 		uint8_t temp[6];
@@ -395,11 +395,43 @@ void FixtureRGB::set_config(uint8_t config[6])
 		_values[5] = temp[5];
 	}
 	else {
-		std::cout << "Copying failed. Use uint8_t[3] for 3-channel lights." << std::endl;
+		uint8_t temp[3];
+		for (int i = 0; i < 3; i++) {
+			temp[i] = config[i];
+		}
+		_values[0] = temp[0];
+		_values[2] = temp[1];
+		_values[4] = temp[2];
 	}
 }
+
+void FixtureLED::setConfig(const uint8_t config[6])
+{
+	if (channelNumber == 6) {
+		uint8_t temp[6];
+		for (int i = 0; i < 6; i++) {
+			temp[i] = config[i];
+		}
+		_values[0] = temp[0];
+		_values[2] = temp[1];
+		_values[4] = temp[2];
+		_values[1] = temp[3];
+		_values[3] = temp[4];
+		_values[5] = temp[5];
+	}
+	else {
+		uint8_t temp[3];
+		for (int i = 0; i < 3; i++) {
+			temp[i] = config[i];
+		}
+		_values[0] = temp[0];
+		_values[2] = temp[1];
+		_values[4] = temp[2];
+	}
+}
+
 /*
-void FixtureRGB::set_config(uint8_t config[3])
+void FixtureLED::setConfig(uint8_t config[3])
 {
 	if (channelNumber == 3) {
 		uint8_t temp[3];
@@ -413,23 +445,23 @@ void FixtureRGB::set_config(uint8_t config[3])
 	}
 }
 */
-string FixtureRGB::get_str() const
+string FixtureLED::getStr() const
 {
 	std::stringstream ss;
 	if (channelNumber == 6) {
 		ss << unsigned(_values[0]) << "-" << unsigned(_values[2]) << "-" << unsigned(_values[4]) << "-" << unsigned(_values[1]) << "-" << unsigned(_values[3]) << "-" << unsigned(_values[5]);
 	}
 	else {
-		ss << unsigned(_values[0]) << "-" << unsigned(_values[1]) << "-" << unsigned(_values[2]);
+		ss << unsigned(_values[0]) << "-" << unsigned(_values[2]) << "-" << unsigned(_values[4]);
 	}
 	return ss.str();
 }
-uint8_t * FixtureRGB::getValuePtr()
+uint8_t * FixtureLED::getValuePtr()
 {
 	return _values;
 }
 
-void FixtureRGB::setValuePtr(uint8_t * ptr)
+void FixtureLED::setValuePtr(uint8_t * ptr)
 {
 	_values = ptr;
 }

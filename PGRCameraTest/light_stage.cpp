@@ -4,7 +4,7 @@ LightStage::LightStage()
 {
 	Colour = new PowerSupply*[12];
 	White = new PowerSupply*[12];
-	Lamp = new FixtureRGB*[12][28];
+	Lamp = new FixtureLED*[12][28];
 	ip = "10.37.211.0";
 	uint8_t defaultConfig[6] = { 4, 4, 3, 0, 128, 0 };
 
@@ -14,14 +14,12 @@ LightStage::LightStage()
 		ip.replace(10, ip.size() - 1, std::to_string(2 * i + 1));
 		White[i] = new PowerSupply(ip);
 		for (size_t j = 0; j < 28;) {
-			Lamp[i][j] = new FixtureRGB(3 * j, Matrix[i][j]);
+			Lamp[i][j] = new FixtureLED(3 * j, Matrix[i][j]);
 			Colour[i]->addFixture(Lamp[i][j]);
 			j++;
-			Lamp[i][j] = new FixtureRGB(3 * (j - 1), Matrix[i][j]);
+			Lamp[i][j] = new FixtureLED(3 * (j - 1), Matrix[i][j]);
 			White[i]->addFixture(Lamp[i][j]);
 			j++;
-
-
 		}
 		Colour[i]->go();
 		White[i]->go();
@@ -29,9 +27,7 @@ LightStage::LightStage()
 	MatrixOffsetH = 0;
 	MatrixOffsetV = 0;
 	//setBuffer();
-	//setVirtualBuffer();
 	//bufferOffset = 0;
-	//virtualOffset = 0;
 }
 
 
@@ -40,7 +36,7 @@ LightStage::~LightStage()
 
 }
 
-FixtureRGB ** LightStage::operator[](int i)
+FixtureLED ** LightStage::operator[](int i)
 {
 	return Lamp[i];
 }
@@ -69,7 +65,7 @@ void LightStage::go()
 void LightStage::adjustAll(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2) {
 	for (size_t i = 0; i < 12; i++) {
 		for (size_t j = 0; j < 28; j++) {
-			Lamp[i][j]->set_rgb2(r, g, b, r2, g2, b2);
+			Lamp[i][j]->setValue(r, g, b, r2, g2, b2);
 		}
 	}
 	go();
@@ -79,7 +75,7 @@ void LightStage::adjustAll(uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
-			Lamp[i][j]->set_config(config);
+			Lamp[i][j]->setConfig(config);
 		}
 	}
 	go();
@@ -89,7 +85,7 @@ void LightStage::adjustAll(const uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
-			Lamp[i][j]->set_rgb2(*config, *(config + 1), *(config + 2), *(config + 3), *(config + 4), *(config + 5));
+			Lamp[i][j]->setValue(*config, *(config + 1), *(config + 2), *(config + 3), *(config + 4), *(config + 5));
 		}
 	}
 	go();
@@ -99,7 +95,7 @@ void LightStage::adjustRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t 
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->set_rgb2(r, g, b, r2, g2, b2);
+			Lamp[i][2 * j]->setValue(r, g, b, r2, g2, b2);
 		}
 		Colour[i]->go();
 	}
@@ -109,7 +105,17 @@ void LightStage::adjustRGB(uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->set_config(config);
+			Lamp[i][2 * j]->setConfig(config);
+		}
+		Colour[i]->go();
+	}
+}
+
+void LightStage::adjustRGB(const uint8_t config[6])
+{
+	for (auto i = 0; i < 12; i++) {
+		for (auto j = 0; j < 14; j++) {
+			Lamp[i][2 * j]->setConfig(config);
 		}
 		Colour[i]->go();
 	}
@@ -119,7 +125,7 @@ void LightStage::adjustWhite(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->set_rgb2(r, g, b, r2, g2, b2);
+			Lamp[i][2 * j + 1]->setValue(r, g, b, r2, g2, b2);
 		}
 		White[i]->go();
 	}
@@ -129,7 +135,17 @@ void LightStage::adjustWhite(uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->set_config(config);
+			Lamp[i][2 * j + 1]->setConfig(config);
+		}
+		White[i]->go();
+	}
+}
+
+void LightStage::adjustWhite(const uint8_t config[6])
+{
+	for (auto i = 0; i < 12; i++) {
+		for (auto j = 0; j < 14; j++) {
+			Lamp[i][2 * j + 1]->setConfig(config);
 		}
 		White[i]->go();
 	}
@@ -139,22 +155,14 @@ void LightStage::adjustRealArc(int index, uint8_t r, uint8_t g, uint8_t b, uint8
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->set_rgb2(r, g, b, r2, g2, b2);
+			Lamp[index][i * 2]->setValue(r, g, b, r2, g2, b2);
 		}
+		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->set_rgb2(r, g, b, r2, g2, b2);
+			Lamp[index][i * 2 + 1]->setValue(r, g, b, r2, g2, b2);
 		}
-	}
-	if (selection == -1) {
-		Colour[index]->go();
-		White[index]->go();
-	}
-	else if (selection == 0) {
-		Colour[index]->go();
-	}
-	else if (selection == 1) {
 		White[index]->go();
 	}
 }
@@ -163,22 +171,30 @@ void LightStage::adjustRealArc(int index, uint8_t config[6], int selection)
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->set_config(config);
+			Lamp[index][i * 2]->setConfig(config);
 		}
+		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->set_config(config);
+			Lamp[index][i * 2 + 1]->setConfig(config);
 		}
-	}
-	if (selection == -1) {
-		Colour[index]->go();
 		White[index]->go();
 	}
-	else if (selection == 0) {
+}
+
+void LightStage::adjustRealArc(int index, const uint8_t config[6], int selection)
+{
+	if ((selection == -1) || (selection == 0)) {
+		for (int i = 0; i < 14; i++) {
+			Lamp[index][i * 2]->setConfig(config);
+		}
 		Colour[index]->go();
 	}
-	else if (selection == 1) {
+	if ((selection == -1) || (selection == 1)) {
+		for (int i = 0; i < 14; i++) {
+			Lamp[index][i * 2 + 1]->setConfig(config);
+		}
 		White[index]->go();
 	}
 }
@@ -186,22 +202,45 @@ void LightStage::adjustRealArc(int index, uint8_t config[6], int selection)
 void LightStage::adjustVirtualArc(int index, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
 {
 	for (int j = 0; j < 14; j++) {
-		this->operator()(index, j)->set_rgb2(r, g, b, r2, g2, b2);
+		this->operator()(index, j)->setValue(r, g, b, r2, g2, b2);
 	}
 	Colour[index / 2]->go();
 	White[index / 2]->go();
 }
 
-void LightStage::adjustVirtualArc(int index, uint8_t config[6])
+void LightStage::adjustVirtualArc(int index, uint8_t config[6], int selection)
 {
-	for (int j = 0; j < 14; j++) {
-		this->operator()(index, j)->set_config(config);
+	if ((selection == -1) || (selection == 0)) {
+		for (int j = 0; j < 7; j++) {
+			this->operator()(index, 2 * j)->setConfig(config);
+		}
+		Colour[index / 2]->go();
 	}
-	Colour[index / 2]->go();
-	White[index / 2]->go();
+	if ((selection == -1) || (selection == 1)) {
+		for (int j = 0; j < 7; j++) {
+			this->operator()(index, 2 * j + 1)->setConfig(config);
+		}
+		White[index / 2]->go();
+	}
 }
 
-FixtureRGB * LightStage::operator()(int arc, int index)
+void LightStage::adjustVirtualArc(int index, const uint8_t config[6], int selection)
+{
+	if ((selection == -1) || (selection == 0)) {
+		for (int j = 0; j < 7; j++) {
+			this->operator()(index, 2 * j)->setConfig(config);
+		}
+		Colour[index / 2]->go();
+	}
+	if ((selection == -1) || (selection == 1)) {
+		for (int j = 0; j < 7; j++) {
+			this->operator()(index, 2 * j + 1)->setConfig(config);
+		}
+		White[index / 2]->go();
+	}
+}
+
+FixtureLED * LightStage::operator()(int arc, int index)
 {
 	if ((arc < 0) || (arc > 23)) {
 		std::cout << "Arc out of range" << std::endl;
@@ -255,7 +294,6 @@ void LightStage::readBuffer()
 		}
 	}
 }
-
 
 
 void LightStage::setBuffer()

@@ -10,7 +10,6 @@ LightStageCamera::LightStageCamera()
 	cout << "Number of cameras detected: " << numCameras << endl;
 	camera.resize(numCameras);
 	prop.resize(numCameras);
-	getCameraFromIndex();
 }
 
 
@@ -30,7 +29,7 @@ void LightStageCamera::PrintBuildInfo16()
 	cout << timeStamp.str() << endl << endl;
 }
 
-void LightStageCamera::init_control()
+void LightStageCamera::initCurrentCamera()
 {
 	prop[currentCam][0].type = BRIGHTNESS;
 	prop[currentCam][1].type = AUTO_EXPOSURE;
@@ -73,11 +72,14 @@ void LightStageCamera::init_control()
 void LightStageCamera::connect()
 {
 	status = camera[currentCam].Connect(&guid);
+	StatusQuery();
+	initCurrentCamera();
 }
 
 void LightStageCamera::getCameraInfo()
 {
 	status = camera[currentCam].GetCameraInfo(&camInfo);
+	StatusQuery();
 }
 
 void LightStageCamera::PrintCameraInfo16()

@@ -52,11 +52,11 @@ public:
 	virtual std::string getName() const = 0;
 };
 
-class FixtureRGB : public Fixture
+class FixtureLED : public Fixture
 {
 public:
-	FixtureRGB(int address, uint8_t r, uint8_t g, uint8_t b);
-	FixtureRGB(int address, uint8_t * ptr = nullptr, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t r2 = 0, uint8_t g2 = 0, uint8_t b2 = 0);
+	FixtureLED(int address, uint8_t r, uint8_t g, uint8_t b);
+	FixtureLED(int address, uint8_t * ptr = nullptr, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t r2 = 0, uint8_t g2 = 0, uint8_t b2 = 0);
 	int getAddress() const { return _address; }
 	void setAddress(int address) { _address = address; }
 
@@ -64,31 +64,32 @@ public:
 
 	virtual std::string getName() const;
 
-	uint8_t * get_config();
-	void get_config(uint8_t(&table)[6]);
-	void get_config(uint8_t(&table)[3]);
-	void set_config(uint8_t *config, uint8_t *matrix[336]);
-	void set_config(uint8_t config[6]); 
-//	void set_config(uint8_t config[3]);
+	uint8_t * getConfig();
+	void getConfig(uint8_t(&table)[6]);
+	void getConfig(uint8_t(&table)[3]);
+	void setConfig(uint8_t *config, uint8_t *matrix[336]);
+	void setConfig(uint8_t config[6]); 
+	void setConfig(const uint8_t config[6]);
+//	void setConfig(uint8_t config[3]);
 
-	uint8_t get_red() const;
-	uint8_t get_green() const;
-	uint8_t get_blue() const;
-	uint8_t get_red2() const;
-	uint8_t get_green2() const;
-	uint8_t get_blue2() const;
+	uint8_t getRed() const;
+	uint8_t getGreen() const;
+	uint8_t getBlue() const;
+	uint8_t getRed2() const;
+	uint8_t getGreen2() const;
+	uint8_t getBlue2() const;
 
-	void set_red(uint8_t r);
-	void set_green(uint8_t g);
-	void set_blue(uint8_t b);
-	void set_red2(uint8_t r2);
-	void set_green2(uint8_t g2);
-	void set_blue2(uint8_t b2);
+	void setRed(uint8_t r);
+	void setGreen(uint8_t g);
+	void setBlue(uint8_t b);
+	void setRed2(uint8_t r2);
+	void setGreen2(uint8_t g2);
+	void setBlue2(uint8_t b2);
 
-	void set_rgb(uint8_t r, uint8_t g, uint8_t b);
-	void FixtureRGB::set_rgb2(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
+	void setRGB(uint8_t r, uint8_t g, uint8_t b);
+	void FixtureLED::setValue(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
 
-	string get_str() const;
+	string getStr() const;
 
 	uint8_t * getValuePtr();
 	void setValuePtr(uint8_t * ptr);

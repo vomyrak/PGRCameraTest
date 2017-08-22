@@ -8,6 +8,7 @@
 //  Based on kinet.py by Giles Hall
 //  http://github.com/vishnubob/kinet
 //
+//  Depreciated and merged to fixture.cpp
 
 #include "kinet16.h"
 #include <iostream>

@@ -8,6 +8,8 @@ LightStageCamera::LightStageCamera()
 	status = busMgr.GetNumOfCameras(&numCameras);
 	StatusQuery();
 	cout << "Number of cameras detected: " << numCameras << endl;
+	camera.resize(numCameras);
+	prop.resize(numCameras);
 	getCameraFromIndex();
 }
 
@@ -30,52 +32,52 @@ void LightStageCamera::PrintBuildInfo16()
 
 void LightStageCamera::init_control()
 {
-	prop[0].type = BRIGHTNESS;
-	prop[1].type = AUTO_EXPOSURE;
-	prop[2].type = SHARPNESS;
-	prop[3].type = HUE;
-	prop[4].type = SATURATION;
-	prop[5].type = GAMMA;
-	prop[6].type = SHUTTER;
-	prop[7].type = GAIN;
-	prop[8].type = FRAME_RATE;
-	prop[9].type = WHITE_BALANCE;
+	prop[currentCam][0].type = BRIGHTNESS;
+	prop[currentCam][1].type = AUTO_EXPOSURE;
+	prop[currentCam][2].type = SHARPNESS;
+	prop[currentCam][3].type = HUE;
+	prop[currentCam][4].type = SATURATION;
+	prop[currentCam][5].type = GAMMA;
+	prop[currentCam][6].type = SHUTTER;
+	prop[currentCam][7].type = GAIN;
+	prop[currentCam][8].type = FRAME_RATE;
+	prop[currentCam][9].type = WHITE_BALANCE;
 	for (size_t i = 0; i < 10; i++) {
-		prop[i].absControl = true;
-		prop[i].autoManualMode = false;
-		prop[i].present = true;
-		prop[i].onOff = true;
+		prop[currentCam][i].absControl = true;
+		prop[currentCam][i].autoManualMode = false;
+		prop[currentCam][i].present = true;
+		prop[currentCam][i].onOff = true;
 	}
-	prop[brightness].absValue = 0;
-	prop[auto_exposure].absValue = 0;
-	prop[sharpness].absControl = false;
+	prop[currentCam][brightness].absValue = 0;
+	prop[currentCam][auto_exposure].absValue = 0;
+	prop[currentCam][sharpness].absControl = false;
 	//sharpness must have absControl set to false
-	prop[sharpness].valueA = 1024;
-	prop[hue].absValue = 0;
-	prop[saturation].absValue = 100;
-	prop[gamma].absValue = 1;
-	prop[shutter].absValue = 18.058;//30;
-	prop[gain].absValue = 0;
-	prop[frame_rate].absValue = 55.161;//80;
+	prop[currentCam][sharpness].valueA = 1024;
+	prop[currentCam][hue].absValue = 0;
+	prop[currentCam][saturation].absValue = 100;
+	prop[currentCam][gamma].absValue = 1;
+	prop[currentCam][shutter].absValue = 18.058;//30;
+	prop[currentCam][gain].absValue = 0;
+	prop[currentCam][frame_rate].absValue = 82;//55.161;//80;
 									   //white balance must have absControl set to false
-	prop[white_balance].absControl = false;
-	prop[white_balance].onOff = false;
-	prop[white_balance].valueA = 482;
-	prop[white_balance].valueB = 762;
+	prop[currentCam][white_balance].absControl = false;
+	prop[currentCam][white_balance].onOff = false;
+	prop[currentCam][white_balance].valueA = 482;
+	prop[currentCam][white_balance].valueB = 762;
 	for (size_t i = 0; i < 10; i++) {
-		status = camera.SetProperty(prop + i);
+		status = camera[currentCam].SetProperty(prop[currentCam] + i);
 		StatusQuery();
 	}
 }
 
 void LightStageCamera::connect()
 {
-	status = camera.Connect(&guid);
+	status = camera[currentCam].Connect(&guid);
 }
 
 void LightStageCamera::getCameraInfo()
 {
-	status = camera.GetCameraInfo(&camInfo);
+	status = camera[currentCam].GetCameraInfo(&camInfo);
 }
 
 void LightStageCamera::PrintCameraInfo16()
@@ -92,15 +94,16 @@ void LightStageCamera::PrintCameraInfo16()
 	cout << "Firmware build time - " << camInfo.firmwareBuildTime << endl << endl;
 }
 
-void LightStageCamera::PrintError16(Error error)
+void LightStageCamera::PrintError16()
 {
-	error.PrintErrorTrace();
+	status.PrintErrorTrace();
 }
 
 void LightStageCamera::StatusQuery()
 {
 	if (status != PGRERROR_OK) {
-		PrintError16(status);
+		PrintError16();
+		cerr << "Interrupted" << endl;
 	}
 }
 
@@ -116,13 +119,13 @@ void LightStageCamera::setNumImages(int num)
 
 void LightStageCamera::StartCapture()
 {
-	status = camera.StartCapture();
+	status = camera[currentCam].StartCapture();
 	StatusQuery();
 }
 
-Camera * LightStageCamera::getCamera()
+Camera * LightStageCamera::getCurrentCamera()
 {
-	return &camera;
+	return &camera[currentCam];
 }
 
 void LightStageCamera::performFunc(Error & error)
@@ -133,7 +136,7 @@ void LightStageCamera::performFunc(Error & error)
 
 void LightStageCamera::RetrieveBuffer(std::vector<Image> & vecImages, Image * rawImage, int index)
 {
-	status = camera.RetrieveBuffer(rawImage);
+	status = camera[currentCam].RetrieveBuffer(rawImage);
 	StatusQuery();
 	printf("Grabbed %dth image\n", index + 1);
 	vecImages[index].DeepCopy(rawImage);
@@ -141,13 +144,13 @@ void LightStageCamera::RetrieveBuffer(std::vector<Image> & vecImages, Image * ra
 
 void LightStageCamera::StopCapture()
 {
-	status = camera.StopCapture();
+	status = camera[currentCam].StopCapture();
 	StatusQuery();
 }
 
 void LightStageCamera::Disconnect()
 {
-	status = camera.Disconnect();
+	status = camera[currentCam].Disconnect();
 	StatusQuery();
 }
 
@@ -156,10 +159,11 @@ int LightStageCamera::getNumCamera()
 	return numCameras;
 }
 
-void LightStageCamera::getCameraFromIndex()
+void LightStageCamera::getCameraFromIndex(int index)
 {
-	status = busMgr.GetCameraFromIndex(0, &guid);
+	status = busMgr.GetCameraFromIndex(index, &guid);
 	StatusQuery();
+	currentCam = index;
 }
 
 PGRGuid * LightStageCamera::getGuid()
@@ -174,5 +178,5 @@ BusManager * LightStageCamera::getBusManager()
 
 Property * LightStageCamera::getProp()
 {
-	return prop;
+	return prop[currentCam];
 }

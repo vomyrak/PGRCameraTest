@@ -31,18 +31,18 @@ public:
 	void connect();
 	void getCameraInfo();
 	void PrintCameraInfo16();
-	void PrintError16(Error error);
+	void PrintError16();
 	void StatusQuery();
 	int getNumImages();
 	void setNumImages(int num);
 	void StartCapture();
-	Camera * getCamera();
 	void performFunc(Error &error);
-	void LightStageCamera::RetrieveBuffer(std::vector<Image> & vecImages, Image * rawImage, int index);
+	void RetrieveBuffer(std::vector<Image> & vecImages, Image * rawImage, int index);
 	void StopCapture();
 	void Disconnect();
 	int getNumCamera();
-	void getCameraFromIndex();
+	void getCameraFromIndex(int index = 0);
+	Camera * getCurrentCamera();
 	PGRGuid * getGuid();
 	BusManager * getBusManager();
 	Property * getProp();
@@ -54,9 +54,10 @@ private:
 	FC2Version fc2Version;
 	unsigned int numCameras;
 	PGRGuid guid;
-	Camera camera;
+	std::vector<Camera> camera;
 	CameraInfo camInfo;
 	int numImages;
-	Property prop[10];
+	int currentCam;
+	std::vector<Property[10]> prop;
 };
 

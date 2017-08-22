@@ -1,3 +1,4 @@
+
 //
 //  kinet16.h
 //
@@ -10,6 +11,7 @@
 //  Port of kinet.py by Giles Hall
 //  http://github.com/vishnubob/kinet
 //
+//  Depreciated and merged to fixture.h
 
 #include "kinet.h"
 

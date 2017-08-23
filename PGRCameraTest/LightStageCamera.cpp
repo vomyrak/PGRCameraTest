@@ -1,15 +1,21 @@
 #include "LightStageCamera.h"
-using namespace std;
 
 
 LightStageCamera::LightStageCamera()
 {
+	currentCam = 0;
 	PrintBuildInfo16();
 	status = busMgr.GetNumOfCameras(&numCameras);
 	StatusQuery();
-	cout << "Number of cameras detected: " << numCameras << endl;
+	std::cout << "Number of cameras detected: " << numCameras << std::endl;
 	camera.resize(numCameras);
 	prop.resize(numCameras);
+	while (currentCam < numCameras) {
+		camera[currentCam] = new Camera;
+		prop[currentCam] = new Property[10];
+		initCurrentCamera();
+		currentCam += 1;
+	}
 }
 
 
@@ -22,11 +28,11 @@ void LightStageCamera::PrintBuildInfo16()
 	Utilities::GetLibraryVersion(&fc2Version);
 	ostringstream version;
 	version << "FlyCapture2 library version: " << fc2Version.major << "." << fc2Version.minor << "." << fc2Version.type << "." << fc2Version.build;
-	cout << version.str() << endl;
+	std::cout << version.str() << std::endl;
 
 	ostringstream timeStamp;
 	timeStamp << "Application build date: " << __DATE__ << " " << __TIME__;
-	cout << timeStamp.str() << endl << endl;
+	std::cout << timeStamp.str() << std::endl << std::endl;
 }
 
 void LightStageCamera::initCurrentCamera()
@@ -58,42 +64,42 @@ void LightStageCamera::initCurrentCamera()
 	prop[currentCam][shutter].absValue = 18.058;//30;
 	prop[currentCam][gain].absValue = 0;
 	prop[currentCam][frame_rate].absValue = 82;//55.161;//80;
-									   //white balance must have absControl set to false
+						   //white balance must have absControl set to false
 	prop[currentCam][white_balance].absControl = false;
 	prop[currentCam][white_balance].onOff = false;
 	prop[currentCam][white_balance].valueA = 482;
 	prop[currentCam][white_balance].valueB = 762;
 	for (size_t i = 0; i < 10; i++) {
-		status = camera[currentCam].SetProperty(prop[currentCam] + i);
+		status = camera[currentCam]->SetProperty(prop[currentCam] + i);
 		StatusQuery();
 	}
 }
 
 void LightStageCamera::connect()
 {
-	status = camera[currentCam].Connect(&guid);
+	status = camera[currentCam]->Connect(&guid);
 	StatusQuery();
 	initCurrentCamera();
 }
 
 void LightStageCamera::getCameraInfo()
 {
-	status = camera[currentCam].GetCameraInfo(&camInfo);
+	status = camera[currentCam]->GetCameraInfo(&camInfo);
 	StatusQuery();
 }
 
 void LightStageCamera::PrintCameraInfo16()
 {
 
-	cout << endl;
-	cout << "*** CAMERA INFORMATION ***" << endl;
-	cout << "Serial number -" << camInfo.serialNumber << endl;
-	cout << "Camera model - " << camInfo.modelName << endl;
-	cout << "Camera vendor - " << camInfo.vendorName << endl;
-	cout << "Sensor - " << camInfo.sensorInfo << endl;
-	cout << "Resolution - " << camInfo.sensorResolution << endl;
-	cout << "Firmware version - " << camInfo.firmwareVersion << endl;
-	cout << "Firmware build time - " << camInfo.firmwareBuildTime << endl << endl;
+	std::cout << std::endl;
+	std::cout << "*** CAMERA INFORMATION ***" << std::endl;
+	std::cout << "Serial number -" << camInfo.serialNumber << std::endl;
+	std::cout << "Camera model - " << camInfo.modelName << std::endl;
+	std::cout << "Camera vendor - " << camInfo.vendorName << std::endl;
+	std::cout << "Sensor - " << camInfo.sensorInfo << std::endl;
+	std::cout << "Resolution - " << camInfo.sensorResolution << std::endl;
+	std::cout << "Firmware version - " << camInfo.firmwareVersion << std::endl;
+	std::cout << "Firmware build time - " << camInfo.firmwareBuildTime << std::endl << std::endl;
 }
 
 void LightStageCamera::PrintError16()
@@ -105,7 +111,7 @@ void LightStageCamera::StatusQuery()
 {
 	if (status != PGRERROR_OK) {
 		PrintError16();
-		cerr << "Interrupted" << endl;
+		cerr << "Interrupted" << std::endl;
 	}
 }
 
@@ -121,13 +127,13 @@ void LightStageCamera::setNumImages(int num)
 
 void LightStageCamera::StartCapture()
 {
-	status = camera[currentCam].StartCapture();
+	status = camera[currentCam]->StartCapture();
 	StatusQuery();
 }
 
 Camera * LightStageCamera::getCurrentCamera()
 {
-	return &camera[currentCam];
+	return camera[currentCam];
 }
 
 void LightStageCamera::performFunc(Error & error)
@@ -138,7 +144,7 @@ void LightStageCamera::performFunc(Error & error)
 
 void LightStageCamera::RetrieveBuffer(std::vector<Image> & vecImages, Image * rawImage, int index)
 {
-	status = camera[currentCam].RetrieveBuffer(rawImage);
+	status = camera[currentCam]->RetrieveBuffer(rawImage);
 	StatusQuery();
 	printf("Grabbed %dth image\n", index + 1);
 	vecImages[index].DeepCopy(rawImage);
@@ -146,13 +152,13 @@ void LightStageCamera::RetrieveBuffer(std::vector<Image> & vecImages, Image * ra
 
 void LightStageCamera::StopCapture()
 {
-	status = camera[currentCam].StopCapture();
+	status = camera[currentCam]->StopCapture();
 	StatusQuery();
 }
 
 void LightStageCamera::Disconnect()
 {
-	status = camera[currentCam].Disconnect();
+	status = camera[currentCam]->Disconnect();
 	StatusQuery();
 }
 
@@ -181,4 +187,9 @@ BusManager * LightStageCamera::getBusManager()
 Property * LightStageCamera::getProp()
 {
 	return prop[currentCam];
+}
+
+int LightStageCamera::getCurrentCamIndex()
+{
+	return currentCam;
 }

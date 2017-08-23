@@ -7,7 +7,8 @@
 //
 //  Based on kinet.py by Giles Hall
 //  http://github.com/vishnubob/kinet
-//
+//  
+//  Depreciated and merged to fixture.cpp
 
 #include "kinet.h"
 #ifdef _WIN32

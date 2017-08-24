@@ -67,7 +67,7 @@ public:
 	uint8_t * getConfig();
 	void getConfig(uint8_t(&table)[6]);
 	void getConfig(uint8_t(&table)[3]);
-	void setConfig(uint8_t *config, uint8_t *matrix[336]);
+	//void setConfig(uint8_t *config, uint8_t *matrix[336]);
 	void setConfig(uint8_t config[6]); 
 	void setConfig(const uint8_t config[6]);
 //	void setConfig(uint8_t config[3]);

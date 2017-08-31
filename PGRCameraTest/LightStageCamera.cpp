@@ -61,10 +61,10 @@ void LightStageCamera::initCurrentCamera()
 	prop[currentCam][hue].absValue = 0;
 	prop[currentCam][saturation].absValue = 100;
 	prop[currentCam][gamma].absValue = 1;
-	prop[currentCam][shutter].absValue = 18.058;//30;
+	prop[currentCam][shutter].absValue = 18.058;
 	prop[currentCam][gain].absValue = 0;
-	prop[currentCam][frame_rate].absValue = 82;//55.161;//80;
-						   //white balance must have absControl set to false
+	prop[currentCam][frame_rate].absValue = 82;
+	 //white balance must have absControl set to false
 	prop[currentCam][white_balance].absControl = false;
 	prop[currentCam][white_balance].onOff = false;
 	prop[currentCam][white_balance].valueA = 482;

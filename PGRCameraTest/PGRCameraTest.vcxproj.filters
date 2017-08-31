@@ -59,5 +59,8 @@
     <ClInclude Include="Fixture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUIdefaults.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

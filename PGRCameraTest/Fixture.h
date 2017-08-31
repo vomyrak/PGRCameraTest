@@ -55,44 +55,77 @@ public:
 class FixtureLED : public Fixture
 {
 public:
-	FixtureLED(int address, uint8_t r, uint8_t g, uint8_t b);
+
+	/*8-bit setting constructor that takes only one value for RGB each*/
+	FixtureLED(int address, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0);
+
+	/*16-bit setting constructor that takes two values for RGB each*/
 	FixtureLED(int address, uint8_t * ptr = nullptr, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t r2 = 0, uint8_t g2 = 0, uint8_t b2 = 0);
+	
+	/*Returns the address of the fixture*/
 	int getAddress() const { return _address; }
+	/*Sets the address of the fixture*/
 	void setAddress(int address) { _address = address; }
 
+	/*Inherit from superclass*/
 	virtual void updateFrame(uint8_t* packets) const;
-
+	/*Inherit from superclass*/
 	virtual std::string getName() const;
 
+	/*Returns the pointer to the RGB array of the fixture*/
 	uint8_t * getConfig();
-	void getConfig(uint8_t(&table)[6]);
-	void getConfig(uint8_t(&table)[3]);
-	//void setConfig(uint8_t *config, uint8_t *matrix[336]);
-	void setConfig(uint8_t config[6]); 
-	void setConfig(const uint8_t config[6]);
-//	void setConfig(uint8_t config[3]);
 
+	/*Copy 16-bit current RGB values to array*/
+	void getConfig(uint8_t(&table)[6]);
+
+	/*Copy 8-bit current RGB values to array*/
+	void getConfig(uint8_t(&table)[3]);
+
+
+	
+	/*Return MSB of red value*/
 	uint8_t getRed() const;
+	/*Return MSB of green value*/
 	uint8_t getGreen() const;
+	/*Return MSB of blue value*/
 	uint8_t getBlue() const;
+	/*Return LSB of red value*/
 	uint8_t getRed2() const;
+	/*Return LSB of green value*/
 	uint8_t getGreen2() const;
+	/*Return LSB of blue value*/
 	uint8_t getBlue2() const;
 
+
+	/*Set MSB of red value*/
 	void setRed(uint8_t r);
+	/*Set MSB of green value*/
 	void setGreen(uint8_t g);
+	/*Set MSB of blue value*/
 	void setBlue(uint8_t b);
+	/*Set LSB of red value*/
 	void setRed2(uint8_t r2);
+	/*Set LSB of green value*/
 	void setGreen2(uint8_t g2);
+	/*Set LSB of blue value*/
 	void setBlue2(uint8_t b2);
-
+	/*Set RGB values to fixture from array*/
+	void setConfig(uint8_t config[6]);
+	/*Set RGB values to fixture from array*/
+	void setConfig(const uint8_t config[6]);
+	/*Set 8-bit RGB values by value*/
 	void setRGB(uint8_t r, uint8_t g, uint8_t b);
-	void FixtureLED::setValue(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
-
+	/*Set 16-bit RGB values by value*/
+	void setValue(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
+	
+	/*Print RGB values as a string*/
 	string getStr() const;
 
+	/*Return the pointer to the RGB array of the fixture*/
 	uint8_t * getValuePtr();
+	/*Set the pointer to the RGB array of the fixture*/
 	void setValuePtr(uint8_t * ptr);
+
 private:
 	int _address;
 	uint8_t * _values;

@@ -22,6 +22,7 @@
     <ProjectGuid>{34D5F70E-6928-4622-8DC8-8B814409A01C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>PGRCameraTest</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -34,7 +35,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -97,15 +98,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\dev\glui-2.36\src\include;C:\dev\freeglut\include;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include;C:\dev\zlib-1.2.11;C:\dev\lpng1629;C:\Program Files\Point Grey Research\FlyCapture2\include</AdditionalIncludeDirectories>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\dev\glui-2.36\src\lib;C:\dev\freeglut\lib\x64;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\dev\zlib-1.2.11\libs\static_x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glui32d.lib;freeglut.lib;OpenGL32.Lib;FlyCapture2d_v140.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comctl32.lib;glui32d.lib;freeglut.lib;OpenGL32.Lib;FlyCapture2d_v140.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -157,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="GUIdefaults.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="LightStageCamera.h" />
     <ClInclude Include="light_stage.h" />

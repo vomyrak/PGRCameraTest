@@ -367,18 +367,7 @@ void FixtureLED::getConfig(uint8_t(&table)[3])
 		std::cout << "Copying failed. Use uint8_t[6] for 6-channel lights" << std::endl;
 	}
 }
-/*void FixtureLED::setConfig(uint8_t * config, uint8_t *matrix[336])
-{
-	std::cout << unsigned(*config) << std::endl;
-	_values[0] = *config;
-	std::cout << unsigned(*config) << std::endl;
-	_values[2] = *(config + 1);
-	_values[4] = *(config + 2);
-	_values[1] = *(config + 3);
-	_values[3] = *(config + 4);
-	_values[5] = *(config + 5);
-}
-*/
+
 void FixtureLED::setConfig(uint8_t config[6])
 {
 	if (channelNumber == 6) {

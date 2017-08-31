@@ -26,8 +26,6 @@ LightStage::LightStage()
 	}
 	MatrixOffsetH = 0;
 	MatrixOffsetV = 0;
-	//setBuffer();
-	//bufferOffset = 0;
 }
 
 

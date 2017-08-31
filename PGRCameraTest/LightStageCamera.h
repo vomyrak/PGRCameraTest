@@ -7,6 +7,9 @@
 using namespace FlyCapture2;
 using namespace std;
 
+/*Enums for adjusting FlyCapture camera parameters.
+  Different from the capitalised enum defined in FlyCapture2.h
+  as a few enums are not effective*/
 enum {
 	brightness,
 	auto_exposure,
@@ -24,6 +27,7 @@ class LightStageCamera
 {
 	
 public:
+
 
 	LightStageCamera();
 	~LightStageCamera();

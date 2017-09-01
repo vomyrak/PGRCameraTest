@@ -155,17 +155,13 @@
     <ClCompile Include="light_stage.cpp" />
     <ClCompile Include="main16.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="test_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="GUI.h" />
-    <ClInclude Include="GUIdefaults.h" />
-    <ClInclude Include="interface.h" />
     <ClInclude Include="LightStageCamera.h" />
     <ClInclude Include="light_stage.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="test_interface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

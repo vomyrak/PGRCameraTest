@@ -244,3 +244,6 @@ ModelManifest.xml
 /image_folder
 /intensity_curve_gain.txt
 /PGRCamera
+/PGRCameraTest
+/PNGReader
+/PythonApplication1

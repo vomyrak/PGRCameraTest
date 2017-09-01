@@ -21,9 +21,6 @@
     <ClCompile Include="main16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_interface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="light_stage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,12 +38,6 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="test_interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="light_stage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -57,9 +48,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fixture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUIdefaults.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -246,3 +246,12 @@ ModelManifest.xml
 /PGRCamera
 /PNGReader
 /PythonApplication1
+/PGRCameraTest/test_interface.h
+/PGRCameraTest/test_interface.cpp
+/PGRCameraTest/main.cpp
+/PGRCameraTest/kinet16.h
+/PGRCameraTest/kinet16.cpp
+/PGRCameraTest/kinet.h
+/PGRCameraTest/kinet.cpp
+/PGRCameraTest/interface.h
+/PGRCameraTest/GUIdefaults.h

@@ -153,7 +153,7 @@
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="LightStageCamera.cpp" />
     <ClCompile Include="light_stage.cpp" />
-    <ClCompile Include="main16.cpp" />
+    <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>

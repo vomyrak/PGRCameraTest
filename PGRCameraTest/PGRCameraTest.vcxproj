@@ -151,16 +151,16 @@
   <ItemGroup>
     <ClCompile Include="Fixture.cpp" />
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="LightStage.cpp" />
     <ClCompile Include="LightStageCamera.cpp" />
-    <ClCompile Include="light_stage.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="LightStage.h" />
     <ClInclude Include="LightStageCamera.h" />
-    <ClInclude Include="light_stage.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

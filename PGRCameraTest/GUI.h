@@ -9,7 +9,7 @@
 #include <cwchar>
 #include <cstring>
 #include <string>
-#include "light_stage.h"
+#include "LightStage.h"
 #include "LightStageCamera.h"
 #define ID_TB_1 1
 #define ID_TB_2 2

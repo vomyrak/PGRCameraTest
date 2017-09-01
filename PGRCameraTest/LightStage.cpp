@@ -1,4 +1,4 @@
-#include "light_stage.h"
+#include "LightStage.h"
 
 LightStage::LightStage()
 {

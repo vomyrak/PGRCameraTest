@@ -7,3 +7,5 @@ Philips kinet control api is
 Based on kinet.h created by Michael Dewberry on 12/19/12.
 Port of kinet.py by Giles Hall
 http://github.com/vishnubob/kinet
+
+GUI working in progress

@@ -6,7 +6,6 @@ LightStage::LightStage()
 	White = new PowerSupply*[12];
 	Lamp = new FixtureLED*[12][28];
 	ip = "10.37.211.0";
-	uint8_t defaultConfig[6] = { 4, 4, 3, 0, 128, 0 };
 
 	for (size_t i = 0; i < 12; i++) {
 		ip.replace(10, ip.size() - 1, std::to_string(2 * i));
@@ -352,7 +351,17 @@ void LightStage::loadMap(string filename)
 	infile.close();
 }
 
-uint8_t * LightStage::getDeault()
+uint8_t * LightStage::getDefault()
 {
 	return defaultConfig;
+}
+
+void LightStage::setDefault(uint8_t(&config)[6])
+{
+	defaultConfig[0] = config[0];
+	defaultConfig[1] = config[1];
+	defaultConfig[2] = config[2];
+	defaultConfig[3] = config[3];
+	defaultConfig[4] = config[4];
+	defaultConfig[5] = config[5];
 }

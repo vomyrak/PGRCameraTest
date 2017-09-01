@@ -347,9 +347,12 @@ uint8_t * FixtureLED::getConfig()
 void FixtureLED::getConfig(uint8_t(&table)[6])
 {
 	if (channelNumber == 6) {
-		for (auto i = 0; i < 6; i++) {
-			table[i] = _values[i];
-		}
+		table[0] = _values[0];
+		table[1] = _values[2];
+		table[2] = _values[4];
+		table[3] = _values[1];
+		table[4] = _values[3];
+		table[5] = _values[5];
 	}
 	else {
 		std::cout << "Copying failed. Use uint8_t[3] for 3-channel lights" << std::endl;

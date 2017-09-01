@@ -62,7 +62,10 @@ public:
 	void loadMap(string filename);
 
 	/*Get the pointer to default 16-bit setting*/
-	uint8_t * getDeault();
+	uint8_t * getDefault();
+
+	/*Set the default value setting*/
+	void setDefault(uint8_t (&config)[6]);
 
 	//Functions used during testing stage//
 	/*Allows rotation of current setting map by i virtual arcs*/
@@ -87,5 +90,5 @@ private:
 	uint8_t Buffer[12][28][6];
 	uint8_t bufferOffset;
 	string ip;
-	uint8_t defaultConfig[6];
+	uint8_t defaultConfig[6] = { 4, 4, 3, 0, 128, 0 };
 };

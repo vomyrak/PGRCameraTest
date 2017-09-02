@@ -223,7 +223,7 @@ FixtureLED::FixtureLED(int address, uint8_t r, uint8_t g, uint8_t b)
 	channelNumber = 3;
 }
 
-FixtureLED::FixtureLED(int address, uint8_t * ptr, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+FixtureLED::FixtureLED(int address, uint8_t * ptr, uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2)
 	: Fixture()
 	, _address(address)
 {
@@ -324,7 +324,7 @@ void FixtureLED::setRGB(uint8_t r, uint8_t g, uint8_t b)
 	}
 }
 
-void FixtureLED::setValue(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+void FixtureLED::setValue(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2)
 {
 	if (channelNumber = 6) {
 		setRed(r);
@@ -339,103 +339,68 @@ void FixtureLED::setValue(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g
 	}
 }
 
-uint8_t * FixtureLED::getConfig()
+uint8_t * FixtureLED::getValue()
 {
 	return _values;
 }
 
-void FixtureLED::getConfig(uint8_t(&table)[6])
+void FixtureLED::getValue(uint8_t(&table)[6])
 {
 	if (channelNumber == 6) {
-		table[0] = _values[0];
-		table[1] = _values[2];
-		table[2] = _values[4];
-		table[3] = _values[1];
-		table[4] = _values[3];
-		table[5] = _values[5];
+		for (auto i = 0; i < 6; i++) {
+			table[i] = _values[i];
+		}
 	}
 	else {
 		std::cout << "Copying failed. Use uint8_t[3] for 3-channel lights" << std::endl;
 	}
 }
 
-void FixtureLED::getConfig(uint8_t(&table)[3])
+void FixtureLED::getValue(uint8_t(&table)[3])
 {
 	if (channelNumber == 3) {
-		table[0] = _values[0];
-		table[1] = _values[2];
-		table[2] = _values[4];
+		for (auto i = 0; i < 3; i++) {
+			table[i] = _values[i];
+		}
 	}
 	else {
 		std::cout << "Copying failed. Use uint8_t[6] for 6-channel lights" << std::endl;
 	}
 }
 
-void FixtureLED::setConfig(uint8_t config[6])
+void FixtureLED::setValue(uint8_t config[6])
 {
 	if (channelNumber == 6) {
 		uint8_t temp[6];
 		for (int i = 0; i < 6; i++) {
-			temp[i] = config[i];
+			_values[i] = config[i];
 		}
-		_values[0] = temp[0];
-		_values[2] = temp[1];
-		_values[4] = temp[2];
-		_values[1] = temp[3];
-		_values[3] = temp[4];
-		_values[5] = temp[5];
 	}
 	else {
 		uint8_t temp[3];
 		for (int i = 0; i < 3; i++) {
-			temp[i] = config[i];
+			_values[i] = config[i];
 		}
-		_values[0] = temp[0];
-		_values[2] = temp[1];
-		_values[4] = temp[2];
 	}
 }
 
-void FixtureLED::setConfig(const uint8_t config[6])
+void FixtureLED::setValue(const uint8_t config[6])
 {
 	if (channelNumber == 6) {
 		uint8_t temp[6];
 		for (int i = 0; i < 6; i++) {
-			temp[i] = config[i];
+			_values[i] = config[i];
 		}
-		_values[0] = temp[0];
-		_values[2] = temp[1];
-		_values[4] = temp[2];
-		_values[1] = temp[3];
-		_values[3] = temp[4];
-		_values[5] = temp[5];
 	}
 	else {
 		uint8_t temp[3];
 		for (int i = 0; i < 3; i++) {
-			temp[i] = config[i];
+			_values[i] = config[i];
 		}
-		_values[0] = temp[0];
-		_values[2] = temp[1];
-		_values[4] = temp[2];
 	}
 }
 
-/*
-void FixtureLED::setConfig(uint8_t config[3])
-{
-	if (channelNumber == 3) {
-		uint8_t temp[3];
-		for (int i = 0; i < 3; i++) {
-			temp[i] = config[i];
-			_values[i] = temp[i];
-		}
-	}
-	else {
-		std::cout << "Copying failed. Use uint8_t[3] for 3-channel lights." << std::endl;
-	}
-}
-*/
+
 string FixtureLED::getStr() const
 {
 	std::stringstream ss;

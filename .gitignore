@@ -255,3 +255,4 @@ ModelManifest.xml
 /PGRCameraTest/kinet.cpp
 /PGRCameraTest/interface.h
 /PGRCameraTest/GUIdefaults.h
+*.valmap

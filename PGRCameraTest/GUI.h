@@ -4,6 +4,7 @@
 #endif // !UNICODE
 #define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
+#include <ShObjIdl.h>
 #include <CommCtrl.h>
 #include <stdlib.h>
 #include <cwchar>
@@ -47,6 +48,8 @@ extern HWND WINAPI addTextBox(HWND hwnd, int xpos, int ypos, int width, int heig
 extern HWND WINAPI CreateComboEx(HWND hwnd);
 extern LRESULT CALLBACK subEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 extern HWND WINAPI CreateButton(HWND hwnd, int x, int y, int width, int height, int handle, wchar_t * label);
+extern void fileOpen();
+extern void fileSave();
 extern HWND * Texts;
 extern HWND * LightCtrl;
 extern wchar_t buf[4];

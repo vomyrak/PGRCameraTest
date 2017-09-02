@@ -59,7 +59,7 @@ void LightStage::go()
 	}
 }
 
-void LightStage::adjustAll(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2) {
+void LightStage::adjustAll(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2) {
 	for (size_t i = 0; i < 12; i++) {
 		for (size_t j = 0; j < 28; j++) {
 			Lamp[i][j]->setValue(r, g, b, r2, g2, b2);
@@ -72,7 +72,7 @@ void LightStage::adjustAll(uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
-			Lamp[i][j]->setConfig(config);
+			Lamp[i][j]->setValue(config);
 		}
 	}
 	go();
@@ -88,11 +88,11 @@ void LightStage::adjustAll(const uint8_t config[6])
 	go();
 }
 
-void LightStage::adjustRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+void LightStage::adjustRGB(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2)
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->setValue(r, g, b, r2, g2, b2);
+			Lamp[i][2 * j]->setValue(r, r2, g, g2, b, b2);
 		}
 		Colour[i]->go();
 	}
@@ -102,7 +102,7 @@ void LightStage::adjustRGB(uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->setConfig(config);
+			Lamp[i][2 * j]->setValue(config);
 		}
 		Colour[i]->go();
 	}
@@ -112,17 +112,17 @@ void LightStage::adjustRGB(const uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->setConfig(config);
+			Lamp[i][2 * j]->setValue(config);
 		}
 		Colour[i]->go();
 	}
 }
 
-void LightStage::adjustWhite(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+void LightStage::adjustWhite(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2)
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->setValue(r, g, b, r2, g2, b2);
+			Lamp[i][2 * j + 1]->setValue(r, r2, g, g2, b, b2);
 		}
 		White[i]->go();
 	}
@@ -132,7 +132,7 @@ void LightStage::adjustWhite(uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->setConfig(config);
+			Lamp[i][2 * j + 1]->setValue(config);
 		}
 		White[i]->go();
 	}
@@ -142,23 +142,23 @@ void LightStage::adjustWhite(const uint8_t config[6])
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->setConfig(config);
+			Lamp[i][2 * j + 1]->setValue(config);
 		}
 		White[i]->go();
 	}
 }
 
-void LightStage::adjustRealArc(int index, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2, int selection)
+void LightStage::adjustRealArc(int index, uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2, int selection)
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->setValue(r, g, b, r2, g2, b2);
+			Lamp[index][i * 2]->setValue(r, r2, g, g2, b, b2);
 		}
 		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->setValue(r, g, b, r2, g2, b2);
+			Lamp[index][i * 2 + 1]->setValue(r, r2, g, g2, b, b2);
 		}
 		White[index]->go();
 	}
@@ -168,13 +168,13 @@ void LightStage::adjustRealArc(int index, uint8_t config[6], int selection)
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->setConfig(config);
+			Lamp[index][i * 2]->setValue(config);
 		}
 		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->setConfig(config);
+			Lamp[index][i * 2 + 1]->setValue(config);
 		}
 		White[index]->go();
 	}
@@ -184,22 +184,22 @@ void LightStage::adjustRealArc(int index, const uint8_t config[6], int selection
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->setConfig(config);
+			Lamp[index][i * 2]->setValue(config);
 		}
 		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->setConfig(config);
+			Lamp[index][i * 2 + 1]->setValue(config);
 		}
 		White[index]->go();
 	}
 }
 
-void LightStage::adjustVirtualArc(int index, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2)
+void LightStage::adjustVirtualArc(int index, uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2)
 {
 	for (int j = 0; j < 14; j++) {
-		this->operator()(index, j)->setValue(r, g, b, r2, g2, b2);
+		this->operator()(index, j)->setValue(r, r2, g, g2, b, b2);
 	}
 	Colour[index / 2]->go();
 	White[index / 2]->go();
@@ -209,13 +209,13 @@ void LightStage::adjustVirtualArc(int index, uint8_t config[6], int selection)
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j)->setConfig(config);
+			this->operator()(index, 2 * j)->setValue(config);
 		}
 		Colour[index / 2]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j + 1)->setConfig(config);
+			this->operator()(index, 2 * j + 1)->setValue(config);
 		}
 		White[index / 2]->go();
 	}
@@ -225,13 +225,13 @@ void LightStage::adjustVirtualArc(int index, const uint8_t config[6], int select
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j)->setConfig(config);
+			this->operator()(index, 2 * j)->setValue(config);
 		}
 		Colour[index / 2]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j + 1)->setConfig(config);
+			this->operator()(index, 2 * j + 1)->setValue(config);
 		}
 		White[index / 2]->go();
 	}
@@ -319,10 +319,15 @@ void LightStage::setBuffer(uint8_t * source[12][28])
 
 
 
-void LightStage::saveMap(string filename)
+void LightStage::saveMap(char * filename)
 {
 	std::ofstream outfile;
-	outfile.open(filename.c_str());
+	char temp[8] = {'.', 'v', 'a', 'l', 'm', 'a', 'p', '\0'};
+	char temp2[9] = { 'a', '.', 'v', 'a', 'l', 'm', 'a', 'p', '\0' };
+	if (strcmp(temp, filename + strlen(filename) - 7)) {
+		strcat(filename, ".valmap");
+	}
+	outfile.open(filename);
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
 			for (auto k = 0; k < 6; k++) {
@@ -335,11 +340,11 @@ void LightStage::saveMap(string filename)
 	outfile.close();
 }
 
-void LightStage::loadMap(string filename)
+void LightStage::loadMap(char * filename)
 {
 	std::ifstream infile;
 	int temp;
-	infile.open(filename.c_str());
+	infile.open(filename);
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
 			for (auto k = 0; k < 6; k++) {
@@ -358,10 +363,7 @@ uint8_t * LightStage::getDefault()
 
 void LightStage::setDefault(uint8_t(&config)[6])
 {
-	defaultConfig[0] = config[0];
-	defaultConfig[1] = config[1];
-	defaultConfig[2] = config[2];
-	defaultConfig[3] = config[3];
-	defaultConfig[4] = config[4];
-	defaultConfig[5] = config[5];
+	for (auto i = 0; i < 6; i++) {
+		defaultConfig[i] = config[i];
+	}
 }

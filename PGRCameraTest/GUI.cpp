@@ -22,6 +22,7 @@ HBRUSH brush;
 HPEN pen;
 RECT * lightMatrix = new RECT[336];
 PAINTSTRUCT ps;
+LPVOID fileBuffer;
 using namespace std;
 
 
@@ -32,10 +33,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 		addMenu(hwnd);
 		Texts[0] = addTextBox(hwnd, 775, 703, 30, 20, ID_EC_1);
-		Texts[1] = addTextBox(hwnd, 1160, 703, 30, 20, ID_EC_2);
-		Texts[2] = addTextBox(hwnd, 1535, 703, 30, 20, ID_EC_3);
-		Texts[3] = addTextBox(hwnd, 775, 763, 30, 20, ID_EC_4);
-		Texts[4] = addTextBox(hwnd, 1160, 763, 30, 20, ID_EC_5);
+		Texts[1] = addTextBox(hwnd, 775, 763, 30, 20, ID_EC_2);
+		Texts[2] = addTextBox(hwnd, 1160, 703, 30, 20, ID_EC_3);
+		Texts[3] = addTextBox(hwnd, 1160, 763, 30, 20, ID_EC_4);
+		Texts[4] = addTextBox(hwnd, 1535, 703, 30, 20, ID_EC_5);
 		Texts[5] = addTextBox(hwnd, 1535, 763, 30, 20, ID_EC_6);
 		Label[0] = addLabel(hwnd, 455, 704, 60, 20, L"Ch1_H");
 		Label[1] = addLabel(hwnd, 455, 764, 60, 20, L"Ch1_L");
@@ -56,10 +57,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		addLabel(hwnd, 1149, 660, 60, 20, L"Arc 10");
 		addLabel(hwnd, 1057, 660, 60, 20, L"Arc 11");
 		LightCtrl[0] = CreateTrackbar(hwnd, 0, 255, ID_TB_1, 8, 515, 700);
-		LightCtrl[1] = CreateTrackbar(hwnd, 0, 255, ID_TB_2, 8, 900, 700);
-		LightCtrl[2] = CreateTrackbar(hwnd, 0, 255, ID_TB_3, 8, 1275, 700);
-		LightCtrl[3] = CreateTrackbar(hwnd, 0, 255, ID_TB_4, 8, 515, 760);
-		LightCtrl[4] = CreateTrackbar(hwnd, 0, 255, ID_TB_5, 8, 900, 760);
+		LightCtrl[1] = CreateTrackbar(hwnd, 0, 255, ID_TB_2, 8, 515, 760);
+		LightCtrl[2] = CreateTrackbar(hwnd, 0, 255, ID_TB_3, 8, 900, 700);
+		LightCtrl[3] = CreateTrackbar(hwnd, 0, 255, ID_TB_4, 8, 900, 760);
+		LightCtrl[4] = CreateTrackbar(hwnd, 0, 255, ID_TB_5, 8, 1275, 700);
 		LightCtrl[5] = CreateTrackbar(hwnd, 0, 255, ID_TB_6, 8, 1275, 760);
 		Button[0] = CreateButton(hwnd, 440, 155, 100, 25, ID_BN_1, L"Load Default");
 		Button[1] = CreateButton(hwnd, 550, 155, 150, 25, ID_BN_2, L"Load Global Default");
@@ -82,7 +83,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		updateLight();
 		BeginPaint(hchild, &ps);
-		brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[1], currentConfig[2]));
+		brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
 		FillRect(GetDC(hchild), lightMatrix + activeButton, brush);
 		EndPaint(hchild, &ps);
 		ReleaseDC(hchild, GetDC(hchild));
@@ -101,7 +102,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 				updateLight();
 				BeginPaint(hchild, &ps);
-				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[1], currentConfig[2]));
+				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
 				FillRect(GetDC(hchild), lightMatrix + activeButton, brush);
 				EndPaint(hchild, &ps);
 				ReleaseDC(hchild, GetDC(hchild));
@@ -118,7 +119,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 				stage.adjustAll(temp);
 				BeginPaint(hchild, &ps);
-				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[1], currentConfig[2]));
+				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
 				for (int i = 0; i < 336; i++) {
 					FillRect(GetDC(hchild), lightMatrix + i, brush);
 				}
@@ -136,7 +137,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 				updateLight();
 				BeginPaint(hchild, &ps);
-				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[1], currentConfig[2]));
+				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
 				FillRect(GetDC(hchild), lightMatrix + activeButton, brush);
 				EndPaint(hchild, &ps);
 				ReleaseDC(hchild, GetDC(hchild));
@@ -152,7 +153,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 				stage.adjustAll(turn_off);
 				BeginPaint(hchild, &ps);
-				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[1], currentConfig[2]));
+				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
 				for (int i = 0; i < 336; i++) {
 					FillRect(GetDC(hchild), lightMatrix + i, brush);
 				}
@@ -162,6 +163,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			else if (LOWORD(wParam) == ID_BN_5) {
 				stage.setDefault(currentConfig);
+			}
+			else if (LOWORD(wParam) == ID_BN_7) {
+				fileOpen();
+			}
+			else if (LOWORD(wParam) == ID_BN_6) {
+				fileSave();
 			}
 		}
 		break;
@@ -199,7 +206,7 @@ LRESULT CALLBACK WindowProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				selectedPowerSupply = activeButton / 28;
 				selectedLightPos = activeButton % 28;
 				whiteSelected = activeButton % 2;
-				stage[selectedPowerSupply][selectedLightPos]->getConfig(currentConfig);
+				stage[selectedPowerSupply][selectedLightPos]->getValue(currentConfig);
 				for (int i = 0; i < 6; i++) {
 					pos = currentConfig[i];
 					wsprintfW(buf, L"%d", pos);
@@ -209,7 +216,7 @@ LRESULT CALLBACK WindowProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					UpdateWindow(LightCtrl[i]);
 				}
 				BeginPaint(hwnd, &ps);
-				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[1], currentConfig[2]));
+				brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
 				FillRect(GetDC(hwnd), lightMatrix + activeButton, brush);
 				EndPaint(hwnd, &ps);
 				ReleaseDC(hwnd, GetDC(hwnd));
@@ -351,10 +358,22 @@ LRESULT CALLBACK subEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
 			for (auto i = 0; i < 6; i++) {
 				SendMessageW(Texts[i], WM_GETTEXT, 4, (LPARAM)buf);
 				pos = stoi(buf);
+				if (pos > 255) {
+					pos = 255;
+				}
+				else if (pos < 0) {
+					pos = 0;
+				}
 				currentConfig[i] = pos;
 				SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)pos);
-				updateLight();
 			}
+			updateLight();
+			BeginPaint(hchild, &ps);
+			brush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
+			FillRect(GetDC(hchild), lightMatrix + activeButton, brush);
+			EndPaint(hchild, &ps);
+			ReleaseDC(hchild, GetDC(hchild));
+			DeleteObject(brush);
 			break;
 		}
 	case WM_PAINT:
@@ -367,7 +386,7 @@ LRESULT CALLBACK subEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
 
 void updateLight()
 {
-	stage[selectedPowerSupply][selectedLightPos]->setConfig(currentConfig);
+	stage[selectedPowerSupply][selectedLightPos]->setValue(currentConfig);
 	if (!whiteSelected) {
 		stage.go(selectedPowerSupply * 2);
 	}
@@ -375,4 +394,59 @@ void updateLight()
 		stage.go(selectedPowerSupply * 2 + 1);
 	}
 	Sleep(20);
+}
+
+void fileOpen() {
+	OPENFILENAMEW ofn;
+	wchar_t szFile[260];
+	wchar_t dirBuffer[260];
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = L'\0';
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = L"Light Stage Value Map (.valmap)\0*.valmap*\0";
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	GetCurrentDirectoryW(260, dirBuffer);
+	ofn.lpstrInitialDir = dirBuffer;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	if (GetOpenFileName(&ofn) == true) {
+		char temp[260];
+		ZeroMemory(temp, sizeof(temp));
+		wcstombs(temp, ofn.lpstrFile, lstrlenW(ofn.lpstrFile));
+		if (temp[0] != '\0') {
+			stage.loadMap(temp);
+		}
+	}
+}
+
+void fileSave() {
+	OPENFILENAMEW ofn;
+	wchar_t szFile[260];
+	wchar_t dirBuffer[260];
+	HANDLE hf;
+	DWORD dw;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = L'\0';
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = L"Light Stage Value Map (.valmap)\0*.valmap*\0";
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	GetCurrentDirectoryW(260, dirBuffer);
+	ofn.lpstrInitialDir = dirBuffer;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	GetSaveFileNameW(&ofn);
+	char temp[260];
+	ZeroMemory(temp, sizeof(temp));
+	wcstombs(temp, ofn.lpstrFile, lstrlenW(ofn.lpstrFile));
+	if (temp[0] != '\0') {
+		stage.saveMap(temp);
+	}
 }

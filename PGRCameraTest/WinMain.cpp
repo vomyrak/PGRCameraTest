@@ -1,16 +1,11 @@
 #include "stdafx.h"
-#include <winsock2.h>
 
 #include <fstream>
 #include <cmath>
 #include <tuple>
 #include <vector>
-#include <ws2tcpip.h>
-#include "FlyCapture2.h"
 #include "GUI.h"
-
-
-
+#include "FlyCapture2.h"
 
 
 // Need to link with Ws2_32.lib
@@ -21,17 +16,9 @@ using namespace std;
 
 LightStage stage;
 LightStageCamera cam;
-HWND * Texts = new HWND[6];
-HWND * LightCtrl = new HWND[6];
-wchar_t buf[4];
-int pos = 0;
-int activeButton = 0;
-HWND * display = new HWND[336];
-UINT8 currentConfig[6] = { 0, 0, 0, 0, 0, 0 };
-HWND * Label = new HWND[6];
-HWND hwnd;
+HWND hmaster;
 HWND hchild;
-HWND * Button = new HWND[7];
+HWND hpopup;
 
 int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow) {
 	const wchar_t CLASS_NAME[] = L"Master";
@@ -63,7 +50,21 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	wc2.hbrBackground = CreateSolidBrush(RGB(255, 255, 255));
 	RegisterClassW(&wc2);
 
-	hwnd = CreateWindowExW(
+	WNDCLASSW wc3 = {};
+	wc3.cbClsExtra = 0;
+	wc3.cbWndExtra = 0;
+	wc3.hIcon = 0;
+	wc3.lpfnWndProc = WindowProc3;
+	wc3.hInstance = hinstance;
+	wc3.style = CS_HREDRAW | CS_VREDRAW;
+	wc3.lpszMenuName = 0;
+	wc3.lpszClassName = L"Popup";
+	wc3.hCursor = LoadCursor(0, IDC_ARROW);
+	wc3.hIcon = LoadIcon(0, IDI_APPLICATION);
+	wc3.hbrBackground = CreateSolidBrush(RGB(240, 240, 240));
+	RegisterClassW(&wc3);
+
+	hmaster = CreateWindowExW(
 		NULL,
 		CLASS_NAME,
 		L"Light Stage Controller",
@@ -81,22 +82,35 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		NULL,
 		WS_CHILDWINDOW | WS_VISIBLE | WS_CLIPSIBLINGS,
 		440, 200, 1125, 450,
-		hwnd,
+		hmaster,
+		NULL,
+		NULL,
+		NULL
+	);
+	
+	hpopup = CreateWindowExW(
+		NULL,
+		L"Popup",
+		L"Mode selection",
+		WS_OVERLAPPEDWINDOW  ^ WS_THICKFRAME  | WS_POPUPWINDOW,
+		600, 150, 460, 300,
+		NULL,
 		NULL,
 		NULL,
 		NULL
 	);
 
+	
 	HFONT defaultFont;
 	defaultFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
-	SendMessageW(hwnd, WM_SETFONT, WPARAM(defaultFont), (LPARAM)L"Times New Roman");
+	SendMessageW(hmaster, WM_SETFONT, WPARAM(defaultFont), (LPARAM)L"Times New Roman");
 
-	if ((hwnd == NULL) || (hchild == NULL))
+	if ((hmaster == NULL) || (hchild == NULL) || (hpopup == NULL))
 	{
 		MessageBoxW(0, L"Create Window Failed", L"Error Message", 0);
 	}
-	ShowWindow(hwnd, nCmdShow);
-	UpdateWindow(hwnd);
+	ShowWindow(hmaster, nCmdShow);
+	UpdateWindow(hmaster);
 
 	MSG msg = {};
 	SecureZeroMemory(&msg, sizeof(MSG));

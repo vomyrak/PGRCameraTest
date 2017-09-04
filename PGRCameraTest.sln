@@ -11,6 +11,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ResponseAnalysis", "PythonA
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PGRCamera", "PGRCamera\PGRCamera.vcxproj", "{98D56AE5-3C7F-45F7-AC28-173E587F313D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project2", "Project2\Project2.vcxproj", "{543E3734-DB1C-419F-9B22-623D98E282BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,16 @@ Global
 		{98D56AE5-3C7F-45F7-AC28-173E587F313D}.Release|Win32.Build.0 = Release|Win32
 		{98D56AE5-3C7F-45F7-AC28-173E587F313D}.Release|x64.ActiveCfg = Release|x64
 		{98D56AE5-3C7F-45F7-AC28-173E587F313D}.Release|x64.Build.0 = Release|x64
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Debug|Win32.Build.0 = Debug|Win32
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Debug|x64.ActiveCfg = Debug|x64
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Debug|x64.Build.0 = Debug|x64
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Release|Any CPU.ActiveCfg = Release|Win32
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Release|Win32.ActiveCfg = Release|Win32
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Release|Win32.Build.0 = Release|Win32
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Release|x64.ActiveCfg = Release|x64
+		{543E3734-DB1C-419F-9B22-623D98E282BB}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

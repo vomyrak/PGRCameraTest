@@ -99,14 +99,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\dev\glui-2.36\src\include;C:\dev\freeglut\include;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include;C:\dev\zlib-1.2.11;C:\dev\lpng1629;C:\Program Files\Point Grey Research\FlyCapture2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include;C:\Program Files\Point Grey Research\FlyCapture2\include;C:\dev\opencv249\build\include</AdditionalIncludeDirectories>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\dev\glui-2.36\src\lib;C:\dev\freeglut\lib\x64;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\dev\zlib-1.2.11\libs\static_x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>comctl32.lib;glui32d.lib;freeglut.lib;OpenGL32.Lib;FlyCapture2d_v140.lib;zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files\Point Grey Research\FlyCapture2\lib64\vs2015;C:\dev\opencv249\build\x64\vc14\lib\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>comctl32.lib;FlyCapture2d_v140.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -149,19 +149,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="convert.cpp" />
+    <ClCompile Include="edit.cpp" />
     <ClCompile Include="Fixture.cpp" />
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="interface.cpp" />
     <ClCompile Include="LightStage.cpp" />
     <ClCompile Include="LightStageCamera.cpp" />
+    <ClCompile Include="loadPNM.cpp" />
+    <ClCompile Include="relighting.cpp" />
+    <ClCompile Include="voronoi.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="convert.h" />
+    <ClInclude Include="edit.h" />
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="interface.h" />
     <ClInclude Include="LightStage.h" />
     <ClInclude Include="LightStageCamera.h" />
+    <ClInclude Include="loadPNM.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="relighting.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="voronoi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

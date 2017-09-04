@@ -314,7 +314,7 @@ void FixtureLED::setBlue2(uint8_t b2)
 
 void FixtureLED::setRGB(uint8_t r, uint8_t g, uint8_t b)
 {
-	if (channelNumber = 3) {
+	if (channelNumber == 3) {
 		setRed(r);
 		setGreen(g);
 		setBlue(b);
@@ -326,7 +326,7 @@ void FixtureLED::setRGB(uint8_t r, uint8_t g, uint8_t b)
 
 void FixtureLED::setValue(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2)
 {
-	if (channelNumber = 6) {
+	if (channelNumber == 6) {
 		setRed(r);
 		setGreen(g);
 		setBlue(b);

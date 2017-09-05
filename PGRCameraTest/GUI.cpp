@@ -6,7 +6,7 @@ using namespace cv;
 
 HWND * Texts = new HWND[6];
 HWND * LightCtrl = new HWND[6];
-wchar_t buf[4];
+wchar_t buf[64];
 int pos = 0;
 int activeButton = 0;
 HWND * display = new HWND[336];
@@ -94,6 +94,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		Texts[3] = addTextBox(hwnd, 745, 658, 30, 20, ID_EC_4, false);
 		Texts[4] = addTextBox(hwnd, 1120, 598, 30, 20, ID_EC_5, false);
 		Texts[5] = addTextBox(hwnd, 1120, 658, 30, 20, ID_EC_6, false);
+		Label[28] = addLabel(hwnd, 715, 28, 60, 20, ID_LB_24, L"Factor");
+		Texts[6] = CreateWindowExW(NULL, L"EDIT", NULL, WS_VISIBLE | WS_CHILDWINDOW | WS_BORDER | WS_TABSTOP | WS_GROUP, 775, 28, 50, 20, hwnd, (HMENU)ID_EC_7, NULL, NULL);
+		SendMessageW(Texts[6], WM_SETTEXT, NULL, (LPARAM)L"1.0");
+		SetWindowSubclass(Texts[6], subEditProc2, 0, 0);
 		CheckBox[0] = addCheckBox(hwnd, 558, 550, 70, 25, ID_CHB_1, L"", true);
 		CheckBox[1] = addCheckBox(hwnd, 466, 550, 70, 25, ID_CHB_2, L"", true);
 		CheckBox[2] = addCheckBox(hwnd, 374, 550, 70, 25, ID_CHB_3, L"", true);
@@ -807,6 +811,27 @@ LRESULT CALLBACK WindowProc3(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 LRESULT CALLBACK WindowProc4(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	switch (uMsg) {
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case WM_LBUTTONDOWN:
+			SetFocus(hwnd);
+		case VK_RETURN:
+			SendMessageW(hwnd, WM_GETTEXT, 4, (LPARAM)buf);
+			scaleFactor = stod(buf);
+			if (scaleFactor < 0) {
+				scaleFactor = 0;
+			}
+			else if (scaleFactor <= 1) {
+			}
+			else {
+				scaleFactor = 1;
+			}
+		default:
+			break;
+		}
+	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
@@ -951,6 +976,34 @@ LRESULT CALLBACK subEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
 		break;
 	default:
 		return DefSubclassProc(hwnd, uMsg, wParam, lParam);
+	}
+	return DefSubclassProc(hwnd, uMsg, wParam, lParam);
+}
+LRESULT CALLBACK subEditProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData) {
+	switch (uMsg) {
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case WM_LBUTTONDOWN:
+			SetFocus(hwnd);
+		case VK_RETURN:
+			SendMessageW(hwnd, WM_GETTEXT, 4, (LPARAM)buf);
+			scaleFactor = stod(buf);
+			if (scaleFactor < 0) {
+				scaleFactor = 0.0f;
+				swprintf_s(buf, L"%f", scaleFactor);
+				SendMessageW(hwnd, WM_SETTEXT, NULL, (LPARAM)buf);
+			}
+			else if (scaleFactor <= 1) {
+			}
+			else {
+				scaleFactor = 1.0f;
+				swprintf_s(buf, L"%f", scaleFactor);
+				SendMessageW(hwnd, WM_SETTEXT, NULL, (LPARAM)buf);
+			}
+		default:
+			return DefSubclassProc(hwnd, uMsg, wParam, lParam);
+		}
 	}
 	return DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
@@ -1165,12 +1218,16 @@ void demoRoutine() {
 				in_path += envName;
 				in_path += "\\txt\\global_converted.txt";
 
+				
 				ifstream ifs(in_path);
 
 				int no, arc, index;
 				float r, g, b;
 				while (ifs >> no >> arc >> index >> r >> g >> b)
 				{
+					r *= scaleFactor;
+					g *= scaleFactor;
+					b *= scaleFactor;
 					stage(arc, index)->setValue(r, 0.0f, g, 0.0f, b, 0.0f);
 
 					if (no == 174)
@@ -1218,6 +1275,9 @@ void demoRoutine() {
 			float r, g, b;
 			while (ifs >> no >> arc >> index >> r >> g >> b && !(no == 174 && index == 13))
 			{
+				r *= scaleFactor;
+				g *= scaleFactor;
+				b *= scaleFactor;
 				stage(arc, index)->setValue(r, 0.0f, g, 0.0f, b, 0.0f);
 			}
 
@@ -1239,6 +1299,9 @@ void demoRoutine() {
 			float r, g, b;
 			while (ifs >> no >> arc >> index >> r >> g >> b && !(no == 174 && index == 13))
 			{
+				r *= scaleFactor;
+				g *= scaleFactor;
+				b *= scaleFactor;
 				stage(arc, index)->setValue(r, 0.0f, g, 0.0f, b, 0.0f);
 			}
 
@@ -1496,3 +1559,4 @@ void scale(uint8_t * config) {
 		config[i] *= scaleFactor;
 	}
 }
+

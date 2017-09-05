@@ -30,6 +30,7 @@
 #define ID_EC_4 10
 #define ID_EC_5 11
 #define ID_EC_6 12
+#define ID_EC_7 80
 #define ID_BN_1 13
 #define ID_BN_2 14
 #define ID_BN_3 15
@@ -85,6 +86,7 @@
 #define ID_LB_21 62
 #define ID_LB_22 63
 #define ID_LB_23 64
+#define ID_LB_24 79
 
 #define ID_CHB_1 65
 #define ID_CHB_2 66
@@ -123,6 +125,7 @@ extern HWND WINAPI addTextBox(HWND hwnd, int xpos, int ypos, int width, int heig
 extern HWND WINAPI addCheckBox(HWND hwnd, int x, int y, int width, int height, int handle, wchar_t * tag, bool isGrouped);
 extern HWND WINAPI CreateComboEx(HWND hwnd, int x, int y, int width, int height, int handle);
 extern LRESULT CALLBACK subEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+extern LRESULT CALLBACK subEditProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 extern HWND WINAPI CreateButton(HWND hwnd, int x, int y, int width, int height, int handle, wchar_t * label);
 extern LRESULT CALLBACK subCVProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 extern void fileOpen();
@@ -137,3 +140,4 @@ extern void loadValMap();
 extern void loadVoronMap();
 extern void lightStageInit();
 extern void scale(uint8_t * config);
+extern void updateScale(float a);

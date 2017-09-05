@@ -248,7 +248,7 @@ void play_rotations(std::string in_path)
 		Mat img;
 		img = imread(in, CV_LOAD_IMAGE_COLOR); 
 	
-		imshow("Rotation", img);
+		imshow("Demo", img);
 		waitKey(20);
 	}
 }
@@ -259,7 +259,7 @@ void play_one_rotation(std::string in_path, int i)
 	Mat img;
 	img = imread(in_path, CV_LOAD_IMAGE_COLOR); 
 	
-	imshow("Rotation", img);
+	imshow("Demo", img);
 }
 
 

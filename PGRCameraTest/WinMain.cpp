@@ -19,8 +19,10 @@ LightStageCamera cam;
 HWND hmaster;
 HWND hchild;
 HWND hpopup;
+HWND hcamera;
 
 int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow) {
+	lightStageInit();
 	const wchar_t CLASS_NAME[] = L"Master";
 	WNDCLASSW wc = {};
 	wc.cbClsExtra = 0;
@@ -64,6 +66,20 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	wc3.hbrBackground = CreateSolidBrush(RGB(240, 240, 240));
 	RegisterClassW(&wc3);
 
+	WNDCLASSW wc4 = {};
+	wc4.cbClsExtra = 0;
+	wc4.cbWndExtra = 0;
+	wc4.hIcon = 0;
+	wc4.lpfnWndProc = WindowProc4;
+	wc4.hInstance = hinstance;
+	wc4.style = CS_HREDRAW | CS_VREDRAW;
+	wc4.lpszMenuName = 0;
+	wc4.lpszClassName = L"Camera";
+	wc4.hCursor = LoadCursor(0, IDC_ARROW);
+	wc4.hIcon = LoadIcon(0, IDI_APPLICATION);
+	wc4.hbrBackground = CreateSolidBrush(RGB(240, 240, 240));
+	RegisterClassW(&wc4);
+
 	hmaster = CreateWindowExW(
 		NULL,
 		CLASS_NAME,
@@ -81,7 +97,7 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		L"Child",
 		NULL,
 		WS_CHILDWINDOW | WS_VISIBLE | WS_CLIPSIBLINGS,
-		440, 200, 1125, 450,
+		25, 70, 1125, 450,
 		hmaster,
 		NULL,
 		NULL,
@@ -100,6 +116,17 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		NULL
 	);
 
+	hcamera = CreateWindowExW(
+		NULL,
+		L"Camera",
+		L"",
+		WS_CHILDWINDOW | WS_VISIBLE,
+		1165, 25, 400, 650,
+		hmaster,
+		NULL,
+		NULL,
+		NULL
+	);
 	
 	HFONT defaultFont;
 	defaultFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
@@ -115,8 +142,25 @@ int WINAPI wWinMain(HINSTANCE hinstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	MSG msg = {};
 	SecureZeroMemory(&msg, sizeof(MSG));
 	while (GetMessage(&msg, NULL, 0, 0) > 0) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		//if (!(IsDialogMessageW(hmaster, &msg))) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		//}
+
 	}
 	return (int)msg.wParam;
+}
+
+void lightStageInit() {
+	ifstream infile;
+	infile.open("default.val");
+	if (!infile.is_open()) {
+		stage.adjustAll(stage.getDefault());
+	}
+	else {
+		int r, r2, g, g2, b, b2;
+		infile >> r >> r2 >> g >> g2 >> b >> b2;
+		stage.adjustAll(r, r2, g, g2, b, b2);
+	}
+	infile.close();
 }

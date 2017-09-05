@@ -112,12 +112,17 @@ public:
 	/*Set RGB values to fixture from array*/
 	void setValue(uint8_t config[6]);
 	/*Set RGB values to fixture from array*/
+	void setValue(uint8_t config[6], float scale);
+	/*Set RGB values to fixture from array*/
 	void setValue(const uint8_t config[6]);
 	/*Set 8-bit RGB values by value*/
 	void setRGB(uint8_t r, uint8_t g, uint8_t b);
 	/*Set 16-bit RGB values by value*/
 	void setValue(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2);
-	
+	/*Set 16-bit RGB values by value*/
+	void setValue(int r, int r2, int g, int g2, int b, int b2);
+	/*Set 16-bit RGB values by value*/
+	void setValue(float r, float r2, float g, float g2, float b, float b2);
 	/*Print RGB values as a string*/
 	string getStr() const;
 

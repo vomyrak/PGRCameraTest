@@ -23,28 +23,28 @@ public:
 	void go();
 
 	/*set the same 16-bit setting to all lights by value*/
-	void adjustAll(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
+	void adjustAll(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2);
 	/*set the same 16-bit setting to all lights by array*/
 	void adjustAll(uint8_t config[6]);
 	/*set the same 16-bit setting to all lights by array*/
 	void adjustAll(const uint8_t config[6]);
 
 	/*apply the same 16-bit setting to all RGB lights by value*/
-	void adjustRGB(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
+	void adjustRGB(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2);
 	/*apply the same 16-bit setting to all RGB lights by array*/
 	void adjustRGB(uint8_t config[6]);
 	/*apply the same 16-bit setting to all RGB lights by array*/
 	void adjustRGB(const uint8_t config[6]);
 
 	/*apply the same 16-bit setting to all white lights by value*/
-	void adjustWhite(uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2);
+	void adjustWhite(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2);
 	/*apply the same 16-bit setting to all white lights by array*/
 	void adjustWhite(uint8_t config[6]);
 	/*apply the same 16-bit setting to all white lights by array*/
 	void adjustWhite(const uint8_t config[6]);
 
 	/*apply the same 16-bit setting to a real arc by value*/
-	void adjustRealArc(int index, uint8_t r, uint8_t g, uint8_t b, uint8_t r2, uint8_t g2, uint8_t b2, int selection = -1);
+	void adjustRealArc(int index, uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2, int selection = -1);
 	/*apply the same 16-bit setting to a real arc by array*/
 	void adjustRealArc(int index, uint8_t config[6], int selection = -1);
 	/*apply the same 16-bit setting to a real arc by array*/
@@ -60,7 +60,9 @@ public:
 	/*Save existing lamp setting to file*/
 	void saveMap(char * filename);
 	/*Load lamp setting from file*/
-	void loadMap(char * filename);
+	bool loadMap(char * filename);
+	/*Load voronoi-format map from file*/
+	bool loadVoronMap(char * filename);
 
 	/*Get the pointer to default 16-bit setting*/
 	uint8_t * getDefault();
@@ -79,7 +81,11 @@ public:
 	/*Copy setting map from a setting matrix to buffer matrix*/
 	void setBuffer(uint8_t * source[12][28]);
 
+	/*Get the scale factor of the light stage*/
+	float getScale();
 
+	/*Set the scale factor of the light stage*/
+	void setScale(float input);
 
 private:
 	PowerSupply ** Colour;
@@ -92,4 +98,6 @@ private:
 	uint8_t bufferOffset;
 	string ip;
 	uint8_t defaultConfig[6] = { 4, 0, 4, 128, 3, 0 };
+	float scale = 0.0f;
+	bool scaled = false;
 };

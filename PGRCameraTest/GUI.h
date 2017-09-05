@@ -14,6 +14,7 @@
 #include <conio.h>
 #include "interface.h"
 #include "convert.h"
+#include <set>
 
 
 
@@ -57,6 +58,48 @@
 #define ID_P_RB_14 37
 #define ID_P_RB_15 38
 
+#define ID_CB_1 39
+#define ID_CB_2 40
+#define ID_CB_3 41
+
+#define ID_LB_1 42
+#define ID_LB_2 43
+#define ID_LB_3 44
+#define ID_LB_4 45
+#define ID_LB_5 46
+#define ID_LB_6 47
+#define ID_LB_7 48
+#define ID_LB_8 49
+#define ID_LB_9 50
+#define ID_LB_10 51
+#define ID_LB_11 52
+#define ID_LB_12 53
+#define ID_LB_13 54
+#define ID_LB_14 55
+#define ID_LB_15 56
+#define ID_LB_16 57
+#define ID_LB_17 58
+#define ID_LB_18 59
+#define ID_LB_19 60
+#define ID_LB_20 61
+#define ID_LB_21 62
+#define ID_LB_22 63
+#define ID_LB_23 64
+
+#define ID_CHB_1 65
+#define ID_CHB_2 66
+#define ID_CHB_3 67
+#define ID_CHB_4 68
+#define ID_CHB_5 69
+#define ID_CHB_6 70
+#define ID_CHB_7 71
+#define ID_CHB_8 72
+#define ID_CHB_9 73
+#define ID_CHB_10 74
+#define ID_CHB_11 75
+#define ID_CHB_12 76
+#define ID_CHB_13 77
+#define ID_CHB_14 78
 
 #define turn_on 255,255,255,255,255,255
 #define turn_half_lit 128,128,128,128,128,128
@@ -71,13 +114,14 @@ extern HWND hpopup;
 extern LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 extern LRESULT CALLBACK WindowProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 extern LRESULT CALLBACK WindowProc3(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+extern LRESULT CALLBACK WindowProc4(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 extern void addMenu(HWND);
 extern HWND WINAPI CreateTrackbar(HWND hwnd, UINT iMin, UINT iMax, UINT iSelMin, UINT iSelMax, UINT posx, UINT posy, UINT width = 250, UINT height = 50);
 extern HWND WINAPI addRadioButton(HWND hwnd, int x, int y, int width, int height, int handle, wchar_t * tag, bool isGrouped);
-extern HWND WINAPI addLabel(HWND hwnd, int x, int y, int width, int height, wchar_t * tag);
-extern HWND WINAPI addTextBox(HWND hwnd, int xpos, int ypos, int width, int height, int handle);
+extern HWND WINAPI addLabel(HWND hwnd, int x, int y, int width, int height, int handle, wchar_t * tag);
+extern HWND WINAPI addTextBox(HWND hwnd, int xpos, int ypos, int width, int height, int handle, bool isGrouped);
 extern HWND WINAPI addCheckBox(HWND hwnd, int x, int y, int width, int height, int handle, wchar_t * tag, bool isGrouped);
-extern HWND WINAPI CreateComboEx(HWND hwnd);
+extern HWND WINAPI CreateComboEx(HWND hwnd, int x, int y, int width, int height, int handle);
 extern LRESULT CALLBACK subEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 extern HWND WINAPI CreateButton(HWND hwnd, int x, int y, int width, int height, int handle, wchar_t * label);
 extern LRESULT CALLBACK subCVProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
@@ -88,3 +132,8 @@ extern void demoRoutine();
 extern void captureRoutine();
 extern void precomRoutine();
 extern void tableRoutine();
+extern void loadVal(uint8_t * config);
+extern void loadValMap();
+extern void loadVoronMap();
+extern void lightStageInit();
+extern void scale(uint8_t * config);

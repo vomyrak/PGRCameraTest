@@ -339,6 +339,36 @@ void FixtureLED::setValue(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t 
 	}
 }
 
+void FixtureLED::setValue(int r, int r2, int g, int g2, int b, int b2)
+{
+	if (channelNumber == 6) {
+		setRed(r);
+		setGreen(g);
+		setBlue(b);
+		setRed2(r2);
+		setGreen2(g2);
+		setBlue2(b2);
+	}
+	else {
+		std::cout << "Setting failed. Use setRGB for 3-channel lights" << std::endl;
+	}
+}
+
+void FixtureLED::setValue(float r, float r2, float g, float g2, float b, float b2)
+{
+	if (channelNumber == 6) {
+		setRed(r);
+		setGreen(g);
+		setBlue(b);
+		setRed2((r - (uint8_t)r) * 256);
+		setGreen2((g - (uint8_t)g) * 256);
+		setBlue2((b - (uint8_t)b) * 256);
+	}
+	else {
+		std::cout << "Setting failed. Use setRGB for 3-channel lights" << std::endl;
+	}
+}
+
 uint8_t * FixtureLED::getValue()
 {
 	return _values;
@@ -380,6 +410,24 @@ void FixtureLED::setValue(uint8_t config[6])
 		uint8_t temp[3];
 		for (int i = 0; i < 3; i++) {
 			_values[i] = config[i];
+		}
+	}
+}
+
+void FixtureLED::setValue(uint8_t config[6], float scale)
+{
+	uint8_t temp[6];
+	for (auto i = 0; i < 6; i++) {
+		temp[i] = config[i] * scale;
+	}
+	if (channelNumber == 6) {
+		for (int i = 0; i < 6; i++) {
+			_values[i] = temp[i];
+		}
+	}
+	else {
+		for (int i = 0; i < 3; i++) {
+			_values[i] = temp[i];
 		}
 	}
 }

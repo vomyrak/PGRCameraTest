@@ -62,7 +62,7 @@ void LightStage::go()
 void LightStage::adjustAll(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2) {
 	for (size_t i = 0; i < 12; i++) {
 		for (size_t j = 0; j < 28; j++) {
-			Lamp[i][j]->setValue(r * scale, r2 * scale, g * scale, g2 * scale, b * scale, b2 * scale);
+			Lamp[i][j]->setValue(r, r2, g, g2, b, b2);
 		}
 	}
 	go();
@@ -76,7 +76,7 @@ void LightStage::adjustAll(uint8_t config[6])
 	}
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
-			Lamp[i][j]->setValue(temp);
+			Lamp[i][j]->setValue(config);
 		}
 	}
 	go();
@@ -90,7 +90,7 @@ void LightStage::adjustAll(const uint8_t config[6])
 	}
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 28; j++) {
-			Lamp[i][j]->setValue(temp);
+			Lamp[i][j]->setValue(config);
 		}
 	}
 	go();
@@ -100,7 +100,7 @@ void LightStage::adjustRGB(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->setValue(r * scale, r2 * scale, g * scale, g2 * scale, b * scale, b2 * scale);
+			Lamp[i][2 * j]->setValue(r, r2, g, g2, b, b2);
 		}
 		Colour[i]->go();
 	}
@@ -114,7 +114,7 @@ void LightStage::adjustRGB(uint8_t config[6])
 	}
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->setValue(temp);
+			Lamp[i][2 * j]->setValue(config);
 		}
 		Colour[i]->go();
 	}
@@ -128,7 +128,7 @@ void LightStage::adjustRGB(const uint8_t config[6])
 	}
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j]->setValue(temp);
+			Lamp[i][2 * j]->setValue(config);
 		}
 		Colour[i]->go();
 	}
@@ -138,7 +138,7 @@ void LightStage::adjustWhite(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8
 {
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->setValue(r * scale, r2 * scale, g * scale, g2 * scale, b * scale, b2 * scale);
+			Lamp[i][2 * j + 1]->setValue(r, r2, g, g2, b, b2);
 		}
 		White[i]->go();
 	}
@@ -152,7 +152,7 @@ void LightStage::adjustWhite(uint8_t config[6])
 	}
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->setValue(temp);
+			Lamp[i][2 * j + 1]->setValue(config);
 		}
 		White[i]->go();
 	}
@@ -166,7 +166,7 @@ void LightStage::adjustWhite(const uint8_t config[6])
 	}
 	for (auto i = 0; i < 12; i++) {
 		for (auto j = 0; j < 14; j++) {
-			Lamp[i][2 * j + 1]->setValue(temp);
+			Lamp[i][2 * j + 1]->setValue(config);
 		}
 		White[i]->go();
 	}
@@ -176,13 +176,13 @@ void LightStage::adjustRealArc(int index, uint8_t r, uint8_t r2, uint8_t g, uint
 {
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->setValue(r * scale, r2 * scale, g * scale, g2 * scale, b * scale, b2 * scale);
+			Lamp[index][i * 2]->setValue(r, r2, g, g2, b, b2);
 		}
 		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->setValue(r * scale, r2 * scale, g * scale, g2 * scale, b * scale, b2 * scale);
+			Lamp[index][i * 2 + 1]->setValue(r, r2, g, g2, b, b2);
 		}
 		White[index]->go();
 	}
@@ -196,13 +196,13 @@ void LightStage::adjustRealArc(int index, uint8_t config[6], int selection)
 	}
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->setValue(temp);
+			Lamp[index][i * 2]->setValue(config);
 		}
 		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->setValue(temp);
+			Lamp[index][i * 2 + 1]->setValue(config);
 		}
 		White[index]->go();
 	}
@@ -216,13 +216,13 @@ void LightStage::adjustRealArc(int index, const uint8_t config[6], int selection
 	}
 	if ((selection == -1) || (selection == 0)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2]->setValue(temp);
+			Lamp[index][i * 2]->setValue(config);
 		}
 		Colour[index]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int i = 0; i < 14; i++) {
-			Lamp[index][i * 2 + 1]->setValue(temp);
+			Lamp[index][i * 2 + 1]->setValue(config);
 		}
 		White[index]->go();
 	}
@@ -231,7 +231,7 @@ void LightStage::adjustRealArc(int index, const uint8_t config[6], int selection
 void LightStage::adjustVirtualArc(int index, uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2)
 {
 	for (int j = 0; j < 14; j++) {
-		this->operator()(index, j)->setValue(r * scale, r2 * scale, g * scale, g2 * scale, b * scale, b2 * scale);
+		this->operator()(index, j)->setValue(r, r2, g, g2, b, b2);
 	}
 	Colour[index / 2]->go();
 	White[index / 2]->go();
@@ -245,13 +245,13 @@ void LightStage::adjustVirtualArc(int index, uint8_t config[6], int selection)
 	}
 	if ((selection == -1) || (selection == 0)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j)->setValue(temp);
+			this->operator()(index, 2 * j)->setValue(config);
 		}
 		Colour[index / 2]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j + 1)->setValue(temp);
+			this->operator()(index, 2 * j + 1)->setValue(config);
 		}
 		White[index / 2]->go();
 	}
@@ -265,13 +265,13 @@ void LightStage::adjustVirtualArc(int index, const uint8_t config[6], int select
 	}
 	if ((selection == -1) || (selection == 0)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j)->setValue(temp);
+			this->operator()(index, 2 * j)->setValue(config);
 		}
 		Colour[index / 2]->go();
 	}
 	if ((selection == -1) || (selection == 1)) {
 		for (int j = 0; j < 7; j++) {
-			this->operator()(index, 2 * j + 1)->setValue(temp);
+			this->operator()(index, 2 * j + 1)->setValue(config);
 		}
 		White[index / 2]->go();
 	}
@@ -367,6 +367,11 @@ void LightStage::setScale(float input)
 	scale = input;
 }
 
+uint8_t * LightStage::getviaMatrix(int arc, int index)
+{
+	return Matrix[arc][index];
+}
+
 
 
 void LightStage::saveMap(char * filename)
@@ -436,6 +441,13 @@ uint8_t * LightStage::getDefault()
 }
 
 void LightStage::setDefault(uint8_t(&config)[6])
+{
+	for (auto i = 0; i < 6; i++) {
+		defaultConfig[i] = config[i];
+	}
+}
+
+void LightStage::setDefault(uint8_t * config)
 {
 	for (auto i = 0; i < 6; i++) {
 		defaultConfig[i] = config[i];

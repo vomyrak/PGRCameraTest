@@ -69,6 +69,9 @@ public:
 
 	/*Set the default value setting*/
 	void setDefault(uint8_t (&config)[6]);
+	/*Set the default value setting*/
+	void LightStage::setDefault(uint8_t * config);
+
 
 	//Functions used during testing stage//
 	/*Allows rotation of current setting map by i virtual arcs*/
@@ -81,11 +84,11 @@ public:
 	/*Copy setting map from a setting matrix to buffer matrix*/
 	void setBuffer(uint8_t * source[12][28]);
 
-	/*Get the scale factor of the light stage*/
 	float getScale();
 
-	/*Set the scale factor of the light stage*/
 	void setScale(float input);
+
+	uint8_t * getviaMatrix(int arc, int index);
 
 private:
 	PowerSupply ** Colour;
@@ -98,6 +101,5 @@ private:
 	uint8_t bufferOffset;
 	string ip;
 	uint8_t defaultConfig[6] = { 4, 0, 4, 128, 3, 0 };
-	float scale = 0.0f;
-	bool scaled = false;
+	float scale = 1.0f;
 };

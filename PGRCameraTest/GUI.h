@@ -40,6 +40,7 @@
 #define ID_BN_7 19
 #define ID_MN_1 20
 #define ID_MN_2 21
+#define ID_MN_3 82
 
 #define ID_P_BN_1 22
 #define ID_P_BN_2 23
@@ -102,6 +103,7 @@
 #define ID_CHB_12 76
 #define ID_CHB_13 77
 #define ID_CHB_14 78
+#define ID_CHB_15 81
 
 #define turn_on 255,255,255,255,255,255
 #define turn_half_lit 128,128,128,128,128,128

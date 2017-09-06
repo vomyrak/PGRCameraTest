@@ -37,6 +37,7 @@ bool multipleArcs = false;
 set<int> activeList;
 float scaleFactor = 1.0f;
 int sleepTime = 30;
+float prevFactor = 1.0f;
 
 
 
@@ -114,8 +115,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		CheckBox[12] = addCheckBox(hwnd, 575, 25, 70, 25, ID_CHB_13, L"White", true);
 		CheckBox[13] = addCheckBox(hwnd, 645, 25, 50, 25, ID_CHB_14, L"RGB", true);
 		CheckBox[14] = addCheckBox(hwnd, 30, 550, 50, 25, ID_CHB_15, L"", true);
-		SendMessageW(CheckBox[12], BM_SETCHECK, BST_CHECKED, NULL);
-		SendMessageW(CheckBox[13], BM_SETCHECK, BST_CHECKED, NULL);
 		for (int i = 0; i < 6; i++) {
 			pos = currentConfig[i];
 			SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)pos);
@@ -261,7 +260,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						}
 						else {
 							if (SendMessageW(CheckBox[13], BM_GETCHECK, NULL, NULL) == BST_CHECKED) {
-								activeList.insert(temp * 28 + j);
+								for (auto j = 0; j < 28; j++) {
+									if (j % 2) {
+										activeList.insert(j);
+									}
+								}
 							}
 						}
 
@@ -285,6 +288,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							}
 						}
 					}
+					else {
+						for (auto i = 0; i < 12; i++) {
+							if (SendMessageW(CheckBox[i], BM_GETCHECK, NULL, NULL) == BST_CHECKED) {
+								for (auto j = 0; j < 28; j++) {
+									if (j % 2) {
+										activeList.insert(j);
+									}
+								}
+							}
+						}
+					}
 				}
 				else if (SendMessageW(CheckBox[12], BM_GETCHECK, NULL, NULL) == BST_UNCHECKED) {
 					if (activeList.size()) {
@@ -297,6 +311,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							}
 						}
 					}
+
 				}
 			}
 			else if (LOWORD(wParam) == ID_CHB_14) {
@@ -305,6 +320,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						for (auto i = activeList.begin(); i != activeList.end(); i++) {
 							if ((*i) % 2 != 0) {
 								activeList.insert((*i) - 1);
+							}
+						}
+					}
+					for (auto i = 0; i < 12; i++) {
+						if (SendMessageW(CheckBox[i], BM_GETCHECK, NULL, NULL) == BST_CHECKED) {
+							for (auto j = 0; j < 28; j++) {
+								if (!(j % 2)) {
+									activeList.insert(j);
+								}
 							}
 						}
 					}
@@ -328,12 +352,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						SendMessageW(CheckBox[i], BM_SETCHECK, BST_CHECKED, NULL);
 					}
 					for (auto i = 0; i < 336; i++) {
-						activeList.insert(i);
+						if ((i % 2) && (SendMessageW(CheckBox[12], BM_GETCHECK, NULL, NULL) == BST_CHECKED)) {
+							activeList.insert(i);
+						}
+						if ((i % 2 == 0) && (SendMessageW(CheckBox[13], BM_GETCHECK, NULL, NULL) == BST_CHECKED)) {
+							activeList.insert(i);
+						}
 					}
 				}
 				else if (SendMessageW(CheckBox[14], BM_GETCHECK, NULL, NULL) == BST_UNCHECKED) {
 					for (auto i = 0; i < 12; i++) {
-						SendMessageW(CheckBox[i], BM_SETCHECK, BST_CHECKED, NULL);
+						SendMessageW(CheckBox[i], BM_SETCHECK, BST_UNCHECKED, NULL);
 					}
 					activeList.clear();
 				}
@@ -494,8 +523,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				for (int i = 0; i < 12; i++) {
 					SendMessageW(CheckBox[i], BM_SETCHECK, BST_UNCHECKED, NULL);
 				}
-				SendMessageW(CheckBox[12], BM_SETCHECK, BST_CHECKED, NULL);
-				SendMessageW(CheckBox[13], BM_SETCHECK, BST_CHECKED, NULL);
 				SendMessageW(CheckBox[14], BM_SETCHECK, BST_UNCHECKED, NULL);
 
 
@@ -553,7 +580,39 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				stage.setDefault(stage.getDefault());
 			}
 		}
-
+		SetFocus(hwnd);
+		break;
+	case WM_KEYDOWN:
+		switch (wParam) {
+		case 0x31:
+			stage.adjustAll(turn_off);
+			adjustByType(255, 0, 0, 0, 0, 0, 1);
+			break;
+		case 0x32:
+			stage.adjustAll(turn_off);
+			adjustByType(0, 0, 255, 0, 0, 0, 1);
+			break;
+		case 0x33:
+			stage.adjustAll(turn_off);
+			adjustByType(0, 0, 0, 0, 255, 0, 1);
+			break;
+		case 0x34:
+			stage.adjustAll(turn_off);
+			adjustByType(255, 0, 0, 0, 0, 0, 0);
+			break;
+		case 0x35:
+			stage.adjustAll(turn_off);
+			adjustByType(0, 0, 255, 0, 0, 0, 0);
+			break;
+		case 0x36:
+			stage.adjustAll(turn_off);
+			adjustByType(0, 0, 0, 0, 255, 0, 0);
+			break;
+		case VK_ESCAPE:
+			adjustByType(0, 0, 0, 0, 0, 0, -1);
+			SetFocus(hwnd);
+			break;
+		}
 		break;
 	case WM_ACTIVATE:
 		UpdateWindow(hwnd);
@@ -1128,7 +1187,6 @@ LRESULT CALLBACK subCVProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, U
 		}
 		break;
 	case WM_KILLFOCUS:
-		SetFocus(hwnd);
 		break;
 	case WM_DESTROY:
 		ShowWindow(hwnd, SW_HIDE);
@@ -1288,7 +1346,7 @@ void demoRoutine() {
 					r *= scaleFactor;
 					g *= scaleFactor;
 					b *= scaleFactor;
-					stage(arc, index)->setValue(r, 0.0f, g, 0.0f, b, 0.0f);
+					stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
 
 					if (no == 174 && index == 13)
 					{
@@ -1302,6 +1360,9 @@ void demoRoutine() {
 						play_one_rotation(animation_path, rotationIndex);
 						rotationIndex++;
 						waitKey(sleepTime);
+						if ((GetFocus() != hmaster) && (GetFocus() != Texts[6])) {
+							SetFocus(newWND);
+						}
 					}
 				}
 			}
@@ -1337,7 +1398,7 @@ void demoRoutine() {
 					r *= scaleFactor;
 					g *= scaleFactor;
 					b *= scaleFactor;
-					stage(arc, index)->setValue(r, 0.0f, g, 0.0f, b, 0.0f);
+					stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
 
 					if (no == 174)
 					{
@@ -1351,6 +1412,9 @@ void demoRoutine() {
 						play_one_rotation(animation_path, rotationIndex);
 						rotationIndex++;
 						waitKey(sleepTime);
+						if ((GetFocus() != hmaster) && (GetFocus() != Texts[6])) {
+							SetFocus(newWND);
+						}
 					}
 				}
 			}
@@ -1387,7 +1451,9 @@ void demoRoutine() {
 				r *= scaleFactor;
 				g *= scaleFactor;
 				b *= scaleFactor;
-				stage(arc, index)->setValue(r, 0.0f, g, 0.0f, b, 0.0f);
+				//stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+				stage(arc, index)->setValue(r, 0, g, 0, b, 0);
+
 			}
 
 			stage.go();
@@ -1411,7 +1477,7 @@ void demoRoutine() {
 				r *= scaleFactor;
 				g *= scaleFactor;
 				b *= scaleFactor;
-				stage(arc, index)->setValue(r, 0.0f, g, 0.0f, b, 0.0f);
+				stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
 			}
 
 			stage.go();
@@ -1669,3 +1735,92 @@ void scale(uint8_t * config) {
 	}
 }
 
+void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8_t b2, int mode) {
+	globalHDC = GetDC(hchild);
+	BeginPaint(hchild, &ps);
+	if ((mode == 1) || (mode == -1)) {
+		stage.adjustWhite(r, r2, g, g2, b, b2);
+		activeList.clear();
+		SendMessageW(CheckBox[12], BM_SETCHECK, BST_CHECKED, NULL);
+		SendMessageW(CheckBox[13], BM_SETCHECK, BST_UNCHECKED, NULL);
+		SendMessageW(CheckBox[14], BM_SETCHECK, BST_CHECKED, NULL);
+		for (auto i = 0; i < 12; i++) {
+			SendMessageW(CheckBox[i], BM_SETCHECK, BST_CHECKED, NULL);
+		}
+		activeButton = 1;
+		whiteSelected = true;
+		selectedPowerSupply = 0;
+		selectedLightPos = 1;
+		currentConfig[0] = r;
+		currentConfig[1] = r2;
+		currentConfig[2] = g;
+		currentConfig[3] = g2;
+		currentConfig[4] = b;
+		currentConfig[5] = b2;
+		for (auto i = 0; i < 6; i++) {
+			SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)currentConfig[i]);
+			wsprintfW(buf, L"%d", currentConfig[i]);
+			SendMessageW(Texts[i], WM_SETTEXT, NULL, (LPARAM)buf);
+			UpdateWindow(LightCtrl[i]);
+			UpdateWindow(Texts[i]);
+		}
+		grayval = (r + g + b) / 3;
+		wbrush = CreateSolidBrush(RGB(grayval, grayval, grayval));
+		rgbbrush = CreateSolidBrush(RGB(0, 0, 0));
+		for (auto i = 0; i < 336; i++) {
+			if (i % 2) {
+				FillRect(globalHDC, lightMatrix + i, wbrush);
+				activeList.insert(i);
+			}
+			else {
+				FillRect(globalHDC, lightMatrix + i, rgbbrush);
+			}
+		}
+		DeleteObject(wbrush);
+		DeleteObject(rgbbrush);
+	}
+	if (mode == 0 || (mode == -1)) {
+		stage.adjustRGB(r, r2, g, g2, b, b2);
+		activeList.clear();
+		SendMessageW(CheckBox[12], BM_SETCHECK, BST_UNCHECKED, NULL);
+		SendMessageW(CheckBox[13], BM_SETCHECK, BST_CHECKED, NULL);
+		SendMessageW(CheckBox[14], BM_SETCHECK, BST_CHECKED, NULL);
+		for (auto i = 0; i < 12; i++) {
+			SendMessageW(CheckBox[i], BM_SETCHECK, BST_CHECKED, NULL);
+		}
+		activeButton = 0;
+		whiteSelected = false;
+		selectedPowerSupply = 0;
+		selectedLightPos = 0;
+		currentConfig[0] = r;
+		currentConfig[1] = r2;
+		currentConfig[2] = g;
+		currentConfig[3] = g2;
+		currentConfig[4] = b;
+		currentConfig[5] = b2;
+		for (auto i = 0; i < 6; i++) {
+			SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)currentConfig[i]);
+			wsprintfW(buf, L"%d", currentConfig[i]);
+			SendMessageW(Texts[i], WM_SETTEXT, NULL, (LPARAM)buf);
+			UpdateWindow(LightCtrl[i]);
+			UpdateWindow(Texts[i]);
+		}
+		globalHDC = GetDC(hchild);
+		BeginPaint(hchild, &ps);
+		rgbbrush = CreateSolidBrush(RGB(r, g, b));
+		wbrush = CreateSolidBrush(RGB(0, 0, 0));
+		for (auto i = 0; i < 336; i++) {
+			if (i % 2 == 0) {
+				FillRect(globalHDC, lightMatrix + i, wbrush);
+			}
+			else {
+				FillRect(globalHDC, lightMatrix + i, rgbbrush);
+				activeList.insert(i);
+			}
+		}
+		DeleteObject(wbrush);
+		DeleteObject(rgbbrush);
+	}
+	ReleaseDC(hchild, globalHDC);
+	EndPaint(hchild, &ps);
+}

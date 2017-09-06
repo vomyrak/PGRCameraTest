@@ -100,6 +100,7 @@ private:
 	uint8_t Buffer[12][28][6];
 	uint8_t bufferOffset;
 	string ip;
-	uint8_t defaultConfig[6] = { 4, 0, 4, 128, 3, 0 };
-	float scale = 1.0f;
+	uint8_t defaultConfig[6];
+	bool lampState[12][28];
+	float scale;
 };

@@ -6,6 +6,13 @@ LightStage::LightStage()
 	White = new PowerSupply*[12];
 	Lamp = new FixtureLED*[12][28];
 	ip = "10.37.211.0";
+	defaultConfig[0] = 4;
+	defaultConfig[1] = 0;
+	defaultConfig[2] = 4;
+	defaultConfig[3] = 128;
+	defaultConfig[4] = 3;
+	defaultConfig[5] = 0;
+	scale = 1.0f;
 
 	for (size_t i = 0; i < 12; i++) {
 		ip.replace(10, ip.size() - 1, std::to_string(2 * i));

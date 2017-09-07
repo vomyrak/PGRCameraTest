@@ -38,7 +38,8 @@ set<int> activeList;
 float scaleFactor = 1.0f;
 int sleepTime = 30;
 float prevFactor = 1.0f;
-
+int cycle = 0;
+char * envName = new char[260];
 
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -115,6 +116,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		CheckBox[12] = addCheckBox(hwnd, 575, 25, 70, 25, ID_CHB_13, L"White", true);
 		CheckBox[13] = addCheckBox(hwnd, 645, 25, 50, 25, ID_CHB_14, L"RGB", true);
 		CheckBox[14] = addCheckBox(hwnd, 30, 550, 50, 25, ID_CHB_15, L"", true);
+		stage[0][0]->getValue(currentConfig);
 		for (int i = 0; i < 6; i++) {
 			pos = currentConfig[i];
 			SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)pos);
@@ -241,6 +243,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			}
 		}
+		SetFocus(hwnd);
 		break;
 	case WM_COMMAND:
 		if (HIWORD(wParam) == CBN_SELCHANGE) {
@@ -413,14 +416,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				int temp;
 				if (!stage.loadMap("default.valmap")) {
 					if (!stage.loadVoronMap("default.voronmap")) {
-						stage.adjustAll(stage.getDefault());
-						stage[0][0]->getValue(currentConfig);
+						infile.open("default.val");
+						int tempdata;
 						for (auto i = 0; i < 6; i++) {
+							infile >> tempdata;
+							currentConfig[i] = tempdata;
 							SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)currentConfig[i]);
 							pos = currentConfig[i];
 							wsprintfW(buf, L"%d", pos);
 							SendMessageW(Texts[i], WM_SETTEXT, NULL, (LPARAM)buf);
 						}
+						stage.adjustAll(currentConfig);
 						globalHDC = GetDC(hchild);
 						BeginPaint(hchild, &ps);
 						grayval = (currentConfig[0] + currentConfig[2] + currentConfig[4]) / 3;
@@ -473,6 +479,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					ReleaseDC(hchild, globalHDC);
 					EndPaint(hchild, &ps);
 				}
+				
+				scaleFactor = 1;
+				prevFactor = 1;
+				SendMessageW(Texts[6], WM_SETTEXT, NULL, (LPARAM)L"1");
 			}
 			else if (LOWORD(wParam) == ID_BN_3) {
 				activeList.clear();
@@ -528,8 +538,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 				SendMessageW(CheckBox[13], BM_SETCHECK, BST_UNCHECKED, NULL);
 				SendMessageW(CheckBox[14], BM_SETCHECK, BST_UNCHECKED, NULL);
-
-
 
 			}
 			else if (LOWORD(wParam) == ID_BN_5) {
@@ -1195,6 +1203,7 @@ LRESULT CALLBACK subEditProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 				EndPaint(hchild, &ps);
 				stage.go();
 				prevFactor = tempFactor;
+				scaleFactor = tempFactor;
 			}
 		default:
 			return DefSubclassProc(hwnd, uMsg, wParam, lParam);
@@ -1208,13 +1217,78 @@ LRESULT CALLBACK subCVProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, U
 	{
 	case WM_CREATE:
 		SetFocus(hwnd);
+		break;
+	case WM_LBUTTONDOWN:
+		SetFocus(hwnd);
+		break;
 	case WM_KEYDOWN:
-		if (rotationInterrupted == false) {
-			rotationInterrupted = true;
-		}
-		else {
-			rotationInterrupted = false;
-			demoRoutine();
+		switch(wParam){
+		case VK_DOWN:
+
+			ZeroMemory(envName, sizeof(envName));
+			SendMessageW(ComboBox[0], CB_GETLBTEXT, selectedCBItem, (LPARAM)environment);
+			wcstombs(envName, environment, 30);
+			if (cycle == 0){
+				stage.adjustAll(turn_off);
+				string in_path;
+				in_path = "C:\\CO417-HW1\\voronoi_";
+				in_path += envName;
+				in_path += "\\txt\\global_rgb_w.txt";
+
+
+				ifstream ifs(in_path);
+
+				int no, arc, index;
+				float r, g, b;
+				while (ifs >> no >> arc >> index >> r >> g >> b && !(no == 174 && index == 13))
+				{
+					r *= scaleFactor;
+					g *= scaleFactor;
+					b *= scaleFactor;
+					//stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+					stage(arc, index)->setValue(r, 0, g, 0, b, 0);
+
+				}
+				ifs.close();
+				stage.go();
+				Sleep(sleepTime);
+				cycle = 1;
+			}
+			else {
+				stage.adjustAll(turn_off);
+				string in_path;
+				in_path = "C:\\CO417-HW1\\voronoi_";
+				in_path += envName;
+				in_path += "\\txt\\global_converted.txt";
+
+
+				ifstream ifs(in_path);
+
+				int no, arc, index;
+				float r, g, b;
+				while (ifs >> no >> arc >> index >> r >> g >> b && !(no == 174 && index == 12))
+				{
+					r *= scaleFactor;
+					g *= scaleFactor;
+					b *= scaleFactor;
+					//stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+					stage(arc, index)->setValue(r, 0, g, 0, b, 0);
+
+				}
+				ifs.close();
+				stage.go();
+				Sleep(sleepTime);
+				cycle = 0;
+			}
+			break;
+		default:
+			if (rotationInterrupted == false) {
+				rotationInterrupted = true;
+			}
+			else {
+				rotationInterrupted = false;
+				demoRoutine();
+			}
 		}
 		break;
 	case WM_KILLFOCUS:
@@ -1527,7 +1601,6 @@ void demoRoutine() {
 			Sleep(sleepTime);
 		}
 	}
-	delete[] envName;
 }
 
 void captureRoutine() {
@@ -1782,7 +1855,13 @@ void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8
 	globalHDC = GetDC(hchild);
 	BeginPaint(hchild, &ps);
 	if ((mode == 1) || (mode == -1)) {
-		stage.adjustWhite(r, r2, g, g2, b, b2);
+		currentConfig[0] = r * scaleFactor;
+		currentConfig[1] = r2 * scaleFactor;
+		currentConfig[2] = g * scaleFactor;
+		currentConfig[3] = g2 * scaleFactor;
+		currentConfig[4] = b * scaleFactor;
+		currentConfig[5] = b2 * scaleFactor;
+		stage.adjustWhite(currentConfig[0], currentConfig[1], currentConfig[2], currentConfig[3], currentConfig[4], currentConfig[5]);
 		activeList.clear();
 		SendMessageW(CheckBox[12], BM_SETCHECK, BST_CHECKED, NULL);
 		SendMessageW(CheckBox[13], BM_SETCHECK, BST_UNCHECKED, NULL);
@@ -1794,12 +1873,7 @@ void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8
 		whiteSelected = true;
 		selectedPowerSupply = 0;
 		selectedLightPos = 1;
-		currentConfig[0] = r;
-		currentConfig[1] = r2;
-		currentConfig[2] = g;
-		currentConfig[3] = g2;
-		currentConfig[4] = b;
-		currentConfig[5] = b2;
+
 		for (auto i = 0; i < 6; i++) {
 			SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)currentConfig[i]);
 			wsprintfW(buf, L"%d", currentConfig[i]);
@@ -1807,7 +1881,7 @@ void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8
 			UpdateWindow(LightCtrl[i]);
 			UpdateWindow(Texts[i]);
 		}
-		grayval = (r + g + b) / 3;
+		grayval = (currentConfig[0], currentConfig[2], currentConfig[4]) / 3;
 		wbrush = CreateSolidBrush(RGB(grayval, grayval, grayval));
 		rgbbrush = CreateSolidBrush(RGB(0, 0, 0));
 		for (auto i = 0; i < 336; i++) {
@@ -1823,7 +1897,14 @@ void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8
 		DeleteObject(rgbbrush);
 	}
 	if (mode == 0 || (mode == -1)) {
-		stage.adjustRGB(r, r2, g, g2, b, b2);
+		currentConfig[0] = r * scaleFactor;
+		currentConfig[1] = r2 * scaleFactor;
+		currentConfig[2] = g * scaleFactor;
+		currentConfig[3] = g2 * scaleFactor;
+		currentConfig[4] = b * scaleFactor;
+		currentConfig[5] = b2 * scaleFactor;
+		stage.adjustRGB(currentConfig[0], currentConfig[1], currentConfig[2], currentConfig[3], currentConfig[4], currentConfig[5]);
+
 		activeList.clear();
 		SendMessageW(CheckBox[12], BM_SETCHECK, BST_UNCHECKED, NULL);
 		SendMessageW(CheckBox[13], BM_SETCHECK, BST_CHECKED, NULL);
@@ -1835,12 +1916,7 @@ void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8
 		whiteSelected = false;
 		selectedPowerSupply = 0;
 		selectedLightPos = 0;
-		currentConfig[0] = r;
-		currentConfig[1] = r2;
-		currentConfig[2] = g;
-		currentConfig[3] = g2;
-		currentConfig[4] = b;
-		currentConfig[5] = b2;
+
 		for (auto i = 0; i < 6; i++) {
 			SendMessageW(LightCtrl[i], TBM_SETPOS, true, (LPARAM)currentConfig[i]);
 			wsprintfW(buf, L"%d", currentConfig[i]);
@@ -1850,7 +1926,7 @@ void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8
 		}
 		globalHDC = GetDC(hchild);
 		BeginPaint(hchild, &ps);
-		rgbbrush = CreateSolidBrush(RGB(r, g, b));
+		rgbbrush = CreateSolidBrush(RGB(currentConfig[0], currentConfig[2], currentConfig[4]));
 		wbrush = CreateSolidBrush(RGB(0, 0, 0));
 		for (auto i = 0; i < 336; i++) {
 			if (i % 2 == 0) {

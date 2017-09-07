@@ -105,6 +105,18 @@
 #define ID_CHB_14 78
 #define ID_CHB_15 81
 
+#define ID_MN_4 83
+#define ID_MN_5 84
+#define ID_MN_6 85
+#define ID_MN_7 86
+#define ID_MN_8 87
+#define ID_MN_9 88
+
+
+
+
+
+
 #define turn_on 255,255,255,255,255,255
 #define turn_half_lit 128,128,128,128,128,128
 #define turn_off 0,0,0,0,0,0

@@ -185,6 +185,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		ReleaseDC(hchild, globalHDC);
 		EndPaint(hchild, &ps);
+		SetFocus(hwnd);
 		break;
 
 	case WM_LBUTTONDOWN:
@@ -209,6 +210,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							activeList.insert(j + baseIndex);
 						}
 					}
+					SendMessageW(CheckBox[14], BM_SETCHECK, BST_UNCHECKED, NULL);
 				}
 				else {
 					int baseIndex = ((18 + i) % 12) * 28;
@@ -278,6 +280,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					}
 				}
 
+
 			}
 			else if (LOWORD(wParam) == ID_CHB_13) {
 				if (SendMessageW(CheckBox[12], BM_GETCHECK, NULL, NULL) == BST_CHECKED) {
@@ -293,7 +296,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							if (SendMessageW(CheckBox[i], BM_GETCHECK, NULL, NULL) == BST_CHECKED) {
 								for (auto j = 0; j < 28; j++) {
 									if (j % 2) {
-										activeList.insert(j);
+										activeList.insert(i * 28 + j);
 									}
 								}
 							}
@@ -327,7 +330,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						if (SendMessageW(CheckBox[i], BM_GETCHECK, NULL, NULL) == BST_CHECKED) {
 							for (auto j = 0; j < 28; j++) {
 								if (!(j % 2)) {
-									activeList.insert(j);
+									activeList.insert(i * 28 + j);
 								}
 							}
 						}
@@ -523,6 +526,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				for (int i = 0; i < 12; i++) {
 					SendMessageW(CheckBox[i], BM_SETCHECK, BST_UNCHECKED, NULL);
 				}
+				SendMessageW(CheckBox[13], BM_SETCHECK, BST_UNCHECKED, NULL);
 				SendMessageW(CheckBox[14], BM_SETCHECK, BST_UNCHECKED, NULL);
 
 
@@ -579,8 +583,27 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			else if (LOWORD(wParam) == ID_MN_3) {
 				stage.setDefault(stage.getDefault());
 			}
+			else if (LOWORD(wParam) == ID_MN_4) {
+				SendMessageW(hwnd, WM_KEYDOWN, 0x31, NULL);
+			}
+			else if (LOWORD(wParam) == ID_MN_5) {
+				SendMessageW(hwnd, WM_KEYDOWN, 0x32, NULL);
+			}
+			else if (LOWORD(wParam) == ID_MN_6) {
+				SendMessageW(hwnd, WM_KEYDOWN, 0x33, NULL);
+			}
+			else if (LOWORD(wParam) == ID_MN_7) {
+				SendMessageW(hwnd, WM_KEYDOWN, 0x34, NULL);
+			}
+			else if (LOWORD(wParam) == ID_MN_8) {
+				SendMessageW(hwnd, WM_KEYDOWN, 0x35, NULL);
+			}
+			else if (LOWORD(wParam) == ID_MN_9) {
+				SendMessageW(hwnd, WM_KEYDOWN, 0x36, NULL);
+			}
+			SetFocus(hwnd);
 		}
-		SetFocus(hwnd);
+
 		break;
 	case WM_KEYDOWN:
 		switch (wParam) {
@@ -609,7 +632,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			adjustByType(0, 0, 0, 0, 255, 0, 0);
 			break;
 		case VK_ESCAPE:
-			adjustByType(0, 0, 0, 0, 0, 0, -1);
+			SendMessageW(hwnd, WM_COMMAND, (BN_CLICKED << 8) | ID_BN_4, NULL);
 			SetFocus(hwnd);
 			break;
 		}
@@ -1084,6 +1107,7 @@ LRESULT CALLBACK subEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
 				EndPaint(hchild, &ps);
 				ReleaseDC(hchild, hdc);
 			}
+			SetFocus(hwnd);
 			break;
 		}
 	case WM_PAINT:
@@ -1108,6 +1132,7 @@ LRESULT CALLBACK subEditProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 				swprintf_s(buf, L"%f", scaleFactor);
 				SendMessageW(hwnd, WM_SETTEXT, NULL, (LPARAM)buf);
 				stage.adjustAll(turn_off);
+
 				for (int i = 0; i < 6; i++) {
 					currentConfig[i] = 0;
 					wsprintfW(buf, L"%d", currentConfig[i]);
@@ -1125,9 +1150,19 @@ LRESULT CALLBACK subEditProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 				ReleaseDC(hchild, globalHDC);
 				DeleteObject(wbrush);
 				EndPaint(hchild, &ps);
+				prevFactor = scaleFactor;
 			}
-			else if (scaleFactor <= 1) {
-				swprintf_s(buf, L"%f", scaleFactor);
+			else {
+				if (scaleFactor > 1) {
+					scaleFactor = 1.0f;
+					swprintf_s(buf, L"%f", scaleFactor);
+					SendMessageW(hwnd, WM_SETTEXT, NULL, (LPARAM)buf);
+				}
+				else {
+					swprintf_s(buf, L"%f", scaleFactor);
+				}
+				float tempFactor = scaleFactor;
+				scaleFactor /= prevFactor;
 				for (int i = 0; i < 6; i++) {
 					currentConfig[i] *= scaleFactor;
 					wsprintfW(buf, L"%d", currentConfig[i]);
@@ -1159,11 +1194,7 @@ LRESULT CALLBACK subEditProc2(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 				ReleaseDC(hchild, globalHDC);
 				EndPaint(hchild, &ps);
 				stage.go();
-			}
-			else {
-				scaleFactor = 1.0f;
-				swprintf_s(buf, L"%f", scaleFactor);
-				SendMessageW(hwnd, WM_SETTEXT, NULL, (LPARAM)buf);
+				prevFactor = tempFactor;
 			}
 		default:
 			return DefSubclassProc(hwnd, uMsg, wParam, lParam);
@@ -1204,10 +1235,18 @@ void addMenu(HWND hwnd)
 {
 	Menu[0] = CreateMenu();
 	Menu[1] = CreateMenu();
+	Menu[2] = CreateMenu();
 	AppendMenuW(Menu[0], MF_POPUP, (UINT_PTR)Menu[1], L"File");
 	AppendMenuW(Menu[1], MF_STRING, ID_MN_1, L"Save Value Map");
 	AppendMenuW(Menu[1], MF_STRING, ID_MN_2, L"Load Value Map");
 	AppendMenuW(Menu[1], MF_STRING, ID_MN_3, L"Reset Default");
+	AppendMenuW(Menu[0], MF_POPUP, (UINT_PTR)Menu[2], L"Shortcut");
+	AppendMenuW(Menu[2], MF_STRING, ID_MN_4, L"White Channel 1 (1)");
+	AppendMenuW(Menu[2], MF_STRING, ID_MN_5, L"White Channel 2 (2)");
+	AppendMenuW(Menu[2], MF_STRING, ID_MN_6, L"White Channel 3 (3)");
+	AppendMenuW(Menu[2], MF_STRING, ID_MN_7, L"RGB Channel 1 (1)");
+	AppendMenuW(Menu[2], MF_STRING, ID_MN_8, L"RGB Channel 2 (2)");
+	AppendMenuW(Menu[2], MF_STRING, ID_MN_9, L"RGB Channel 3 (3)");
 	SetMenu(hwnd, Menu[0]);
 }
 
@@ -1346,7 +1385,8 @@ void demoRoutine() {
 					r *= scaleFactor;
 					g *= scaleFactor;
 					b *= scaleFactor;
-					stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+					//stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+					stage(arc, index)->setValue(r, 0, g, 0, b, 0);
 
 					if (no == 174 && index == 13)
 					{
@@ -1398,7 +1438,8 @@ void demoRoutine() {
 					r *= scaleFactor;
 					g *= scaleFactor;
 					b *= scaleFactor;
-					stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+					//stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+					stage(arc, index)->setValue(r, 0, g, 0, b, 0);
 
 					if (no == 174)
 					{
@@ -1477,7 +1518,9 @@ void demoRoutine() {
 				r *= scaleFactor;
 				g *= scaleFactor;
 				b *= scaleFactor;
-				stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+				//stage(arc, index)->setValue(r, (r - (int)r) * 255, g, (g - (int)g) * 255, b, (b - (int)b) * 255);
+				stage(arc, index)->setValue(r, 0, g, 0, b, 0);
+
 			}
 
 			stage.go();
@@ -1811,11 +1854,12 @@ void adjustByType(uint8_t r, uint8_t r2, uint8_t g, uint8_t g2, uint8_t b, uint8
 		wbrush = CreateSolidBrush(RGB(0, 0, 0));
 		for (auto i = 0; i < 336; i++) {
 			if (i % 2 == 0) {
-				FillRect(globalHDC, lightMatrix + i, wbrush);
-			}
-			else {
 				FillRect(globalHDC, lightMatrix + i, rgbbrush);
 				activeList.insert(i);
+			}
+			else {
+				FillRect(globalHDC, lightMatrix + i, wbrush);
+
 			}
 		}
 		DeleteObject(wbrush);
